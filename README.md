@@ -29,5 +29,6 @@
 | :--- |:----------------------| :--- | :--- | :--- |
 | Ling-3.0-flash | 单台 NVIDIA DGX Spark | SGLang | MXFP4 (W4A16 / W4A8) | [文档: SGLang MXFP4 部署指南](guide/local-deploy/ling-3.0-flash/dgx-spark-sglang-mxfp4.ipynb) |
 | Ling-3.0-flash | 单台 NVIDIA DGX Spark | SGLang | INT4 (W4A16) | [文档: SGLang INT4 部署指南](guide/local-deploy/ling-3.0-flash/dgx-spark-sglang-int4.ipynb) |
+| Ling-3.0-flash | 单台 NVIDIA DGX Spark | vLLM | FP4 (MXFP4) | [文档: vLLM FP4 部署指南](guide/local-deploy/ling-3.0-flash/dgx-spark-vllm-fp4.ipynb) |
 | Ling-3.0-flash | 单台 NVIDIA DGX Spark | vLLM | INT4 (W4A16) | [文档: vLLM INT4 部署指南](guide/local-deploy/ling-3.0-flash/dgx-spark-vllm-int4.ipynb) |
 | Ling-3.0-flash | 单台 NVIDIA DGX Spark | llama.cpp | GGUF (Q6_K / Q4_K) | [文档: llama.cpp GGUF 部署指南](guide/local-deploy/ling-3.0-flash/dgx-spark-llamacpp-gguf.ipynb) |
