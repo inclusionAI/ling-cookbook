@@ -1,0 +1,27 @@
+# Python & Jupyter
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# IDE & Editor Settings (IntelliJ IDEA, PyCharm, VS Code)
+.idea/
+*.iml
+*.iws
+*.ipr
+.idea_modules/
+.vscode/
+
+# OS & Temp
+.DS_Store
+*.tmp
+*.log
+
+# Internal Agent & Handoff docs
+AGENTS.md
+HANDOFF.md
+agents.md
+handoff.md
+.agents/

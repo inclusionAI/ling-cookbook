@@ -1,0 +1,3 @@
+[submodule "internals"]
+	path = internals
+	url = git@code.alipay.com:map/ling-cookbook-internals.git
