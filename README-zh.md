@@ -21,6 +21,11 @@
 
 ## 内容目录
 
+### Agent 安装包（`resources/setup/`）
+
+面向 Claude Code、Codex 和 Hermes Agent 的独立 OpenRouter 安装包：
+[English guide](resources/setup/README.md) · [简体中文](resources/setup/README.zh-CN.md)。
+
 ### 本地部署 (`guide/local-deploy/`)
 
 包含在消费级硬件和设备上部署 Ling 系列模型提供推理服务的示例。
