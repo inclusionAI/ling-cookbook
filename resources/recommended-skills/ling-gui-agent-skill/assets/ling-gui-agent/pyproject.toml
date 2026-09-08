@@ -1,0 +1,26 @@
+[project]
+name = "ling-gui-agent"
+version = "0.1.0"
+description = "Ling GUI agent CLI using Appium or PyAutoGUI"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+dependencies = [
+    "httpx>=0.27",
+    "Pillow>=10.0",
+    "PyAutoGUI>=0.9.53",
+    "pyperclip>=1.8.2",
+    "setuptools<82; sys_platform == 'darwin'",
+]
+
+[tool.setuptools.packages.find]
+include = ["ling_gui_agent*"]
+
+[tool.setuptools]
+license-files = ["LICENSE"]
+
+[project.scripts]
+ling-gui-agent = "ling_gui_agent.main:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"

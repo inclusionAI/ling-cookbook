@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ling GUI Agent"
+  short_description: "Configure and run the Ling GUI Agent"
+  default_prompt: "Use $ling-gui-agent-skill to run the bundled Ling GUI Agent (self-contained, via scripts/run.py) for Android or desktop automation."

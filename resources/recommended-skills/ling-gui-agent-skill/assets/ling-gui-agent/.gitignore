@@ -1,0 +1,15 @@
+# Runtime artifacts and sensitive model traces
+logs/
+
+# Python build artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Local metadata
+.DS_Store
+.venv/
+venv/
+.env

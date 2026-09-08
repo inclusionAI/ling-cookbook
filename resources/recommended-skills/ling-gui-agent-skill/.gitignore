@@ -1,0 +1,5 @@
+/.env
+/.venv/
+/logs/
+# Legacy runtime data may contain logs or an environment from older releases.
+/runtime/
