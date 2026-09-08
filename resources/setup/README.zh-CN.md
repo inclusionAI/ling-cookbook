@@ -6,26 +6,26 @@
 
 准备好 OpenRouter API Key，并安装 Bash、Python 3 和要配置的 Agent CLI。下载本文件夹，在文件夹内打开终端。
 
-## 安装
+## 打开配置菜单
 
-按使用的 Agent，复制**一条**命令执行。按提示输入 API Key，输入内容不会显示。安装完成后重启 Agent。
+按使用的 Agent，复制**一条**命令查看全部菜单选项：1 安装或更新、2 查看状态、3 自检、9 卸载并恢复、0 退出。选择安装后按提示输入 API Key，输入内容不会显示。安装完成后重启 Agent。
 
 **Claude Code**
 
 ```bash
-bash ./claude-code-ling-3-flash-vl-setup.sh --install
+bash ./claude-code-ling-3-flash-vl-openrouter-setup.sh
 ```
 
 **Codex**
 
 ```bash
-bash ./codex-ling-3-flash-vl-setup.sh --install
+bash ./codex-ling-3-flash-vl-openrouter-setup.sh
 ```
 
 **Hermes Agent**
 
 ```bash
-bash ./hermes-ling-3-flash-vl-setup.sh --install
+bash ./hermes-ling-3-flash-vl-openrouter-setup.sh
 ```
 
 安装器通过备份和恢复流程保留原配置。可选的 GUI Skill 需要 `npx`；如需跳过，在命令前加 `LING_INSTALL_GUI_SKILL=n`。自动化安装可通过环境或密钥管理系统注入 `OPENROUTER_API_KEY`。
@@ -39,9 +39,11 @@ bash ./hermes-ling-3-flash-vl-setup.sh --install
 **不带参数**运行对应脚本，即可在菜单中选择状态检查、自检或卸载。自检会发起 API 请求。
 
 ```bash
-bash ./codex-ling-3-flash-vl-setup.sh
+bash ./codex-ling-3-flash-vl-openrouter-setup.sh
 ```
 
-Claude Code 和 Hermes 使用上方安装命令，去掉 `--install` 即可。卸载遵循安装器的备份和恢复流程。
+Claude Code 和 Hermes 使用上方对应命令。卸载会恢复安装器管理的配置；可选 GUI Skill 及其 `.env` 仍会保留。
 
-以上默认使用英文脚本。如需中文交互，可替换为 `./claude-code-ling-3-flash-vl-setup.zh-CN.sh`、`./codex-ling-3-flash-vl-setup.zh-CN.sh` 或 `./hermes-ling-3-flash-vl-setup.zh-CN.sh`。
+如需直接操作，可在命令后添加 `--install`、`--status`、`--self-test`、`--uninstall`、`--version` 或 `--help`。`--install` 会在询问 API Key 前说明将进行的修改和恢复方法。
+
+以上默认使用英文脚本。如需中文交互，可替换为 `./claude-code-ling-3-flash-vl-openrouter-setup.zh-CN.sh`、`./codex-ling-3-flash-vl-openrouter-setup.zh-CN.sh` 或 `./hermes-ling-3-flash-vl-openrouter-setup.zh-CN.sh`。

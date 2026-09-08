@@ -2,9 +2,9 @@
 # Bundle version: 0.4.0
 # Installer version: 0.4.0
 # Provider: openrouter
-# Entrypoint: codex-ling-3-flash-vl-setup.sh
+# Entrypoint: claude-code-ling-3-flash-vl-openrouter-setup.sh
 # Model: inclusionai/ling-3.0-flash-vl
-# Payload SHA256: 5656a65c2cce535da04cce932f30ab91b4dd0a39906c93ee72d72cb476acfd98
+# Payload SHA256: 4f3206a70f7fed5465cf5a207e809b61a2ddeed12742c9be4d0fb4875186e9e9
 set -euo pipefail
 if [ "${1:-}" = "--version" ]; then
   [ "$#" -eq 1 ] || { printf '%s\n' '--version accepts no extra arguments' >&2; exit 2; }
@@ -12,9 +12,9 @@ if [ "${1:-}" = "--version" ]; then
 Bundle version: 0.4.0
 Installer version: 0.4.0
 Provider: openrouter
-Entrypoint: codex-ling-3-flash-vl-setup.sh
+Entrypoint: claude-code-ling-3-flash-vl-openrouter-setup.sh
 Model: inclusionai/ling-3.0-flash-vl
-Payload SHA256: 5656a65c2cce535da04cce932f30ab91b4dd0a39906c93ee72d72cb476acfd98
+Payload SHA256: 4f3206a70f7fed5465cf5a207e809b61a2ddeed12742c9be4d0fb4875186e9e9
 LING_BUNDLE_VERSION
   exit 0
 fi
@@ -52,23 +52,24 @@ fi
 # END BUILD DEFAULTS
 
 readonly SCRIPT_VERSION="0.4.0"
-readonly INSTALLER_ID="codex-ling-3-flash-vl"
-readonly PROVIDER_ID="antchat_ling3"
-readonly MODEL="${LING_CODEX_MODEL:-$LING_MODEL}"
-case "$MODEL" in
-  ''|*[!a-zA-Z0-9_./:@+~-]*) printf '%s\n' 'Invalid model ID' >&2; exit 1 ;;
-esac
-readonly BASE_URL="${LING_CODEX_BASE_URL:-$LING_BASE_URL}"
+readonly INSTALLER_ID="claude-code-ling-3-flash-vl"
+readonly DEFAULT_MODEL="$LING_MODEL"
+readonly DEFAULT_BASE_URL="$LING_MESSAGES_BASE_URL"
 readonly GUI_SKILL_NAME="ling-gui-agent-skill"
-readonly GUI_SKILL_AGENT="codex"
+readonly GUI_SKILL_AGENT="claude-code"
 readonly GUI_SKILL_SOURCE="$LING_GUI_AGENT_SKILL_SOURCE"
 readonly GUI_SKILL_BASE_URL="${LING_GUI_BASE_URL:-$LING_BASE_URL}"
 readonly SKILLS_CLI_PACKAGE="skills@1.5.23"
 
+model="${LING_CLAUDE_MODEL:-$DEFAULT_MODEL}"
+case "$model" in
+  ''|*[!a-zA-Z0-9_./:@+~-]*) printf '%s\n' 'Invalid model ID' >&2; exit 1 ;;
+esac
+base_url="${LING_CLAUDE_BASE_URL:-$DEFAULT_BASE_URL}"
 theta_api_key=""
 language="${LING_SETUP_LANG:-en}"
-self_test_dir=""
 stage_dir=""
+self_test_dir=""
 backup_created="0"
 skill_install_log=""
 gui_skill_env_stage=""
@@ -102,22 +103,21 @@ cleanup() {
   fi
 
   if [ -n "$self_test_dir" ] && [ -d "$self_test_dir" ]; then
-    rm -f -- "$self_test_dir/final.txt" "$self_test_dir/run.log"
+    rm -f -- "$self_test_dir/output.txt" "$self_test_dir/run.log"
     rmdir -- "$self_test_dir" 2>/dev/null || true
   fi
 
   if [ -n "$stage_dir" ] && [ -d "$stage_dir" ]; then
     rm -f -- \
       "$stage_dir/api-key" \
-      "$stage_dir/config.toml" \
       "$stage_dir/manifest.txt" \
-      "$stage_dir/models.json" \
-      "$stage_dir/read-api-key.sh"
+      "$stage_dir/read-api-key.sh" \
+      "$stage_dir/settings.json"
     rmdir -- "$stage_dir" 2>/dev/null || true
   fi
 
   if [ "$backup_created" = "1" ] && [ -n "${backup_dir:-}" ] && [ -d "$backup_dir" ]; then
-    rm -f -- "$backup_config" "$manifest_file"
+    rm -f -- "$backup_settings" "$manifest_file"
     rmdir -- "$backup_dir" 2>/dev/null || true
   fi
 }
@@ -129,99 +129,115 @@ trap 'exit 143' TERM
 usage() {
   if is_english; then
   cat <<'EOF'
-Ling-3.0-flash-VL persistent setup for Codex (English)
+Ling-3.0-flash-VL persistent setup for Claude Code CLI (English)
 
 Usage:
-  bash codex-ling-3-flash-vl-setup.sh
-  bash codex-ling-3-flash-vl-setup.sh --install
-  bash codex-ling-3-flash-vl-setup.sh --status
-  bash codex-ling-3-flash-vl-setup.sh --self-test
-  bash codex-ling-3-flash-vl-setup.sh --uninstall
-  bash codex-ling-3-flash-vl-setup.sh --uninstall --yes
+  bash claude-code-ling-3-flash-vl-setup.sh
+  bash claude-code-ling-3-flash-vl-setup.sh --install
+  bash claude-code-ling-3-flash-vl-setup.sh --status
+  bash claude-code-ling-3-flash-vl-setup.sh --self-test
+  bash claude-code-ling-3-flash-vl-setup.sh --uninstall
+  bash claude-code-ling-3-flash-vl-setup.sh --uninstall --yes
 
-After installation, running `codex` directly defaults to:
-  Base URL: https://openrouter.ai/api/v1
+After installation, running `claude` directly defaults to:
+  Base URL: https://openrouter.ai/api
   Model:    inclusionai/ling-3.0-flash-vl
-  Protocol: OpenAI Responses API
+  Protocol: Anthropic Messages API
 
 The installer prompts for a OpenRouter personal-token API key and stores it with
-mode 0600. It also recommends the Ling GUI Agent Skill and installs it through
+mode 0600. It never writes the token to settings.json.
+
+The installer recommends the Ling GUI Agent Skill and installs it through
 npx skills unless you answer N/n. Set LING_INSTALL_GUI_SKILL=n to skip it in
-non-interactive automation, and override its Git source with
+non-interactive automation. Override its Git source with
 LING_GUI_AGENT_SKILL_SOURCE. After installation, the setup regenerates the
 Skill-local .env from .env.example with the current token, model, and Chat
 Completions Base URL, and stores it with mode 0600.
 
-Uninstall restores config.toml from before the first install and does not
-delete auth.json or sign out of the Codex subscription account. The shared
-Ling GUI Agent Skill, its .env, and the GUI Agent token remain installed for
-other Agent integrations.
+Uninstall restores the settings.json snapshot from before the first install.
+It does not modify ~/.claude.json, .credentials.json, macOS Keychain, or the
+saved Claude subscription login. The shared GUI Skill, its .env, and the GUI
+Agent token remain installed for other Agent integrations. Claude Desktop uses
+separate gateway settings.
 EOF
   else
   cat <<'EOF'
-Ling-3.0-flash-VL Codex 持久配置工具
+Ling-3.0-flash-VL Claude Code CLI 持久配置工具
 
 用法：
-  bash codex-ling-3-flash-vl-setup.zh-CN.sh
-  bash codex-ling-3-flash-vl-setup.zh-CN.sh --install
-  bash codex-ling-3-flash-vl-setup.zh-CN.sh --status
-  bash codex-ling-3-flash-vl-setup.zh-CN.sh --self-test
-  bash codex-ling-3-flash-vl-setup.zh-CN.sh --uninstall
-  bash codex-ling-3-flash-vl-setup.zh-CN.sh --uninstall --yes
+  bash claude-code-ling-3-flash-vl-setup.zh-CN.sh
+  bash claude-code-ling-3-flash-vl-setup.zh-CN.sh --install
+  bash claude-code-ling-3-flash-vl-setup.zh-CN.sh --status
+  bash claude-code-ling-3-flash-vl-setup.zh-CN.sh --self-test
+  bash claude-code-ling-3-flash-vl-setup.zh-CN.sh --uninstall
+  bash claude-code-ling-3-flash-vl-setup.zh-CN.sh --uninstall --yes
 
-安装后，直接运行 codex 会默认使用：
-  Base URL: https://openrouter.ai/api/v1
+安装后，直接运行 claude 会默认使用：
+  Base URL: https://openrouter.ai/api
   Model:    inclusionai/ling-3.0-flash-vl
-  Protocol: OpenAI Responses API
+  Protocol: Anthropic Messages API
 
-卸载会恢复首次安装前的 config.toml，并删除 Codex 模型配置目录中的 OpenRouter 令牌。
-不会删除 auth.json，也不会主动退出 Codex 订阅账户。
+安装器将提示输入 OpenRouter 个人令牌 APIKey，并将其保存在 Claude 配置目录下、
+权限为 0600。令牌不会写入 settings.json。
 
 安装器还会推荐通过 npx skills 安装 Ling GUI Agent Skill。询问 [Y/n] 时
 只有 N/n 会跳过，其他输入默认安装；自动化可设置 LING_INSTALL_GUI_SKILL=n
 跳过。可使用 LING_GUI_AGENT_SKILL_SOURCE 覆盖默认 Git 仓库地址。
 安装成功后会根据 Skill 的 .env.example 生成 .env，写入当前令牌、Ling 模型和
 Chat Completions Base URL，权限为 0600；重复安装会重新生成这个文件。
-卸载时保留这个共享 Skill 及其 .env；.env 中仍包含 GUI Agent 令牌。
 
-注意：用户级 config.toml 可能被 Codex CLI、Desktop 和 IDE 共享。
+卸载会恢复首次安装前的 settings.json，并删除 Claude 配置目录中的令牌。
+不会修改 ~/.claude.json、.credentials.json、macOS Keychain，也不会退出订阅账户。
+共享的 Ling GUI Agent Skill 及其 .env 会保留，.env 中仍包含 GUI Agent 令牌，
+避免卸载一个模型集成影响其他 Agent。
+
+注意：本工具仅配置 Claude Code CLI。Claude Desktop APP 使用独立配置。
+Claude Code CLI 在自定义 Base URL 后会透传自定义模型 ID；Anthropic 不为非 Claude
+模型路由提供官方支持，本工具属于由网关和模型提供方负责验证的兼容性方案。
 EOF
   fi
 }
 
 resolve_paths() {
-  local requested_home="${CODEX_HOME:-$HOME/.codex}"
+  local requested_dir="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 
-  [ -n "${HOME:-}" ] || die "$(message "HOME must not be empty" "HOME 不能为空")"
-  [ "$HOME" != "/" ] || die "$(message "HOME must not be the root directory" "HOME 不能是根目录")"
-  [ -n "$requested_home" ] || die "$(message "CODEX_HOME must not be empty" "CODEX_HOME 不能为空")"
-  [ "$requested_home" != "/" ] || die "$(message "CODEX_HOME must not be the root directory" "CODEX_HOME 不能是根目录")"
+  [ -n "$requested_dir" ] || die "$(message "CLAUDE_CONFIG_DIR must not be empty" "CLAUDE_CONFIG_DIR 不能为空")"
+  [ "$requested_dir" != "/" ] || die "$(message "CLAUDE_CONFIG_DIR must not be the root directory" "CLAUDE_CONFIG_DIR 不能是根目录")"
 
-  if [ ! -d "$requested_home" ]; then
-    mkdir -p -- "$requested_home"
-    chmod 700 "$requested_home"
+  if [ ! -d "$requested_dir" ]; then
+    mkdir -p -- "$requested_dir"
+    chmod 700 "$requested_dir"
   fi
-  codex_home="$(cd -- "$requested_home" >/dev/null 2>&1 && pwd -P)"
+  claude_dir="$(cd -- "$requested_dir" >/dev/null 2>&1 && pwd -P)"
 
-  config_file="$codex_home/config.toml"
-  install_dir="$codex_home/ling-3-flash-vl"
-  backup_dir="$codex_home/backup-ling-3-flash-vl"
-  backup_config="$backup_dir/config.toml"
+  settings_file="$claude_dir/settings.json"
+  install_dir="$claude_dir/ling-3-flash-vl"
+  backup_dir="$claude_dir/backup-ling-3-flash-vl"
+  backup_settings="$backup_dir/settings.json"
   manifest_file="$backup_dir/manifest.txt"
-  catalog_file="$install_dir/models.json"
   token_file="$install_dir/api-key"
   token_reader="$install_dir/read-api-key.sh"
-  gui_skill_dir="$HOME/.agents/skills/$GUI_SKILL_NAME"
+  gui_skill_dir="$claude_dir/skills/$GUI_SKILL_NAME"
 
-  [ ! -L "$config_file" ] || die "$(message "Symlinked config.toml is not supported: $config_file" "暂不支持符号链接形式的 config.toml：$config_file")"
+  [ ! -L "$settings_file" ] || die "$(message "Symlinked settings.json is not supported: $settings_file" "暂不支持符号链接形式的 settings.json：$settings_file")"
   [ ! -L "$install_dir" ] || die "$(message "The installation directory must not be a symlink: $install_dir" "安装目录不能是符号链接：$install_dir")"
   [ ! -L "$backup_dir" ] || die "$(message "The backup directory must not be a symlink: $backup_dir" "备份目录不能是符号链接：$backup_dir")"
 }
 
-resolve_codex() {
-  codex_executable="$(command -v codex 2>/dev/null || true)"
-  [ -n "$codex_executable" ] \
-    || die "$(message "Codex CLI not found. Install @openai/codex first" "未找到 Codex CLI。请先安装 @openai/codex")"
+resolve_json_runtime() {
+  if command -v python3 >/dev/null 2>&1; then
+    json_runtime="python3"
+  elif command -v node >/dev/null 2>&1; then
+    json_runtime="node"
+  else
+    die "$(message "python3 or node is required to safely merge settings.json" "需要 python3 或 node 来安全合并 settings.json")"
+  fi
+}
+
+resolve_claude() {
+  claude_executable="$(command -v claude 2>/dev/null || true)"
+  [ -n "$claude_executable" ] \
+    || die "$(message "Claude Code CLI not found. Install Claude Code first" "未找到 Claude Code CLI。请先安装 Claude Code")"
 }
 
 write_gui_skill_env() {
@@ -253,7 +269,7 @@ write_gui_skill_env() {
         found_api_key="1"
         ;;
       LING_MODEL=*)
-        printf 'LING_MODEL=%s\n' "$MODEL"
+        printf 'LING_MODEL=%s\n' "$model"
         found_model="1"
         ;;
       *) printf '%s\n' "$line" ;;
@@ -261,7 +277,7 @@ write_gui_skill_env() {
   done < "$template" > "$gui_skill_env_stage"
   [ "$found_base_url" = "1" ] || printf 'LING_BASE_URL=%s\n' "$GUI_SKILL_BASE_URL" >> "$gui_skill_env_stage"
   [ "$found_api_key" = "1" ] || printf 'LING_API_KEY=%s\n' "$theta_api_key" >> "$gui_skill_env_stage"
-  [ "$found_model" = "1" ] || printf 'LING_MODEL=%s\n' "$MODEL" >> "$gui_skill_env_stage"
+  [ "$found_model" = "1" ] || printf 'LING_MODEL=%s\n' "$model" >> "$gui_skill_env_stage"
   chmod 600 "$gui_skill_env_stage"
   mv -f -- "$gui_skill_env_stage" "$destination"
   gui_skill_env_stage=""
@@ -291,7 +307,7 @@ install_gui_skill() {
   else
     info "$(message "Installing the Ling GUI Agent Skill through npx skills..." "正在通过 npx skills 安装 Ling GUI Agent Skill……")"
   fi
-  if ! env -u OPENROUTER_API_KEY CODEX_HOME="$codex_home" \
+  if ! env -u OPENROUTER_API_KEY CLAUDE_CONFIG_DIR="$claude_dir" \
     "$npx_executable" --yes "$SKILLS_CLI_PACKAGE" add "$GUI_SKILL_SOURCE" \
       --global --agent "$GUI_SKILL_AGENT" --skill "$GUI_SKILL_NAME" --yes \
       >"$skill_install_log" 2>&1
@@ -378,15 +394,6 @@ show_gui_skill_status() {
   fi
 }
 
-toml_quote() {
-  local value="$1"
-  value="${value//\\/\\\\}"
-  value="${value//\"/\\\"}"
-  value="${value//$'\n'/\\n}"
-  value="${value//$'\r'/\\r}"
-  printf '"%s"' "$value"
-}
-
 sha256_file() {
   local path="$1"
   if command -v shasum >/dev/null 2>&1; then
@@ -395,6 +402,15 @@ sha256_file() {
     sha256sum "$path" | awk '{print $1}'
   else
     die "$(message "shasum or sha256sum is required to verify configuration snapshots" "缺少 shasum 或 sha256sum，无法校验配置快照")"
+  fi
+}
+
+file_mode() {
+  local path="$1"
+  if stat -f '%Lp' "$path" >/dev/null 2>&1; then
+    stat -f '%Lp' "$path"
+  else
+    stat -c '%a' "$path"
   fi
 }
 
@@ -428,82 +444,6 @@ read_api_key() {
   [ -n "$theta_api_key" ] || die "$(message "The OpenRouter personal token cannot be empty" "OpenRouter 个人令牌不能为空")"
 }
 
-write_catalog() {
-  local destination="$1"
-  cat > "$destination" <<JSON
-{
-  "models": [
-    {
-      "slug": "$MODEL",
-      "display_name": "Ling-3.0-flash-VL",
-      "description": "OpenRouter-hosted Ling-3.0-flash-VL model for Codex integration testing.",
-      "base_instructions": "You are Codex, a coding agent working with the user in the current repository. Follow the user's request, all developer instructions, and applicable AGENTS.md files. Use tools when needed, preserve unrelated user changes, never expose credentials, verify completed work, and report results concisely.",
-      "prefer_websockets": false,
-      "support_verbosity": false,
-      "apply_patch_tool_type": "freeform",
-      "web_search_tool_type": "text",
-      "input_modalities": ["text"],
-      "supports_image_detail_original": false,
-      "truncation_policy": {"mode": "tokens", "limit": 10000},
-      "supports_parallel_tool_calls": false,
-      "tool_mode": null,
-      "use_responses_lite": false,
-      "include_skills_usage_instructions": false,
-      "auto_review_model_override": null,
-      "context_window": 131072,
-      "max_context_window": 131072,
-      "effective_context_window_percent": 90,
-      "auto_compact_token_limit": null,
-      "reasoning_summary_format": "experimental",
-      "default_reasoning_summary": "none",
-      "default_reasoning_level": "high",
-      "supported_reasoning_levels": [
-        {"effort": "none", "description": "No thinking"},
-        {"effort": "high", "description": "Validated default for the initial OpenRouter integration"}
-      ],
-      "shell_type": "shell_command",
-      "visibility": "list",
-      "minimal_client_version": "0.148.0",
-      "supported_in_api": true,
-      "availability_nux": null,
-      "upgrade": null,
-      "priority": 1,
-      "experimental_supported_tools": [],
-      "supports_search_tool": false,
-      "default_service_tier": null,
-      "supports_reasoning_summaries": false
-    }
-  ]
-}
-JSON
-  if [ "${LING_MODEL_CHOICES:-[]}" != '[]' ]; then
-    python3 - "$destination" "$MODEL" <<'PY'
-import copy, json, os, pathlib, sys
-path = pathlib.Path(sys.argv[1])
-data = json.loads(path.read_text())
-template = data['models'][0]
-choices = json.loads(os.environ['LING_MODEL_CHOICES'])
-labels = {row['model']: row['label'] for row in choices}
-models = list(dict.fromkeys([sys.argv[2], *labels]))
-data['models'] = []
-for priority, model in enumerate(models, 1):
-    row = copy.deepcopy(template)
-    row.update(slug=model, display_name=labels.get(model, model),
-               description=labels.get(model, model), priority=priority)
-    context = next((choice['context_length'] for choice in choices if choice['model'] == model), None)
-    if context is not None:
-        row.update(context_window=context, max_context_window=context)
-    levels = next((choice.get('reasoning_levels') for choice in choices if choice['model'] == model), None)
-    if levels is not None:
-        row['supported_reasoning_levels'] = [
-            {'effort': level, 'description': 'No thinking' if level == 'none' else 'Thinking enabled'}
-            for level in levels]
-    data['models'].append(row)
-path.write_text(json.dumps(data, indent=2) + '\n')
-PY
-  fi
-}
-
 write_token_reader() {
   local destination="$1"
   cat > "$destination" <<'SH'
@@ -528,87 +468,212 @@ printf '%s\n' "$token"
 SH
 }
 
-write_config() {
+write_settings_python() {
   local source="$1"
   local destination="$2"
 
-  {
-    printf 'model = %s\n' "$(toml_quote "$MODEL")"
-    printf 'model_provider = %s\n' "$(toml_quote "$PROVIDER_ID")"
-    printf 'model_reasoning_effort = "high"\n'
-    printf 'model_reasoning_summary = "none"\n'
-    printf 'model_catalog_json = %s\n\n' "$(toml_quote "$catalog_file")"
+  python3 - "$source" "$destination" "$model" "$base_url" "$token_reader" <<'PY'
+import json
+import pathlib
+import sys
 
-    if [ -f "$source" ]; then
-      awk '
-        BEGIN { top_level = 1; skip_provider = 0 }
+source, destination, model, base_url, token_reader = sys.argv[1:]
+import os
+choices = json.loads(os.environ.get('LING_MODEL_CHOICES', '[]'))
+source_path = pathlib.Path(source)
 
-        /^[[:space:]]*\[\[?/ {
-          header = $0
-          sub(/[[:space:]]*#.*/, "", header)
-          gsub(/[[:space:]]/, "", header)
-          top_level = 0
-          if (header == "[model_providers.antchat_ling3]" ||
-              index(header, "[model_providers.antchat_ling3.") == 1) {
-            skip_provider = 1
-            next
-          }
-          skip_provider = 0
-        }
+if source_path.is_file():
+    with source_path.open("r", encoding="utf-8") as handle:
+        data = json.load(handle)
+else:
+    data = {}
 
-        skip_provider { next }
+if not isinstance(data, dict):
+    raise SystemExit("settings.json must contain a JSON object")
 
-        top_level && /^[[:space:]]*(model|model_provider|model_reasoning_effort|model_reasoning_summary|model_catalog_json)[[:space:]]*=/ {
-          next
-        }
+env = data.get("env", {})
+if not isinstance(env, dict):
+    raise SystemExit("settings.json env must be a JSON object")
 
-        { print }
-      ' "$source"
-    fi
+for key in (
+    "ANTHROPIC_API_KEY",
+    "ANTHROPIC_AUTH_TOKEN",
+    "CLAUDE_CODE_USE_BEDROCK",
+    "CLAUDE_CODE_USE_VERTEX",
+    "CLAUDE_CODE_USE_FOUNDRY",
+    "CLAUDE_CODE_DISABLE_THINKING",
+    "MAX_THINKING_TOKENS",
+):
+    env.pop(key, None)
 
-    printf '\n[model_providers.%s]\n' "$PROVIDER_ID"
-    printf 'name = %s\n' "$(toml_quote "$LING_CODEX_PROVIDER_NAME")"
-    printf 'base_url = %s\n' "$(toml_quote "$BASE_URL")"
-    printf 'wire_api = "responses"\n'
-    printf 'supports_websockets = false\n\n'
-    printf '[model_providers.%s.auth]\n' "$PROVIDER_ID"
-    printf 'command = %s\n' "$(toml_quote "$token_reader")"
-    printf 'timeout_ms = 5000\n'
-    printf 'refresh_interval_ms = 0\n'
-  } > "$destination"
+env.update(
+    {
+        "ANTHROPIC_BASE_URL": base_url,
+        "ANTHROPIC_MODEL": model,
+        "ANTHROPIC_DEFAULT_MODEL": model,
+        "ANTHROPIC_DEFAULT_FABLE_MODEL": model,
+        "ANTHROPIC_DEFAULT_OPUS_MODEL": model,
+        "ANTHROPIC_DEFAULT_SONNET_MODEL": model,
+        "ANTHROPIC_DEFAULT_HAIKU_MODEL": model,
+        "CLAUDE_CODE_SUBAGENT_MODEL": model,
+        "CLAUDE_CODE_SUBAGENT_MODEL_FORCE": "1",
+        "ANTHROPIC_CUSTOM_MODEL_OPTION": model,
+        "ANTHROPIC_CUSTOM_MODEL_OPTION_NAME": "Ling-3.0-flash-VL",
+        "ANTHROPIC_CUSTOM_MODEL_OPTION_DESCRIPTION": "OpenRouter Anthropic-compatible model",
+    }
+)
+
+for prefix in ("ANTHROPIC_DEFAULT_FABLE_MODEL", "ANTHROPIC_DEFAULT_OPUS_MODEL", "ANTHROPIC_DEFAULT_SONNET_MODEL", "ANTHROPIC_DEFAULT_HAIKU_MODEL", "ANTHROPIC_CUSTOM_MODEL_OPTION"):
+    env[prefix + "_SUPPORTED_CAPABILITIES"] = "thinking"
+data["alwaysThinkingEnabled"] = True
+data["model"] = model
+if choices:
+    env['CLAUDE_CODE_MAX_CONTEXT_TOKENS'] = str(min(row['context_length'] for row in choices))
+    for key in ('ANTHROPIC_MODEL', 'CLAUDE_CODE_SUBAGENT_MODEL', 'CLAUDE_CODE_SUBAGENT_MODEL_FORCE'):
+        env.pop(key, None)
+    labels = {row['model']: row['label'] for row in choices}
+    env['ANTHROPIC_CUSTOM_MODEL_OPTION_NAME'] = labels.get(model, model)
+    for alias, row in zip(('OPUS', 'SONNET'), choices):
+        env[f'ANTHROPIC_DEFAULT_{alias}_MODEL'] = row['model']
+        env[f'ANTHROPIC_DEFAULT_{alias}_MODEL_NAME'] = row['label']
+    picker = data.setdefault('modelPicker', {'replaceBuiltInOptions': True})
+    picker['options'] = [{'model': row['model'], 'label': row['label']} for row in choices] + [row for row in picker.get('options', []) if row['model'] not in labels]
+data["apiKeyHelper"] = token_reader
+data["env"] = env
+
+with pathlib.Path(destination).open("w", encoding="utf-8", newline="\n") as handle:
+    json.dump(data, handle, ensure_ascii=False, indent=2)
+    handle.write("\n")
+PY
 }
 
-validate_staged_files() {
-  if command -v python3 >/dev/null 2>&1 \
-    && python3 -c 'import tomllib' >/dev/null 2>&1; then
-    python3 -c 'import pathlib, sys, tomllib; tomllib.loads(pathlib.Path(sys.argv[1]).read_text())' \
-      "$stage_dir/config.toml" \
-      || die "$(message "Generated config.toml is not valid TOML" "生成的 config.toml 不是有效 TOML")"
-  fi
+write_settings_node() {
+  local source="$1"
+  local destination="$2"
 
-  if command -v jq >/dev/null 2>&1; then
-    jq -e --arg model "$MODEL" \
-      '.models | type == "array" and any(.slug == $model)' \
-      "$stage_dir/models.json" >/dev/null \
-      || die "$(message "Generated models.json is invalid" "生成的 models.json 无效")"
-  elif command -v python3 >/dev/null 2>&1; then
-    python3 -c 'import json, pathlib, sys; data=json.loads(pathlib.Path(sys.argv[1]).read_text()); assert any(item.get("slug") == sys.argv[2] for item in data["models"])' \
-      "$stage_dir/models.json" "$MODEL" \
-      || die "$(message "Generated models.json is invalid" "生成的 models.json 无效")"
-  else
-    grep -Fq "\"slug\": \"$MODEL\"" "$stage_dir/models.json" \
-      || die "$(message "Generated models.json does not contain the target model" "生成的 models.json 缺少目标模型")"
+  node - "$source" "$destination" "$model" "$base_url" "$token_reader" <<'JS'
+const fs = require("fs");
+const [source, destination, model, baseUrl, tokenReader] = process.argv.slice(2);
+let data = fs.existsSync(source) ? JSON.parse(fs.readFileSync(source, "utf8")) : {};
+if (data === null || Array.isArray(data) || typeof data !== "object") {
+  throw new Error("settings.json must contain a JSON object");
+}
+let env = data.env === undefined ? {} : data.env;
+if (env === null || Array.isArray(env) || typeof env !== "object") {
+  throw new Error("settings.json env must be a JSON object");
+}
+for (const key of [
+  "ANTHROPIC_API_KEY",
+  "ANTHROPIC_AUTH_TOKEN",
+  "CLAUDE_CODE_USE_BEDROCK",
+  "CLAUDE_CODE_USE_VERTEX",
+  "CLAUDE_CODE_USE_FOUNDRY",
+  "CLAUDE_CODE_DISABLE_THINKING",
+  "MAX_THINKING_TOKENS",
+]) delete env[key];
+Object.assign(env, {
+  ANTHROPIC_BASE_URL: baseUrl,
+  ANTHROPIC_MODEL: model,
+  ANTHROPIC_DEFAULT_MODEL: model,
+  ANTHROPIC_DEFAULT_FABLE_MODEL: model,
+  ANTHROPIC_DEFAULT_OPUS_MODEL: model,
+  ANTHROPIC_DEFAULT_SONNET_MODEL: model,
+  ANTHROPIC_DEFAULT_HAIKU_MODEL: model,
+  CLAUDE_CODE_SUBAGENT_MODEL: model,
+  CLAUDE_CODE_SUBAGENT_MODEL_FORCE: "1",
+  ANTHROPIC_CUSTOM_MODEL_OPTION: model,
+  ANTHROPIC_CUSTOM_MODEL_OPTION_NAME: "Ling-3.0-flash-VL",
+  ANTHROPIC_CUSTOM_MODEL_OPTION_DESCRIPTION: "OpenRouter Anthropic-compatible model",
+});
+for (const prefix of ["ANTHROPIC_DEFAULT_FABLE_MODEL", "ANTHROPIC_DEFAULT_OPUS_MODEL", "ANTHROPIC_DEFAULT_SONNET_MODEL", "ANTHROPIC_DEFAULT_HAIKU_MODEL", "ANTHROPIC_CUSTOM_MODEL_OPTION"]) env[prefix + "_SUPPORTED_CAPABILITIES"] = "thinking";
+data.alwaysThinkingEnabled = true;
+data.model = model;
+const choices = JSON.parse(process.env.LING_MODEL_CHOICES || '[]');
+if (choices.length) {
+  env.CLAUDE_CODE_MAX_CONTEXT_TOKENS = String(Math.min(...choices.map(row => row.context_length)));
+  for (const key of ['ANTHROPIC_MODEL', 'CLAUDE_CODE_SUBAGENT_MODEL', 'CLAUDE_CODE_SUBAGENT_MODEL_FORCE']) delete env[key];
+  const labels = Object.fromEntries(choices.map(row => [row.model, row.label]));
+  env.ANTHROPIC_CUSTOM_MODEL_OPTION_NAME = labels[model] || model;
+  ['OPUS', 'SONNET'].forEach((alias, i) => {
+    env[`ANTHROPIC_DEFAULT_${alias}_MODEL`] = choices[i].model;
+    env[`ANTHROPIC_DEFAULT_${alias}_MODEL_NAME`] = choices[i].label;
+  });
+  data.modelPicker ??= {replaceBuiltInOptions: true};
+  data.modelPicker.options = choices.map(({model, label}) => ({model, label})).concat((data.modelPicker.options || []).filter(row => !(row.model in labels)));
+}
+data.apiKeyHelper = tokenReader;
+data.env = env;
+fs.writeFileSync(destination, JSON.stringify(data, null, 2) + "\n", "utf8");
+JS
+}
+
+write_settings() {
+  local source="$1"
+  local destination="$2"
+
+  case "$json_runtime" in
+    python3) write_settings_python "$source" "$destination" ;;
+    node) write_settings_node "$source" "$destination" ;;
+    *) die "$(message "Unknown JSON runtime: $json_runtime" "未知 JSON 运行时：$json_runtime")" ;;
+  esac
+}
+
+validate_json() {
+  local path="$1"
+  case "$json_runtime" in
+    python3)
+      python3 -c 'import json, pathlib, sys; data=json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8")); assert isinstance(data, dict)' "$path"
+      ;;
+    node)
+      node -e 'const fs=require("fs"); const value=JSON.parse(fs.readFileSync(process.argv[1], "utf8")); if (!value || Array.isArray(value) || typeof value !== "object") process.exit(1)' "$path"
+      ;;
+  esac
+}
+
+warn_shell_conflicts() {
+  local found="0"
+  local name
+  for name in \
+    ANTHROPIC_API_KEY \
+    ANTHROPIC_AUTH_TOKEN \
+    CLAUDE_CODE_USE_BEDROCK \
+    CLAUDE_CODE_USE_VERTEX \
+    CLAUDE_CODE_USE_FOUNDRY
+  do
+    if [ -n "${!name:-}" ]; then
+      if [ "$found" = "0" ]; then
+        info "$(message "Warning: the current shell contains environment variables that may change authentication routing:" "警告：当前 shell 中存在可能改变认证路由的环境变量：")"
+      fi
+      info "  - $name"
+      found="1"
+    fi
+  done
+  if [ "$found" = "1" ]; then
+    info "$(message "Unset these shell variables while verifying. The installer does not modify shell profiles." "请在验证时取消这些 shell 变量；安装器不会修改 shell profile。")"
   fi
 }
 
 install_ling() {
-  local original_config_existed="0"
+  local original_settings_existed="0"
+  local original_settings_mode=""
   local installed_sha=""
   local previous_installed_sha=""
   local current_sha=""
   local safety_copy=""
 
-  resolve_codex
+  resolve_json_runtime
+  resolve_claude
+  if is_english; then
+    info "This will configure Claude Code to use Ling ($model) through $base_url and store your API key locally with mode 0600."
+    info "Existing managed configuration will be backed up for restoration. Backup: $backup_dir"
+    info "To restore: run this same script without arguments and choose 9, or run it with --uninstall."
+    info "The optional GUI Skill and its .env remain installed after uninstall. Press Ctrl+C now to cancel."
+  else
+    info "即将配置 Claude Code 使用 Ling（${model}），服务地址为 ${base_url}，并将 API Key 保存在本地（权限 0600）。"
+    info "将备份所管理的原配置以便恢复。备份位置：$backup_dir"
+    info "恢复方法：不带参数运行同一个脚本并选择 9，或使用 --uninstall。"
+    info "卸载后可选 GUI Skill 及其 .env 仍会保留。现在可按 Ctrl+C 取消。"
+  fi
   read_api_key
 
   if [ -e "$backup_dir" ] && [ ! -d "$backup_dir" ]; then
@@ -630,42 +695,43 @@ install_ling() {
     skip_gui_skill
   fi
 
-  if is_managed_install && [ -f "$config_file" ]; then
-    previous_installed_sha="$(manifest_value installed_config_sha256 || true)"
-    current_sha="$(sha256_file "$config_file")"
+  if is_managed_install && [ -f "$settings_file" ]; then
+    previous_installed_sha="$(manifest_value installed_settings_sha256 || true)"
+    current_sha="$(sha256_file "$settings_file")"
     if [ -z "$previous_installed_sha" ] || [ "$current_sha" != "$previous_installed_sha" ]; then
-      safety_copy="$codex_home/config.before-ling3-update.$(date '+%Y%m%d-%H%M%S').toml"
-      cp -p -- "$config_file" "$safety_copy"
+      safety_copy="$claude_dir/settings.before-ling3-update.$(date '+%Y%m%d-%H%M%S').json"
+      cp -p -- "$settings_file" "$safety_copy"
       chmod 600 "$safety_copy"
       info "$(message "Detected settings changes since the previous install; saved a safety copy: $safety_copy" "检测到上次安装后的配置改动，已先保存：$safety_copy")"
     fi
   fi
 
-  stage_dir="$(mktemp -d "$codex_home/.ling3-stage.XXXXXX")"
-  write_catalog "$stage_dir/models.json"
+  stage_dir="$(mktemp -d "$claude_dir/.ling3-claude-stage.XXXXXX")"
   write_token_reader "$stage_dir/read-api-key.sh"
   printf '%s' "$theta_api_key" > "$stage_dir/api-key"
   unset theta_api_key OPENROUTER_API_KEY
-  write_config "$config_file" "$stage_dir/config.toml"
-  chmod 600 "$stage_dir/api-key" "$stage_dir/config.toml" "$stage_dir/models.json"
+  write_settings "$settings_file" "$stage_dir/settings.json"
+  chmod 600 "$stage_dir/api-key" "$stage_dir/settings.json"
   chmod 700 "$stage_dir/read-api-key.sh"
-  validate_staged_files
-  installed_sha="$(sha256_file "$stage_dir/config.toml")"
+  validate_json "$stage_dir/settings.json" || die "$(message "Generated settings.json is invalid" "生成的 settings.json 无效")"
+  installed_sha="$(sha256_file "$stage_dir/settings.json")"
 
   if [ ! -d "$backup_dir" ]; then
     mkdir -- "$backup_dir"
     backup_created="1"
     chmod 700 "$backup_dir"
-    if [ -f "$config_file" ]; then
-      cp -p -- "$config_file" "$backup_config"
-      original_config_existed="1"
+    if [ -f "$settings_file" ]; then
+      cp -p -- "$settings_file" "$backup_settings"
+      original_settings_existed="1"
+      original_settings_mode="$(file_mode "$settings_file")"
     fi
   else
-    original_config_existed="$(manifest_value original_config_existed || true)"
-    case "$original_config_existed" in
+    original_settings_existed="$(manifest_value original_settings_existed || true)"
+    original_settings_mode="$(manifest_value original_settings_mode || true)"
+    case "$original_settings_existed" in
       0) ;;
-      1) [ -f "$backup_config" ] || die "$(message "Original settings backup is missing: $backup_config" "原始配置备份缺失：$backup_config")" ;;
-      *) die "$(message "Invalid original_config_existed in the backup manifest" "备份清单中的 original_config_existed 无效")" ;;
+      1) [ -f "$backup_settings" ] || die "$(message "Original settings backup is missing: $backup_settings" "原始配置备份缺失：$backup_settings")" ;;
+      *) die "$(message "Invalid original_settings_existed in the backup manifest" "备份清单中的 original_settings_existed 无效")" ;;
     esac
   fi
 
@@ -673,10 +739,11 @@ install_ling() {
     printf 'installer_id=%s\n' "$INSTALLER_ID"
     printf 'script_version=%s\n' "$SCRIPT_VERSION"
     printf 'installed_at=%s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
-    printf 'original_config_existed=%s\n' "$original_config_existed"
-    printf 'installed_config_sha256=%s\n' "$installed_sha"
-    printf 'model=%s\n' "$MODEL"
-    printf 'base_url=%s\n' "$BASE_URL"
+    printf 'original_settings_existed=%s\n' "$original_settings_existed"
+    printf 'original_settings_mode=%s\n' "$original_settings_mode"
+    printf 'installed_settings_sha256=%s\n' "$installed_sha"
+    printf 'model=%s\n' "$model"
+    printf 'base_url=%s\n' "$base_url"
   } > "$stage_dir/manifest.txt"
   chmod 600 "$stage_dir/manifest.txt"
   mv -f -- "$stage_dir/manifest.txt" "$manifest_file"
@@ -685,35 +752,40 @@ install_ling() {
   mkdir -p -- "$install_dir"
   chmod 700 "$install_dir"
   mv -f -- "$stage_dir/api-key" "$token_file"
-  mv -f -- "$stage_dir/models.json" "$catalog_file"
   mv -f -- "$stage_dir/read-api-key.sh" "$token_reader"
-  chmod 600 "$token_file" "$catalog_file"
+  chmod 600 "$token_file"
   chmod 700 "$token_reader"
 
-  mv -f -- "$stage_dir/config.toml" "$config_file"
-  chmod 600 "$config_file"
+  mv -f -- "$stage_dir/settings.json" "$settings_file"
+  chmod 600 "$settings_file"
 
   info ""
-  info "$(message "Installation complete. Running codex now defaults to ${MODEL}." "安装完成。以后直接运行 codex，默认使用 ${MODEL}。")"
-  info "$(message "OpenRouter token: ${token_file} (mode 0600)" "OpenRouter 令牌：${token_file}（权限 0600）")"
-  info "$(message "Original settings backup: $backup_dir" "原始配置：$backup_dir")"
-  info "$(message "The Codex subscription credential in auth.json was not modified." "Codex 订阅登录凭证 auth.json 未被修改。")"
-  info "$(message "Note: clients sharing $codex_home may all read this configuration, including Codex CLI, Desktop, and IDE integrations." "注意：共享 $codex_home 的 Codex CLI、Desktop 和 IDE 都可能读取这份配置。")"
+  info "$(message "Installation complete. Running claude now defaults to ${model}." "安装完成。以后直接运行 claude，默认使用 ${model}。")"
+  info "$(message "Claude settings: ${settings_file}" "Claude 配置：${settings_file}")"
+  info "$(message "OpenRouter token: ${token_file} (mode 0600; not stored in settings.json)" "OpenRouter 令牌：${token_file}（权限 0600，不写入 settings.json）")"
+  info "$(message "Pre-install settings backup: ${backup_dir}" "首次安装前的配置备份：${backup_dir}")"
+  info "$(message "The subscription login, ~/.claude.json, .credentials.json, and macOS Keychain were not modified." "订阅登录、~/.claude.json、.credentials.json 和 macOS Keychain 均未修改。")"
+  info "$(message "Claude Desktop does not use this CLI gateway configuration." "Claude Desktop APP 不读取这项 CLI 网关配置。")"
+  warn_shell_conflicts
   info "$(message "Run this script with --self-test to verify the end-to-end path." "可运行本脚本 --self-test 验证完整调用链。")"
 }
 
 status_ling() {
+  local recorded_model=""
+  local recorded_base_url=""
+
   if ! is_managed_install; then
     info "$(message "Status: not installed" "状态：未安装")"
-    info "$(message "Codex config directory: $codex_home" "Codex 配置目录：$codex_home")"
+    info "$(message "Claude config directory: $claude_dir" "Claude 配置目录：$claude_dir")"
     return 1
   fi
 
+  recorded_model="$(manifest_value model 2>/dev/null || true)"
+  recorded_base_url="$(manifest_value base_url 2>/dev/null || true)"
   info "$(message "Status: installed" "状态：已安装")"
-  info "$(message "Model: $MODEL" "模型：$MODEL")"
-  info "$(message "Base URL: $BASE_URL" "Base URL：$BASE_URL")"
-  info "$(message "Codex settings: $config_file" "Codex 配置：$config_file")"
-  info "$(message "Model catalog: $catalog_file" "模型目录：$catalog_file")"
+  info "$(message "Model: ${recorded_model:-unknown}" "模型：${recorded_model:-未知}")"
+  info "$(message "Base URL: ${recorded_base_url:-unknown}" "Base URL：${recorded_base_url:-未知}")"
+  info "$(message "Claude settings: $settings_file" "Claude 配置：$settings_file")"
   if [ -f "$token_file" ]; then
     info "$(message "OpenRouter token: saved (value hidden)" "OpenRouter 令牌：已保存（不显示内容）")"
   else
@@ -721,11 +793,12 @@ status_ling() {
   fi
   info "$(message "Installer version: $(manifest_value script_version 2>/dev/null || printf 'unknown')" "安装版本：$(manifest_value script_version 2>/dev/null || printf '未知')")"
   show_gui_skill_status
+  warn_shell_conflicts
 }
 
 confirm_uninstall() {
   local answer=""
-  printf "$(message 'Restore the Codex settings from before the first install? [y/N] ' '卸载后将恢复首次安装前的 Codex 配置。继续？[y/N] ')" > /dev/tty
+  printf "$(message 'Restore the Claude Code CLI settings from before the first install? [y/N] ' '卸载后将恢复首次安装前的 Claude Code CLI 配置。继续？[y/N] ')" > /dev/tty
   IFS= read -r answer < /dev/tty || return 1
   case "$answer" in
     y|Y|yes|YES) return 0 ;;
@@ -735,7 +808,8 @@ confirm_uninstall() {
 
 uninstall_ling() {
   local assume_yes="$1"
-  local original_config_existed=""
+  local original_settings_existed=""
+  local original_settings_mode=""
   local installed_sha=""
   local current_sha=""
   local safety_copy=""
@@ -750,43 +824,45 @@ uninstall_ling() {
     fi
   fi
 
-  original_config_existed="$(manifest_value original_config_existed || true)"
-  installed_sha="$(manifest_value installed_config_sha256 || true)"
+  original_settings_existed="$(manifest_value original_settings_existed || true)"
+  original_settings_mode="$(manifest_value original_settings_mode || true)"
+  installed_sha="$(manifest_value installed_settings_sha256 || true)"
 
-  if [ -f "$config_file" ]; then
-    current_sha="$(sha256_file "$config_file")"
+  if [ -f "$settings_file" ]; then
+    current_sha="$(sha256_file "$settings_file")"
     if [ -z "$installed_sha" ] || [ "$current_sha" != "$installed_sha" ]; then
-      safety_copy="$codex_home/config.before-ling3-uninstall.$(date '+%Y%m%d-%H%M%S').toml"
-      cp -p -- "$config_file" "$safety_copy"
+      safety_copy="$claude_dir/settings.before-ling3-uninstall.$(date '+%Y%m%d-%H%M%S').json"
+      cp -p -- "$settings_file" "$safety_copy"
       chmod 600 "$safety_copy"
       info "$(message "Detected post-install settings changes; saved a safety copy: $safety_copy" "检测到安装后的配置改动，已额外保存：$safety_copy")"
     fi
   fi
 
-  case "$original_config_existed" in
+  case "$original_settings_existed" in
     1)
-      [ -f "$backup_config" ] || die "$(message "Original settings backup is missing: $backup_config" "原始配置备份缺失：$backup_config")"
-      cp -p -- "$backup_config" "$codex_home/.config.toml.ling3-restore"
-      mv -f -- "$codex_home/.config.toml.ling3-restore" "$config_file"
+      [ -f "$backup_settings" ] || die "$(message "Original settings backup is missing: $backup_settings" "原始配置备份缺失：$backup_settings")"
+      cp -p -- "$backup_settings" "$claude_dir/.settings.json.ling3-restore"
+      mv -f -- "$claude_dir/.settings.json.ling3-restore" "$settings_file"
+      [ -n "$original_settings_mode" ] && chmod "$original_settings_mode" "$settings_file"
       ;;
     0)
-      rm -f -- "$config_file"
+      rm -f -- "$settings_file"
       ;;
     *)
-      die "$(message "Invalid original_config_existed in the backup manifest" "备份清单中的 original_config_existed 无效")"
+      die "$(message "Invalid original_settings_existed in the backup manifest" "备份清单中的 original_settings_existed 无效")"
       ;;
   esac
 
-  rm -f -- "$token_file" "$catalog_file" "$token_reader"
+  rm -f -- "$token_file" "$token_reader"
   rmdir -- "$install_dir" 2>/dev/null \
     || die "$(message "Settings restored; installation directory contains unknown files and was preserved: $install_dir" "安装目录包含未知文件，已恢复配置但未删除目录：$install_dir")"
-  rm -f -- "$backup_config" "$manifest_file"
+  rm -f -- "$backup_settings" "$manifest_file"
   rmdir -- "$backup_dir" 2>/dev/null \
     || die "$(message "Settings restored; backup directory contains unknown files and was preserved: $backup_dir" "备份目录包含未知文件，已恢复配置但未删除目录：$backup_dir")"
 
-  info "$(message "Uninstall complete: restored the Codex settings from before the first install." "卸载完成：已恢复首次安装前的 Codex 配置。")"
-  info "$(message "Deleted the OpenRouter token from the Codex model configuration directory." "已删除 Codex 模型配置目录中的 OpenRouter 令牌。")"
-  info "$(message "The Codex subscription credential in auth.json was not modified; running codex now uses the restored account configuration." "Codex 订阅登录凭证 auth.json 未被修改；现在运行 codex 将恢复原账户配置。")"
+  info "$(message "Uninstall complete: restored the Claude Code CLI settings from before the first install." "卸载完成：已恢复首次安装前的 Claude Code CLI 配置。")"
+  info "$(message "Deleted the OpenRouter token from the Claude model configuration directory." "已删除 Claude 模型配置目录中的 OpenRouter 令牌。")"
+  info "$(message "The subscription login was not modified; running claude now uses the restored account configuration." "订阅登录凭证未修改；现在运行 claude 将恢复原账户配置。")"
   if [ -r "$gui_skill_dir/SKILL.md" ]; then
     if is_english; then
       info "Ling GUI Agent Skill remains installed at: $gui_skill_dir"
@@ -804,41 +880,43 @@ uninstall_ling() {
 }
 
 self_test_ling() {
-  resolve_codex
+  local recorded_model=""
+  local self_test_result=""
+
+  resolve_claude
   is_managed_install || die "$(message "Run --install first" "请先执行 --install")"
   [ -r "$token_file" ] || die "$(message "OpenRouter token file is missing or unreadable: $token_file" "OpenRouter 令牌文件缺失或不可读：$token_file")"
   [ -x "$token_reader" ] || die "$(message "Token reader is missing or not executable: $token_reader" "令牌读取器缺失或不可执行：$token_reader")"
-  [ -r "$catalog_file" ] || die "$(message "Model catalog is missing or unreadable: $catalog_file" "模型目录缺失或不可读：$catalog_file")"
 
-  self_test_dir="$(mktemp -d "${TMPDIR:-/tmp}/ling-codex-installed-test.XXXXXX")"
-  info "$(message "Running the Codex end-to-end self-test with the persistent configuration..." "正在使用持久配置执行 Codex 端到端自检……")"
+  recorded_model="$(manifest_value model 2>/dev/null || true)"
+  [ -n "$recorded_model" ] || die "$(message "The backup manifest is missing the model" "备份清单缺少模型信息")"
+  self_test_dir="$(mktemp -d "${TMPDIR:-/tmp}/ling-claude-installed-test.XXXXXX")"
+  info "$(message "Running the Claude Code CLI end-to-end self-test with the persistent configuration..." "正在使用持久配置执行 Claude Code CLI 端到端自检……")"
 
-  if ! CODEX_HOME="$codex_home" "$codex_executable" \
-    --ask-for-approval never \
-    --sandbox read-only \
-    exec \
-    --ignore-rules \
-    --ephemeral \
-    --color never \
-    --output-last-message "$self_test_dir/final.txt" \
+  if ! CLAUDE_CONFIG_DIR="$claude_dir" "$claude_executable" \
+    -p \
+    --model "$recorded_model" \
+    --output-format text \
+    --no-session-persistence \
+    --max-turns 1 \
     "Calculate 19 + 23. Output only the number; do not use tools." \
-    > "$self_test_dir/run.log" 2>&1
+    > "$self_test_dir/output.txt" 2> "$self_test_dir/run.log"
   then
     tail -n 40 "$self_test_dir/run.log" >&2
-    die "$(message "Codex end-to-end self-test failed" "Codex 端到端自检失败")"
+    die "$(message "Claude Code CLI end-to-end self-test failed" "Claude Code CLI 端到端自检失败")"
   fi
 
-  self_test_result="$(tr -d '[:space:]' < "$self_test_dir/final.txt")"
+  self_test_result="$(tr -d '[:space:]' < "$self_test_dir/output.txt")"
   [ "$self_test_result" = "42" ] \
-    || die "$(message "Codex returned an answer other than the expected 42 (actual: ${self_test_result})" "Codex 已返回响应，但自检结果不是预期的 42（实际：${self_test_result}）")"
+    || die "$(message "Claude Code CLI returned an answer other than the expected 42 (actual: ${self_test_result})" "Claude Code CLI 已返回响应，但自检结果不是预期的 42（实际：${self_test_result}）")"
 
-  info "$(message "Self-test passed: persistent settings -> OpenRouter Responses API -> $MODEL returned 42." "自检通过：持久配置 → OpenRouter Responses API → $MODEL 返回 42。")"
+  info "$(message "Self-test passed: persistent settings -> OpenRouter Anthropic Messages API -> $recorded_model returned 42." "自检通过：持久配置 → OpenRouter Anthropic Messages API → $recorded_model 返回 42。")"
 }
 
 interactive_menu() {
   if is_english; then
   cat <<EOF
-Ling-3.0-flash-VL Codex setup v$SCRIPT_VERSION (English)
+Ling-3.0-flash-VL Claude Code CLI setup v$SCRIPT_VERSION (English)
 
 1) Install or update the Ling default model
 2) Show installation status
@@ -848,12 +926,12 @@ Ling-3.0-flash-VL Codex setup v$SCRIPT_VERSION (English)
 EOF
   else
   cat <<EOF
-Ling-3.0-flash-VL Codex 配置工具 v$SCRIPT_VERSION
+Ling-3.0-flash-VL Claude Code CLI 配置工具 v$SCRIPT_VERSION
 
 1) 安装或更新 Ling 默认模型
 2) 查看安装状态
 3) 执行端到端自检
-9) 卸载并恢复 Codex 订阅账户配置
+9) 卸载并恢复 Claude Code 订阅账户配置
 0) 退出
 EOF
   fi
