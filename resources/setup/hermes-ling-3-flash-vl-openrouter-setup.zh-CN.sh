@@ -4,7 +4,7 @@
 # Provider: openrouter
 # Entrypoint: hermes-ling-3-flash-vl-openrouter-setup.zh-CN.sh
 # Model: inclusionai/ling-3.0-flash-vl
-# Payload SHA256: 3761d6e51b8e7795d7550e36adb638a02cf92c40be6652450c89bb6654f30b18
+# Payload SHA256: 802d3046eaf3e289adc49f828c1c3138bccdf60131023f8efe26487e2d0a168f
 set -euo pipefail
 if [ "${1:-}" = "--version" ]; then
   [ "$#" -eq 1 ] || { printf '%s\n' '--version accepts no extra arguments' >&2; exit 2; }
@@ -14,7 +14,7 @@ Installer version: 0.4.0
 Provider: openrouter
 Entrypoint: hermes-ling-3-flash-vl-openrouter-setup.zh-CN.sh
 Model: inclusionai/ling-3.0-flash-vl
-Payload SHA256: 3761d6e51b8e7795d7550e36adb638a02cf92c40be6652450c89bb6654f30b18
+Payload SHA256: 802d3046eaf3e289adc49f828c1c3138bccdf60131023f8efe26487e2d0a168f
 LING_BUNDLE_VERSION
   exit 0
 fi
@@ -712,6 +712,7 @@ print(json.dumps(models))
 PY
 )"
     config_set "providers.$PROVIDER_ID.models" "$model_catalog"
+    config_set "providers.$PROVIDER_ID.discover_models" "false"
     update_model_aliases install
   fi
   update_reasoning_defaults install
