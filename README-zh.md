@@ -53,6 +53,7 @@
 | Ling-3.0-tiny | 单台 NVIDIA DGX Spark | vLLM | BF16 | [文档: vLLM BF16 部署指南](guide/local-deploy/ling-3.0-tiny/dgx-spark-vllm-ling-3-tiny-bf16-zh.ipynb) |
 | Ling-3.0-tiny | Apple Silicon Mac | Ollama | INT4 / FP8 / BF16 | [文档: Ollama 端侧部署指南](guide/local-deploy/ling-3.0-tiny/mac-ollama-ling-3-tiny-zh.ipynb) |
 | Ling-3.0-tiny | Apple Silicon Mac | llama.cpp | BF16 / Q8_0 / Q4_K_M (GGUF) | [文档: llama.cpp Metal 端侧部署指南](guide/local-deploy/ling-3.0-tiny/mac-llamacpp-ling-3-tiny-zh.ipynb) |
+| Ling-3.0-tiny | Apple Silicon Mac | MLX | BF16 / 8-bit / 4-bit | [文档: MLX-LM 原生端侧部署指南](guide/local-deploy/ling-3.0-tiny/mac-mlx-ling-3-tiny-zh.ipynb) |
 
 ---
 
