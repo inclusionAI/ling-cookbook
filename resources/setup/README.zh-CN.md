@@ -42,7 +42,7 @@ bash ./hermes-ling-3-flash-vl-openrouter-setup.sh
 bash ./codex-ling-3-flash-vl-openrouter-setup.sh
 ```
 
-Claude Code 和 Hermes 使用上方对应命令。卸载会恢复安装器管理的配置；可选 GUI Skill 及其 `.env` 仍会保留。
+Claude Code 和 Hermes 使用上方对应命令。卸载会恢复安装器管理的配置。
 
 如需直接操作，可在命令后添加 `--install`、`--status`、`--self-test`、`--uninstall`、`--version` 或 `--help`。`--install` 会在询问 API Key 前说明将进行的修改和恢复方法。
 

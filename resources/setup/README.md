@@ -42,7 +42,7 @@ Run your agent's script **without arguments** to open its menu for status, self-
 bash ./codex-ling-3-flash-vl-openrouter-setup.sh
 ```
 
-Use the corresponding command above for Claude Code or Hermes. Uninstall restores the configuration managed by the installer; the optional GUI Skill and its `.env` remain installed.
+Use the corresponding command above for Claude Code or Hermes. Uninstall restores the configuration managed by the installer.
 
 For direct operation, append `--install`, `--status`, `--self-test`, `--uninstall`, `--version`, or `--help` to your command. `--install` prints the planned changes and restore instructions before requesting your API key.
 

@@ -4,7 +4,7 @@
 # Provider: openrouter
 # Entrypoint: claude-code-ling-3-flash-vl-openrouter-setup.sh
 # Model: inclusionai/ling-3.0-flash-vl
-# Payload SHA256: 8292a3a224371f4045b4c65bd823a0c93c5aca53bbd1b17015cec8706051765f
+# Payload SHA256: 5050fd12035fe4aa32281dacd15197d8b1a3536ea9093b507b06fe3df9a518cf
 set -euo pipefail
 if [ "${1:-}" = "--version" ]; then
   [ "$#" -eq 1 ] || { printf '%s\n' '--version accepts no extra arguments' >&2; exit 2; }
@@ -14,7 +14,7 @@ Installer version: 0.4.0
 Provider: openrouter
 Entrypoint: claude-code-ling-3-flash-vl-openrouter-setup.sh
 Model: inclusionai/ling-3.0-flash-vl
-Payload SHA256: 8292a3a224371f4045b4c65bd823a0c93c5aca53bbd1b17015cec8706051765f
+Payload SHA256: 5050fd12035fe4aa32281dacd15197d8b1a3536ea9093b507b06fe3df9a518cf
 LING_BUNDLE_VERSION
   exit 0
 fi
@@ -667,12 +667,12 @@ install_ling() {
     info "This will configure Claude Code to use Ling ($model) through $base_url and store your API key locally."
     info "Existing managed configuration will be backed up for restoration. Backup: $backup_dir"
     info "To restore: run this same script without arguments and choose 9, or run it with --uninstall."
-    info "The optional GUI Skill and its .env remain installed after uninstall. Press Ctrl+C now to cancel."
+    info "Press Ctrl+C now to cancel."
   else
     info "即将配置 Claude Code 使用 Ling（${model}），服务地址为 ${base_url}，并将 API Key 保存在本地。"
     info "将备份所管理的原配置以便恢复。备份位置：$backup_dir"
     info "恢复方法：不带参数运行同一个脚本并选择 9，或使用 --uninstall。"
-    info "卸载后可选 GUI Skill 及其 .env 仍会保留。现在可按 Ctrl+C 取消。"
+    info "现在可按 Ctrl+C 取消。"
   fi
   read_api_key
 

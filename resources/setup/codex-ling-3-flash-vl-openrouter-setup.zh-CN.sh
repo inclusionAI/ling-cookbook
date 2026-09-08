@@ -4,7 +4,7 @@
 # Provider: openrouter
 # Entrypoint: codex-ling-3-flash-vl-openrouter-setup.zh-CN.sh
 # Model: inclusionai/ling-3.0-flash-vl
-# Payload SHA256: f9cdba67dcf946af9f5b1a38a64b497f44376fdbaff9715cc52d628744726b94
+# Payload SHA256: be3398365fc444797089d35b1f9ac246b9d0b395060d9e6f8eeddd6ba549998c
 set -euo pipefail
 if [ "${1:-}" = "--version" ]; then
   [ "$#" -eq 1 ] || { printf '%s\n' '--version accepts no extra arguments' >&2; exit 2; }
@@ -14,7 +14,7 @@ Installer version: 0.4.0
 Provider: openrouter
 Entrypoint: codex-ling-3-flash-vl-openrouter-setup.zh-CN.sh
 Model: inclusionai/ling-3.0-flash-vl
-Payload SHA256: f9cdba67dcf946af9f5b1a38a64b497f44376fdbaff9715cc52d628744726b94
+Payload SHA256: be3398365fc444797089d35b1f9ac246b9d0b395060d9e6f8eeddd6ba549998c
 LING_BUNDLE_VERSION
   exit 0
 fi
@@ -614,12 +614,12 @@ install_ling() {
     info "This will configure Codex to use Ling ($MODEL) through $BASE_URL and store your API key locally."
     info "Existing managed configuration will be backed up for restoration. Backup: $backup_dir"
     info "To restore: run this same script without arguments and choose 9, or run it with --uninstall."
-    info "The optional GUI Skill and its .env remain installed after uninstall. Press Ctrl+C now to cancel."
+    info "Press Ctrl+C now to cancel."
   else
     info "即将配置 Codex 使用 Ling（${MODEL}），服务地址为 ${BASE_URL}，并将 API Key 保存在本地。"
     info "将备份所管理的原配置以便恢复。备份位置：$backup_dir"
     info "恢复方法：不带参数运行同一个脚本并选择 9，或使用 --uninstall。"
-    info "卸载后可选 GUI Skill 及其 .env 仍会保留。现在可按 Ctrl+C 取消。"
+    info "现在可按 Ctrl+C 取消。"
   fi
   read_api_key
 
