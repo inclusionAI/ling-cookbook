@@ -6,6 +6,14 @@ Bundle version: `0.4.0` · Default model: `inclusionai/ling-3.0-flash-vl`
 
 Have your OpenRouter API key ready. You need Bash, Python 3, and the CLI you want to configure. Run the commands below in a terminal; they download the script to the current directory and open its menu. `curl` is required.
 
+## Configure through your agent
+
+Copy a prompt into your local agent; no setup script is required.
+
+- OpenRouter: [English](prompts/openrouter.md) · [简体中文](prompts/openrouter.zh-CN.md)
+- Theta: [English](prompts/theta.md) · [简体中文](prompts/theta.zh-CN.md)
+
+
 ## Open the setup menu
 
 Copy **one** command for your agent to view all menu options. Choose 1 to install/update, 2 for status, 3 for self-test, 9 to uninstall/restore, or 0 to exit. Installation prompts for your API key with hidden input. Restart the agent after installation.

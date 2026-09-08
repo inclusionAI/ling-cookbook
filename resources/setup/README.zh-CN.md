@@ -6,6 +6,14 @@
 
 准备好 OpenRouter API Key，并安装 Bash、Python 3 和要配置的 Agent CLI。在终端执行以下命令，即可将脚本下载到当前目录并打开菜单。需要安装 `curl`。
 
+## 让 Agent 直接配置
+
+复制对应 Prompt 给本地 Agent，无需使用安装脚本。
+
+- OpenRouter: [English](prompts/openrouter.md) · [简体中文](prompts/openrouter.zh-CN.md)
+- Theta: [English](prompts/theta.md) · [简体中文](prompts/theta.zh-CN.md)
+
+
 ## 打开配置菜单
 
 按使用的 Agent，复制**一条**命令查看全部菜单选项：1 安装或更新、2 查看状态、3 自检、9 卸载并恢复、0 退出。选择安装后按提示输入 API Key，输入内容不会显示。安装完成后重启 Agent。
