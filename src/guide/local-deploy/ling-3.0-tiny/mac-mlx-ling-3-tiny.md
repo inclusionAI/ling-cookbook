@@ -54,24 +54,26 @@ limitations under the License.
 
 `Ling-3.0-tiny` is a 7.9B lightweight Sparse MoE language model in the Ling model family with 1.3B active parameters per token, natively supporting a 128K context window.
 
-`MLX` is Apple's open-source machine learning framework engineered specifically for Apple Silicon's unified memory architecture. It features minimal abstraction overhead and direct execution of native Metal kernels. Support for the Ling-3.0 architecture (`bailing_hybrid` / `BailingMoeV3ForCausalLM`) has been officially merged into upstream `mlx-lm` (PR #1711).
+MLX is Apple's open-source machine learning framework engineered specifically for Apple Silicon's unified memory architecture. It features minimal abstraction overhead and direct execution of native Metal kernels.
 
-In the Apple MLX ecosystem, **the official BF16 Safetensors base weights run out-of-the-box with zero format conversion required**. This guide follows **BF16 full precision as the streamlined primary path**, walking through installation, download, CLI verification, and serving an OpenAI-compatible HTTP REST server. For memory-constrained Macs (8GB / 16GB), an advanced section covers fast on-device conversion to 4-bit / MXFP8.
+Support for the Ling-3.0 architecture (`bailing_hybrid` / `BailingMoeV3ForCausalLM`) has been officially merged into upstream `mlx-lm` (PR #1711).
+
+This guide covers the workflow from installation, downloading weights, and verification to launching an OpenAI-compatible HTTP service. For memory-constrained devices (8GB / 16GB), it also provides instructions for converting model weights to 4-bit / MXFP8.
 
 ---
 
 ### Hardware & Precision Matrix
 
-| Deployment Profile | Weight Format | Disk Size | Recommended RAM (8K Context) | Recommended Mac Hardware | Typical Decode TPS (Empirical) | Conversion Requirement |
-| :--- | :--- | :---: | :---: | :--- | :---: | :--- |
-| **BF16 (Primary Mainline)** | Native Safetensors | **~14.72 GB** | **≥ 24 GB - 32 GB** | MacBook Pro 24GB / 36GB / 48GB+ | **~88.3 tok/s (Empirical)** | **Zero Conversion (Direct)** |
-| **4-bit (Lightweight Recommended)** | MLX Quantized Weights | **~4.83 GB** | **≥ 8 GB - 12 GB** | MacBook Air / Mac mini 8GB/16GB | **~150.5 tok/s (Empirical)** | Fast 1-min on-device quantization |
-| **MXFP8 (High Fidelity)** | MLX Quantized Weights | **~8.06 GB** | **≥ 16 GB - 18 GB** | MacBook Pro 16GB / 18GB / 24GB | **~118.4 tok/s (Empirical)** | Fast 1-min on-device quantization |
+| Deployment Profile | Weight Format | Disk Size | Recommended RAM (8K Context) | Recommended Mac Hardware | Typical Decode TPS |
+|:---|:---|:---:|:---:|:---|:---:|
+| BF16 | Native Precision | ~14.72 GB | ≥ 24 GB - 32 GB | MacBook Pro 24GB / 36GB / 48GB+ | ~88.3 tok/s (Empirical) |
+| MXFP8 Quantized | MLX Quantized Weights | ~8.06 GB | ≥ 16 GB - 18 GB | MacBook Pro 16GB / 18GB / 24GB | ~118.4 tok/s (Empirical) |
+| 4-bit Quantized | MLX Quantized Weights | ~4.83 GB | ≥ 8 GB - 12 GB | MacBook Air / Mac mini 8GB/16GB | ~150.5 tok/s (Empirical) |
 
 > [!TIP]
 > **Environment Requirements**:
 > - **Python 3.11 / 3.12** is recommended, managed with **uv**;
-> - Ling-3.0 architecture (`bailing_hybrid`) requires the latest development version (`git+https://github.com/ml-explore/mlx-lm.git` or `mlx-lm>=0.32.0`);
+> - Ling-3.0 architecture (`bailing_hybrid`) requires `mlx-lm>=0.32.0`;
 > - Default port convention: `mlx_lm.server` listens on port `8080` by default.
 
 +++
@@ -84,14 +86,14 @@ Use `uv` to create an isolated Python virtual environment and install `mlx-lm` w
 !pip install -U uv
 !uv venv --python 3.11 .venv
 !mkdir -p ~/.cache/huggingface/hub
-!source .venv/bin/activate && uv pip install --upgrade mlx "mlx-lm @ git+https://github.com/ml-explore/mlx-lm.git" 'openai>=1.52.0,<2.0.0' 'modelscope>=1.18.0'
+!source .venv/bin/activate && uv pip install --upgrade mlx "mlx-lm>=0.32.0" 'openai>=1.52.0,<2.0.0' 'modelscope>=1.18.0'
 ```
 
 +++
 
 ### Step 2: Download Official Ling-3.0-tiny BF16 Base Weights
 
-Download the official `inclusionAI/Ling-3.0-tiny` Safetensors base weights (32 shards, ~14.7 GB total) from ModelScope or Hugging Face:
+Download the official `inclusionAI/Ling-3.0-tiny` Safetensors base weights (~14.7 GB) from ModelScope or Hugging Face:
 - [Ling-3.0-tiny on ModelScope](https://modelscope.cn/models/inclusionAI/Ling-3.0-tiny)
 - [Ling-3.0-tiny on Hugging Face](https://huggingface.co/inclusionAI/Ling-3.0-tiny)
 
@@ -103,20 +105,17 @@ Download the official `inclusionAI/Ling-3.0-tiny` Safetensors base weights (32 s
 ```
 
 > [!IMPORTANT]
-> **⚠️ Critical Note: Compatibility of Official ModelScope `Ling-3.0-tiny-int4` & `Ling-3.0-tiny-fp8`**:
-> The pre-quantized repositories on ModelScope are tailored specifically for **vLLM / SGLang** runtimes:
-> - `inclusionAI/Ling-3.0-tiny-int4` uses Neural Magic's `compressed-tensors` packed format (keys: `weight_packed`, `weight_scale`, `weight_shape`);
-> - `inclusionAI/Ling-3.0-tiny-fp8` uses vLLM's standard block-wise FP8 format (keys: `weight_scale_inv`).
->
-> **MLX-LM currently lacks decompression kernels for these two proprietary formats**. Passing them directly into `mlx_lm` will fail with `ValueError: Received ... parameters not in model`.
-> 
-> Therefore, in the Apple MLX ecosystem, **download the official BF16 base weights (`inclusionAI/Ling-3.0-tiny`)**. These base weights run natively with zero conversion, or can be converted locally in ~1 minute using MLX's native `mlx_lm.convert` tool into 4-bit / MXFP8 formats optimized for Apple Silicon.
+> Pre-quantized versions released on ModelScope are optimized specifically for vLLM / SGLang runtimes.
+> MLX-LM lacks the corresponding operators; loading ModelScope quantized weights directly into `mlx_lm` will fail.
+> Therefore, in the Apple MLX ecosystem, if a quantized model is needed, you must download the BF16 base weights and perform local quantization using MLX's built-in `mlx_lm.convert`.
 
 +++
 
-### Step 3: Quick Generation Verification with MLX-LM CLI (BF16 Mainline)
+### Step 3: Deploy Model Using MLX-LM CLI (Using Base Weights as Example)
 
-`mlx_lm.generate` verifies model loading and inference speed directly from the command line:
+If device memory is limited and a quantized model is preferred, refer to Step 6 for local quantization using `mlx_lm.convert`.
+
+`mlx_lm.generate` verifies model loading and inference speed directly from the command line, with zero format conversion required:
 
 ```{code-cell}
 !source .venv/bin/activate && python3 -m mlx_lm.generate \
@@ -128,7 +127,7 @@ Download the official `inclusionAI/Ling-3.0-tiny` Safetensors base weights (32 s
 
 Typical CLI output (Apple Silicon Mac steady-state empirical data):
 ```text
-Loading model from /Users/sipan/models/Ling-3.0-tiny...
+Loading model from ~/models/Ling-3.0-tiny...
 Prompt: Calculate 17 × 23 step-by-step with clear derivation.
 ------
 To calculate 17 × 23, we can use the distributive property:
@@ -148,14 +147,11 @@ Peak memory: 15.85 GB
 
 +++
 
-### Step 4: Launch MLX-LM HTTP Inference Server (OpenAI-Compatible)
+### Step 4: Launch MLX-LM HTTP Inference Server (OpenAI-Compatible API)
 
 Launch `mlx_lm.server` to expose an OpenAI-compatible HTTP REST endpoint locally.
 
-For personal workflows, configuring **Prompt Prefix Caching** retains conversation history and system instructions in unified memory, reducing subsequent multi-turn Time to First Token (TTFT) to under 10 milliseconds:
-
-> [!NOTE]
-> `mlx_lm.server` runs as a foreground service. **Execute the launch command in an independent terminal window**; once ready, proceed with testing in the Notebook:
+For single-user scenarios, attaching Prompt Prefix Caching is recommended to reduce first token latency.
 
 ```bash
 python3 -m mlx_lm.server \
@@ -170,7 +166,7 @@ python3 -m mlx_lm.server \
 
 Typical server startup logs:
 ```text
-Loading model from /Users/sipan/models/Ling-3.0-tiny...
+Loading model from ~/models/Ling-3.0-tiny...
 Model loaded successfully.
 INFO:     Started server process [65892]
 INFO:     Waiting for application startup.
@@ -180,9 +176,9 @@ INFO:     Uvicorn running on http://127.0.0.1:8080 (Press CTRL+C to quit)
 
 +++
 
-### Step 5: Verify Deployment and Test Model Inference
+### Step 5: Verify Deployment and Test API Calling
 
-Once the server is running, use standard OpenAI-compatible client libraries to perform end-to-end testing:
+Once the server is running, use standard OpenAI-compatible client libraries to perform call verification:
 
 #### Step 5.1: Connectivity and Health Check
 
@@ -207,12 +203,12 @@ except Exception as e:
 Typical output:
 ```json
 Health check status: 200
-Models response: {"object": "list", "data": [{"id": "/Users/sipan/models/Ling-3.0-tiny", "object": "model", "created": 1788849582}]}
+Models response: {"object": "list", "data": [{"id": "~/models/Ling-3.0-tiny", "object": "model", "created": 1788849582}]}
 ```
 
 +++
 
-#### Step 5.2: Streaming Inference, Reasoning Extraction, and Performance Metrics
+#### Step 5.2: Streaming Inference, Reasoning Extraction, and Performance Measurement
 
 Send a streaming completion request using the OpenAI Python SDK. Note: `mlx_lm.server` parses reasoning content into the `delta.reasoning` field:
 
@@ -367,11 +363,13 @@ if __name__ == "__main__":
 
 +++
 
-### Step 6: Advanced Option: On-Device Native Quantization for Low-Memory Macs (4-bit / MXFP8)
+### Step 6: MLX Quantization for Low-Memory Devices
 
-For Macs with **8GB or 16GB unified memory** (e.g., MacBook Air / Mac mini), running BF16 may exert memory pressure. Use `mlx_lm.convert` to generate native MLX quantized weights on-device:
+For Mac devices with 8GB or 16GB unified memory (such as MacBook Air / Mac mini), running BF16 models may cause memory pressure.
 
-#### Option 1: Convert to 4-bit Compact Quantization (Recommended, ~1 minute)
+You can use `mlx_lm.convert` to generate native MLX quantized weights on-device:
+
+#### Option 1: Convert to 4-bit Quantization (Lower Memory Footprint)
 ```bash
 python3 -m mlx_lm.convert \
   --hf-path ~/models/Ling-3.0-tiny \
@@ -380,9 +378,9 @@ python3 -m mlx_lm.convert \
   --q-bits 4 \
   --trust-remote-code
 ```
-Quantized weights occupy only **4.83 GB**, resident RAM is just **5.30 GB**, and steady-state decode throughput surges to **150.51 tok/s**.
+Memory consumption at runtime is approximately 5 GB after conversion.
 
-#### Option 2: Convert to MXFP8 High-Fidelity Quantization (Recommended, Preserves Dynamic Range)
+#### Option 2: Convert to MXFP8 Quantization (Higher Precision)
 ```bash
 python3 -m mlx_lm.convert \
   --hf-path ~/models/Ling-3.0-tiny \
@@ -391,22 +389,31 @@ python3 -m mlx_lm.convert \
   --q-mode mxfp8 \
   --trust-remote-code
 ```
-Quantized weights occupy **8.06 GB**, resident RAM is **8.75 GB**, and microscopic floating-point blocks provide superior outlier tolerance and reasoning preservation compared to standard uniform INT8.
-
-#### Multi-Precision Empirical Benchmark (Apple Silicon M5 Pro 48GB Empirical Data)
-
-The following benchmark presents measurements following warm-up (Metal shader JIT compilation) and 3 rounds of steady-state sampling (max_tokens=256, temp=0.6, top_p=0.95):
-
-| Profile / Precision | Weight Format / Type | Disk Size | Cold Start Prefill | Steady Prefill (Prompt TPS) | Steady Decode (Decode TPS) | Steady TTFT | Peak Resident RAM (Peak RAM) | Recommended Mac Hardware |
-| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
-| **`Ling-3.0-tiny` (BF16 Mainline)** | Safetensors (Full Precision) | **14.72 GB** | 300.98 tok/s | **421.58 tok/s** | **88.33 tok/s** (88.1~88.7) | **87.93 ms** | **15.85 GB** | MacBook Pro 24GB / 36GB / 48GB+ |
-| **`Ling-3.0-tiny-mxfp8`** | MLX MXFP8 (Microscaling FP8) | **8.06 GB** | 163.05 tok/s | **505.23 tok/s** | **118.35 tok/s** (116.7~119.8) | **73.47 ms** | **8.75 GB** | MacBook Pro 16GB / 18GB / 24GB |
-| **`Ling-3.0-tiny-4bit`** | MLX 4-bit (Recommended) | **4.83 GB** | 438.48 tok/s | **683.18 tok/s** | **150.51 tok/s** (149.4~151.5) | **54.16 ms** | **5.30 GB** | MacBook Air / Mac mini 8GB / 16GB |
+Memory consumption at runtime is approximately 8.7 GB after conversion.
 
 > [!TIP]
-> **Single-User Peak Performance Recommendations**:
-> 1. **Prompt Prefix Caching**: Append `--prompt-cache-size 10 --prompt-cache-bytes 2000000000` to keep multi-turn TTFT under 10ms;
-> 2. **Lock Unified Memory (Wired Memory)**: Run `sudo sysctl iogpu.wired_mem_limit=30000000000` to prevent macOS from paging weights out to disk swap during multitasking.
+> **Deployment Path Update**:
+> After quantization, update the `--model` argument to point to the corresponding quantized model directory in subsequent verification or serving commands. For example, to start the inference service with the 4-bit model:
+> ```bash
+> python3 -m mlx_lm.server \
+>   --model ~/models/Ling-3.0-tiny-4bit \
+>   --host 127.0.0.1 \
+>   --port 8080 \
+>   --prompt-cache-size 10 \
+>   --prompt-cache-bytes 2000000000 \
+>   --prefill-step-size 2048 \
+>   --trust-remote-code
+> ```
+
+#### Performance Benchmarks
+
+The following data is empirically measured on Apple Silicon M5 Pro 48GB.
+
+| Profile | Weight Format / Type | Disk Size | Prefill Throughput | Decode TPS | Time to First Token (TTFT) | Peak Resident RAM | Recommended Mac Hardware |
+|:---|:---|:---:|:---:|:---:|:---:|:---:|:---|
+| Ling-3.0-tiny | BF16 | 14.72 GB | 421.58 tok/s | 88.33 tok/s (88.1~88.7) | 87.93 ms | 15.85 GB | MacBook Pro 24GB / 36GB / 48GB+ |
+| Ling-3.0-tiny-mxfp8 | MXFP8 | 8.06 GB | 505.23 tok/s | 118.35 tok/s (116.7~119.8) | 73.47 ms | 8.75 GB | MacBook Pro 16GB / 18GB / 24GB |
+| Ling-3.0-tiny-4bit | 4-bit | 4.83 GB | 683.18 tok/s | 150.51 tok/s (149.4~151.5) | 54.16 ms | 5.30 GB | MacBook Air / Mac mini 8GB / 16GB |
 
 +++
 
@@ -420,16 +427,9 @@ The following benchmark presents measurements following warm-up (Metal shader JI
      uv pip install --upgrade "mlx-lm @ git+https://github.com/ml-explore/mlx-lm.git"
      ```
 
-2. **Missing Hugging Face Cache Directory (`CacheNotFound`)**:
-   - Symptom: Accessing `GET /v1/models` fails with `Cache directory not found: ~/.cache/huggingface/hub`.
-   - Solution: Create the cache directory manually:
-     ```bash
-     mkdir -p ~/.cache/huggingface/hub
-     ```
-
-3. **Error when Loading Official `int4` / `fp8` Weights**:
+2. **Error when Loading Official `int4` / `fp8` Weights**:
    - Symptom: Passing `inclusionAI/Ling-3.0-tiny-int4` throws `ValueError: Received ... parameters not in model`.
    - Solution: Official `int4` and `fp8` weights use vLLM-specific formats. In MLX, download the BF16 base weights and run `mlx_lm.convert --q-bits 4` for native MLX quantization.
 
-4. **Port Conflict (Port 8080 Occupied)**:
+3. **Port Conflict (Port 8080 Occupied)**:
    - Solution: Query occupying processes via `lsof -i :8080` and terminate, or launch on `--port 8081`.
