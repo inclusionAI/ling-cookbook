@@ -4,7 +4,7 @@
 # Provider: openrouter
 # Entrypoint: codex-ling-3-flash-vl-openrouter-setup.zh-CN.sh
 # Model: inclusionai/ling-3.0-flash-vl
-# Payload SHA256: 24b52efd8417396714015cc2e9aac23ccd6025366b19b46c125440d4c33070a9
+# Payload SHA256: f9cdba67dcf946af9f5b1a38a64b497f44376fdbaff9715cc52d628744726b94
 set -euo pipefail
 if [ "${1:-}" = "--version" ]; then
   [ "$#" -eq 1 ] || { printf '%s\n' '--version accepts no extra arguments' >&2; exit 2; }
@@ -14,7 +14,7 @@ Installer version: 0.4.0
 Provider: openrouter
 Entrypoint: codex-ling-3-flash-vl-openrouter-setup.zh-CN.sh
 Model: inclusionai/ling-3.0-flash-vl
-Payload SHA256: 24b52efd8417396714015cc2e9aac23ccd6025366b19b46c125440d4c33070a9
+Payload SHA256: f9cdba67dcf946af9f5b1a38a64b497f44376fdbaff9715cc52d628744726b94
 LING_BUNDLE_VERSION
   exit 0
 fi
@@ -268,9 +268,9 @@ write_gui_skill_env() {
   gui_skill_env_stage=""
 
   if is_english; then
-    info "Ling GUI Agent Skill configuration: $destination (mode 0600)"
+    info "Ling GUI Agent Skill configuration: $destination"
   else
-    info "$(message "Ling GUI Agent Skill configuration: ${destination} (mode 0600)" "Ling GUI Agent Skill 配置：${destination}（权限 0600）")"
+    info "$(message "Ling GUI Agent Skill configuration: ${destination}" "Ling GUI Agent Skill 配置：${destination}")"
   fi
 }
 
@@ -420,7 +420,7 @@ read_api_key() {
   [ -r /dev/tty ] \
     || die "$(message "No interactive terminal. Set OPENROUTER_API_KEY for non-interactive installation" "当前没有交互终端。请通过 OPENROUTER_API_KEY 环境变量提供 OpenRouter 个人令牌")"
 
-  printf "$(message 'Enter your OpenRouter personal-token API key (stored locally with mode 0600): ' '请输入 OpenRouter 个人令牌 APIKey（将以 0600 权限保存在本机）: ')" > /dev/tty
+  printf "$(message 'Enter your OpenRouter personal-token API key (stored locally): ' '请输入 OpenRouter 个人令牌 APIKey（将保存在本机）: ')" > /dev/tty
   if ! IFS= read -r -s theta_api_key < /dev/tty; then
     printf '\n' > /dev/tty
     die "$(message "Could not read the OpenRouter personal token" "读取 OpenRouter 个人令牌失败")"
@@ -611,12 +611,12 @@ install_ling() {
 
   resolve_codex
   if is_english; then
-    info "This will configure Codex to use Ling ($MODEL) through $BASE_URL and store your API key locally with mode 0600."
+    info "This will configure Codex to use Ling ($MODEL) through $BASE_URL and store your API key locally."
     info "Existing managed configuration will be backed up for restoration. Backup: $backup_dir"
     info "To restore: run this same script without arguments and choose 9, or run it with --uninstall."
     info "The optional GUI Skill and its .env remain installed after uninstall. Press Ctrl+C now to cancel."
   else
-    info "即将配置 Codex 使用 Ling（${MODEL}），服务地址为 ${BASE_URL}，并将 API Key 保存在本地（权限 0600）。"
+    info "即将配置 Codex 使用 Ling（${MODEL}），服务地址为 ${BASE_URL}，并将 API Key 保存在本地。"
     info "将备份所管理的原配置以便恢复。备份位置：$backup_dir"
     info "恢复方法：不带参数运行同一个脚本并选择 9，或使用 --uninstall。"
     info "卸载后可选 GUI Skill 及其 .env 仍会保留。现在可按 Ctrl+C 取消。"
@@ -707,7 +707,7 @@ install_ling() {
 
   info ""
   info "$(message "Installation complete. Running codex now defaults to ${MODEL}." "安装完成。以后直接运行 codex，默认使用 ${MODEL}。")"
-  info "$(message "OpenRouter token: ${token_file} (mode 0600)" "OpenRouter 令牌：${token_file}（权限 0600）")"
+  info "$(message "OpenRouter token: ${token_file}" "OpenRouter 令牌：${token_file}")"
   info "$(message "Original settings backup: $backup_dir" "原始配置：$backup_dir")"
   info "$(message "The Codex subscription credential in auth.json was not modified." "Codex 订阅登录凭证 auth.json 未被修改。")"
   info "$(message "Note: clients sharing $codex_home may all read this configuration, including Codex CLI, Desktop, and IDE integrations." "注意：共享 $codex_home 的 Codex CLI、Desktop 和 IDE 都可能读取这份配置。")"

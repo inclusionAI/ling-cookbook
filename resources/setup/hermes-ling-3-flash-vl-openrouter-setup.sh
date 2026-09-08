@@ -4,7 +4,7 @@
 # Provider: openrouter
 # Entrypoint: hermes-ling-3-flash-vl-openrouter-setup.sh
 # Model: inclusionai/ling-3.0-flash-vl
-# Payload SHA256: 21410cd23035a14f7475adb4999af84853ee38a8f6bb7fafe9df3d198687c657
+# Payload SHA256: 41fa91a320a29d594258e04c7a7d3d42eed206b95f6a1f9eb00b07457b6c9682
 set -euo pipefail
 if [ "${1:-}" = "--version" ]; then
   [ "$#" -eq 1 ] || { printf '%s\n' '--version accepts no extra arguments' >&2; exit 2; }
@@ -14,7 +14,7 @@ Installer version: 0.4.0
 Provider: openrouter
 Entrypoint: hermes-ling-3-flash-vl-openrouter-setup.sh
 Model: inclusionai/ling-3.0-flash-vl
-Payload SHA256: 21410cd23035a14f7475adb4999af84853ee38a8f6bb7fafe9df3d198687c657
+Payload SHA256: 41fa91a320a29d594258e04c7a7d3d42eed206b95f6a1f9eb00b07457b6c9682
 LING_BUNDLE_VERSION
   exit 0
 fi
@@ -234,9 +234,9 @@ write_gui_skill_env() {
   gui_skill_env_stage=""
 
   if is_english; then
-    info "Ling GUI Agent Skill configuration: $destination (mode 0600)"
+    info "Ling GUI Agent Skill configuration: $destination"
   else
-    info "Ling GUI Agent Skill 配置：${destination}（权限 0600）"
+    info "Ling GUI Agent Skill 配置：${destination}"
   fi
 }
 
@@ -528,9 +528,9 @@ read_api_key() {
   }
 
   if is_english; then
-    printf 'Enter your OpenRouter personal-token API key (stored locally with mode 0600): ' > /dev/tty
+    printf 'Enter your OpenRouter personal-token API key (stored locally): ' > /dev/tty
   else
-    printf '请输入 OpenRouter 个人令牌 APIKey（将以 0600 权限保存在本机）: ' > /dev/tty
+    printf '请输入 OpenRouter 个人令牌 APIKey（将保存在本机）: ' > /dev/tty
   fi
   if ! IFS= read -r -s theta_api_key < /dev/tty; then
     printf '\n' > /dev/tty
@@ -648,12 +648,12 @@ install_ling() {
   resolve_hermes
   require_supported_hermes
   if is_english; then
-    info "This will configure Hermes to use Ling ($MODEL) through $BASE_URL and store your API key locally with mode 0600."
+    info "This will configure Hermes to use Ling ($MODEL) through $BASE_URL and store your API key locally."
     info "Existing managed configuration will be backed up for restoration. Backup: $backup_dir"
     info "To restore: run this same script without arguments and choose 9, or run it with --uninstall."
     info "The optional GUI Skill and its .env remain installed after uninstall. Press Ctrl+C now to cancel."
   else
-    info "即将配置 Hermes 使用 Ling（${MODEL}），服务地址为 ${BASE_URL}，并将 API Key 保存在本地（权限 0600）。"
+    info "即将配置 Hermes 使用 Ling（${MODEL}），服务地址为 ${BASE_URL}，并将 API Key 保存在本地。"
     info "将备份所管理的原配置以便恢复。备份位置：$backup_dir"
     info "恢复方法：不带参数运行同一个脚本并选择 9，或使用 --uninstall。"
     info "卸载后可选 GUI Skill 及其 .env 仍会保留。现在可按 Ctrl+C 取消。"
@@ -723,14 +723,14 @@ PY
     info "Added provider: $PROVIDER_ID (other providers and model aliases were preserved)"
     info "Base URL: $BASE_URL"
     info "Protocol: OpenAI Chat Completions"
-    info "OpenRouter token: $env_file (mode 0600; value hidden)"
+    info "OpenRouter token: $env_file (value hidden)"
     info "Run this script with --self-test to verify Hermes -> OpenRouter -> Ling."
   else
     info "安装完成。新的 Hermes 会话现在默认使用 ${MODEL}。"
     info "新增 provider：${PROVIDER_ID}（其他 provider 和模型别名均已保留）"
     info "Base URL：$BASE_URL"
     info "协议：OpenAI Chat Completions"
-    info "OpenRouter 令牌：${env_file}（权限 0600，不显示内容）"
+    info "OpenRouter 令牌：${env_file}（不显示内容）"
     info "可运行本脚本 --self-test 验证 Hermes → OpenRouter → Ling。"
   fi
 }
