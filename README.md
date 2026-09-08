@@ -53,7 +53,7 @@ Recipes for deploying Ling models for local inference across consumer and workst
 | Ling-3.0-tiny | Single NVIDIA DGX Spark | vLLM | BF16 | [Recipe: vLLM BF16 Deployment Guide](guide/local-deploy/ling-3.0-tiny/dgx-spark-vllm-ling-3-tiny-bf16.ipynb) |
 | Ling-3.0-tiny | Apple Silicon Mac | Ollama | INT4 / FP8 / BF16 | [Recipe: Ollama On-Device Deployment Guide](guide/local-deploy/ling-3.0-tiny/mac-ollama-ling-3-tiny.ipynb) |
 | Ling-3.0-tiny | Apple Silicon Mac | llama.cpp | BF16 / Q8_0 / Q4_K_M (GGUF) | [Recipe: llama.cpp Metal On-Device Deployment Guide](guide/local-deploy/ling-3.0-tiny/mac-llamacpp-ling-3-tiny.ipynb) |
-| Ling-3.0-tiny | Apple Silicon Mac | MLX | BF16 / 8-bit / 4-bit | [Recipe: MLX-LM On-Device Deployment Guide](guide/local-deploy/ling-3.0-tiny/mac-mlx-ling-3-tiny.ipynb) |
+| Ling-3.0-tiny | Apple Silicon Mac | MLX | BF16 / MXFP8 / 4-bit | [Recipe: MLX-LM On-Device Deployment Guide](guide/local-deploy/ling-3.0-tiny/mac-mlx-ling-3-tiny.ipynb) |
 
 ---
 

@@ -56,7 +56,7 @@ limitations under the License.
 
 `MLX` 是 Apple 官方专为 Apple Silicon 统一内存架构打造的原生机器学习框架，具备轻量、低抽象开销与直接调用底层 Metal 硬件算子的优势。针对百灵大模型，`mlx-lm` 官方已在主干（PR #1711）原生合入了对 Ling-3.0 架构（`bailing_hybrid` / `BailingMoeV3ForCausalLM`）的支持。
 
-在 Apple MLX 生态下，**官方提供的 BF16 Safetensors 权重原生开箱即用，无需任何格式转换**。本指南以 **BF16 全精度部署为主线**，介绍从安装、下载、CLI 验证到启动 OpenAI 兼容 HTTP 服务的最简流程；同时针对内存受限设备（8GB / 16GB），在进阶章节中提供一键转为 4-bit / 8-bit 的高效方案。
+在 Apple MLX 生态下，**官方提供的 BF16 Safetensors 权重原生开箱即用，无需任何格式转换**。本指南以 **BF16 全精度部署为主线**，介绍从安装、下载、CLI 验证到启动 OpenAI 兼容 HTTP 服务的最简流程；同时针对内存受限设备（8GB / 16GB），在进阶章节中提供一键转为 4-bit / MXFP8 的高效方案。
 
 ---
 
@@ -66,7 +66,7 @@ limitations under the License.
 | :--- | :--- | :---: | :---: | :--- | :---: | :--- |
 | **BF16 (全精度主线)** | 原生 Safetensors | **~14.72 GB** | **≥ 24 GB - 32 GB** | MacBook Pro 24GB / 36GB / 48GB+ | **~88.3 tok/s (实测)** | **零转换，直接运行** |
 | **4-bit (轻量推荐版)** | MLX 量化权重 | **~4.83 GB** | **≥ 8 GB - 12 GB** | MacBook Air / Mac mini 8GB/16GB | **~150.5 tok/s (实测)** | 本地 1 分钟快速量化 |
-| **8-bit / MXFP8 (高保真版)** | MLX 量化权重 | **~8.06 - 8.27 GB** | **≥ 16 GB - 18 GB** | MacBook Pro 16GB / 18GB / 24GB | **~118.4 - 119.9 tok/s (实测)** | 本地 1 分钟快速量化 |
+| **MXFP8 (高保真版)** | MLX 量化权重 | **~8.06 GB** | **≥ 16 GB - 18 GB** | MacBook Pro 16GB / 18GB / 24GB | **~118.4 tok/s (实测)** | 本地 1 分钟快速量化 |
 
 > [!TIP]
 > **环境要求**：
@@ -110,7 +110,7 @@ limitations under the License.
 >
 > **MLX-LM 缺少针对上述两种专有打包格式的反解压算子**，若直接将它们传入 `mlx_lm`，会抛出 `ValueError: Received ... parameters not in model` 严格校验错误而无法运行。
 > 
-> 因此在 Apple MLX 生态下，**必须下载官方的 BF16 基础权重 (`inclusionAI/Ling-3.0-tiny`)**。该基础权重可被 MLX 原生直接加载执行，或通过 MLX 内置的 `mlx_lm.convert` 快速生成专属于 Apple Silicon 硬件的原生 4-bit / 8-bit 量化权重。
+> 因此在 Apple MLX 生态下，**必须下载官方的 BF16 基础权重 (`inclusionAI/Ling-3.0-tiny`)**。该基础权重可被 MLX 原生直接加载执行，或通过 MLX 内置的 `mlx_lm.convert` 快速生成专属于 Apple Silicon 硬件的原生 4-bit / MXFP8 量化权重。
 
 +++
 
@@ -367,7 +367,7 @@ if __name__ == "__main__":
 
 +++
 
-### 步骤 6: 进阶选型：低内存设备的 MLX 原生量化转换 (4-bit / 8-bit)
+### 步骤 6: 进阶选型：低内存设备的 MLX 原生量化转换 (4-bit / MXFP8)
 
 对于统一内存为 **8GB 或 16GB** 的 Mac 设备（如 MacBook Air / Mac mini），运行 BF16 可能面临显存压力。推荐使用 `mlx_lm.convert` 本地生成 MLX 原生量化权重：
 
@@ -382,15 +382,16 @@ python3 -m mlx_lm.convert \
 ```
 转换后权重仅 **4.83 GB**，常驻显存仅需 **5.30 GB**，稳态解码吞吐飙升至 **150.51 tok/s**。
 
-#### 选项 2：转换为 8-bit / MXFP8 高保真量化
+#### 选项 2：转换为 MXFP8 高保真量化（推荐，保留浮点高动态范围）
 ```bash
 python3 -m mlx_lm.convert \
   --hf-path ~/models/Ling-3.0-tiny \
-  --mlx-path ~/models/Ling-3.0-tiny-8bit \
+  --mlx-path ~/models/Ling-3.0-tiny-mxfp8 \
   --quantize \
-  --q-bits 8 \
+  --q-mode mxfp8 \
   --trust-remote-code
 ```
+转换后权重仅 **8.06 GB**，常驻显存仅需 **8.75 GB**，相比均匀 INT8 具备更好的 MoE 专家权重离群值容忍度与数学逻辑表现。
 
 #### 多档精度实测基准对照表 (Apple Silicon M5 Pro 48GB 实测)
 
@@ -399,7 +400,6 @@ python3 -m mlx_lm.convert \
 | 部署规格 | 权重格式 / 类型 | 磁盘体积 | 预热冷启动 Prefill | 稳态 Prefill 吞吐 | 稳态解码吞吐 (Decode TPS) | 稳态首字延迟 (TTFT) | 峰值显存 (Peak RAM) | 推荐 Mac 设备 |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
 | **`Ling-3.0-tiny` (BF16 主线)** | Safetensors (全精度) | **14.72 GB** | 300.98 tok/s | **421.58 tok/s** | **88.33 tok/s** (88.1~88.7) | **87.93 ms** | **15.85 GB** | MacBook Pro 24GB / 36GB / 48GB+ |
-| **`Ling-3.0-tiny-8bit`** | MLX 8-bit (高保真) | **8.27 GB** | 169.35 tok/s | **538.28 tok/s** | **119.88 tok/s** (119.1~120.4) | **68.88 ms** | **8.98 GB** | MacBook Pro 16GB / 18GB / 24GB |
 | **`Ling-3.0-tiny-mxfp8`** | MLX MXFP8 (微缩放FP8) | **8.06 GB** | 163.05 tok/s | **505.23 tok/s** | **118.35 tok/s** (116.7~119.8) | **73.47 ms** | **8.75 GB** | MacBook Pro 16GB / 18GB / 24GB |
 | **`Ling-3.0-tiny-4bit`** | MLX 4-bit (轻量推荐) | **4.83 GB** | 438.48 tok/s | **683.18 tok/s** | **150.51 tok/s** (149.4~151.5) | **54.16 ms** | **5.30 GB** | MacBook Air / Mac mini 8GB / 16GB |
 

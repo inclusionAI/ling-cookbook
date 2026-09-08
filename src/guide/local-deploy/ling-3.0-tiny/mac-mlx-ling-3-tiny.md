@@ -56,7 +56,7 @@ limitations under the License.
 
 `MLX` is Apple's open-source machine learning framework engineered specifically for Apple Silicon's unified memory architecture. It features minimal abstraction overhead and direct execution of native Metal kernels. Support for the Ling-3.0 architecture (`bailing_hybrid` / `BailingMoeV3ForCausalLM`) has been officially merged into upstream `mlx-lm` (PR #1711).
 
-In the Apple MLX ecosystem, **the official BF16 Safetensors base weights run out-of-the-box with zero format conversion required**. This guide follows **BF16 full precision as the streamlined primary path**, walking through installation, download, CLI verification, and serving an OpenAI-compatible HTTP REST server. For memory-constrained Macs (8GB / 16GB), an advanced section covers fast on-device conversion to 4-bit / 8-bit.
+In the Apple MLX ecosystem, **the official BF16 Safetensors base weights run out-of-the-box with zero format conversion required**. This guide follows **BF16 full precision as the streamlined primary path**, walking through installation, download, CLI verification, and serving an OpenAI-compatible HTTP REST server. For memory-constrained Macs (8GB / 16GB), an advanced section covers fast on-device conversion to 4-bit / MXFP8.
 
 ---
 
@@ -66,7 +66,7 @@ In the Apple MLX ecosystem, **the official BF16 Safetensors base weights run out
 | :--- | :--- | :---: | :---: | :--- | :---: | :--- |
 | **BF16 (Primary Mainline)** | Native Safetensors | **~14.72 GB** | **≥ 24 GB - 32 GB** | MacBook Pro 24GB / 36GB / 48GB+ | **~88.3 tok/s (Empirical)** | **Zero Conversion (Direct)** |
 | **4-bit (Lightweight Recommended)** | MLX Quantized Weights | **~4.83 GB** | **≥ 8 GB - 12 GB** | MacBook Air / Mac mini 8GB/16GB | **~150.5 tok/s (Empirical)** | Fast 1-min on-device quantization |
-| **8-bit / MXFP8 (High Fidelity)** | MLX Quantized Weights | **~8.06 - 8.27 GB** | **≥ 16 GB - 18 GB** | MacBook Pro 16GB / 18GB / 24GB | **~118.4 - 119.9 tok/s (Empirical)** | Fast 1-min on-device quantization |
+| **MXFP8 (High Fidelity)** | MLX Quantized Weights | **~8.06 GB** | **≥ 16 GB - 18 GB** | MacBook Pro 16GB / 18GB / 24GB | **~118.4 tok/s (Empirical)** | Fast 1-min on-device quantization |
 
 > [!TIP]
 > **Environment Requirements**:
@@ -110,7 +110,7 @@ Download the official `inclusionAI/Ling-3.0-tiny` Safetensors base weights (32 s
 >
 > **MLX-LM currently lacks decompression kernels for these two proprietary formats**. Passing them directly into `mlx_lm` will fail with `ValueError: Received ... parameters not in model`.
 > 
-> Therefore, in the Apple MLX ecosystem, **download the official BF16 base weights (`inclusionAI/Ling-3.0-tiny`)**. These base weights run natively with zero conversion, or can be converted locally in ~1 minute using MLX's native `mlx_lm.convert` tool into 4-bit / 8-bit formats optimized for Apple Silicon.
+> Therefore, in the Apple MLX ecosystem, **download the official BF16 base weights (`inclusionAI/Ling-3.0-tiny`)**. These base weights run natively with zero conversion, or can be converted locally in ~1 minute using MLX's native `mlx_lm.convert` tool into 4-bit / MXFP8 formats optimized for Apple Silicon.
 
 +++
 
@@ -367,7 +367,7 @@ if __name__ == "__main__":
 
 +++
 
-### Step 6: Advanced Option: On-Device Native Quantization for Low-Memory Macs (4-bit / 8-bit)
+### Step 6: Advanced Option: On-Device Native Quantization for Low-Memory Macs (4-bit / MXFP8)
 
 For Macs with **8GB or 16GB unified memory** (e.g., MacBook Air / Mac mini), running BF16 may exert memory pressure. Use `mlx_lm.convert` to generate native MLX quantized weights on-device:
 
@@ -382,15 +382,16 @@ python3 -m mlx_lm.convert \
 ```
 Quantized weights occupy only **4.83 GB**, resident RAM is just **5.30 GB**, and steady-state decode throughput surges to **150.51 tok/s**.
 
-#### Option 2: Convert to 8-bit / MXFP8 High-Fidelity Quantization
+#### Option 2: Convert to MXFP8 High-Fidelity Quantization (Recommended, Preserves Dynamic Range)
 ```bash
 python3 -m mlx_lm.convert \
   --hf-path ~/models/Ling-3.0-tiny \
-  --mlx-path ~/models/Ling-3.0-tiny-8bit \
+  --mlx-path ~/models/Ling-3.0-tiny-mxfp8 \
   --quantize \
-  --q-bits 8 \
+  --q-mode mxfp8 \
   --trust-remote-code
 ```
+Quantized weights occupy **8.06 GB**, resident RAM is **8.75 GB**, and microscopic floating-point blocks provide superior outlier tolerance and reasoning preservation compared to standard uniform INT8.
 
 #### Multi-Precision Empirical Benchmark (Apple Silicon M5 Pro 48GB Empirical Data)
 
@@ -399,7 +400,6 @@ The following benchmark presents measurements following warm-up (Metal shader JI
 | Profile / Precision | Weight Format / Type | Disk Size | Cold Start Prefill | Steady Prefill (Prompt TPS) | Steady Decode (Decode TPS) | Steady TTFT | Peak Resident RAM (Peak RAM) | Recommended Mac Hardware |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
 | **`Ling-3.0-tiny` (BF16 Mainline)** | Safetensors (Full Precision) | **14.72 GB** | 300.98 tok/s | **421.58 tok/s** | **88.33 tok/s** (88.1~88.7) | **87.93 ms** | **15.85 GB** | MacBook Pro 24GB / 36GB / 48GB+ |
-| **`Ling-3.0-tiny-8bit`** | MLX 8-bit (High Fidelity) | **8.27 GB** | 169.35 tok/s | **538.28 tok/s** | **119.88 tok/s** (119.1~120.4) | **68.88 ms** | **8.98 GB** | MacBook Pro 16GB / 18GB / 24GB |
 | **`Ling-3.0-tiny-mxfp8`** | MLX MXFP8 (Microscaling FP8) | **8.06 GB** | 163.05 tok/s | **505.23 tok/s** | **118.35 tok/s** (116.7~119.8) | **73.47 ms** | **8.75 GB** | MacBook Pro 16GB / 18GB / 24GB |
 | **`Ling-3.0-tiny-4bit`** | MLX 4-bit (Recommended) | **4.83 GB** | 438.48 tok/s | **683.18 tok/s** | **150.51 tok/s** (149.4~151.5) | **54.16 ms** | **5.30 GB** | MacBook Air / Mac mini 8GB / 16GB |
 
