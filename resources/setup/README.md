@@ -8,7 +8,7 @@ Have your OpenRouter API key ready. You need Bash, Python 3, and the CLI you wan
 
 ## Configure through your agent
 
-Copy a prompt into your local agent; no setup script is required.
+Copy a prompt into your local agent to configure Ling and install the GUI Skill.
 
 - OpenRouter: [English](prompts/openrouter.md) · [简体中文](prompts/openrouter.zh-CN.md)
 - Theta: [English](prompts/theta.md) · [简体中文](prompts/theta.zh-CN.md)

@@ -8,7 +8,7 @@
 
 ## 让 Agent 直接配置
 
-复制对应 Prompt 给本地 Agent，无需使用安装脚本。
+复制对应 Prompt 给本地 Agent，让它配置 Ling 并安装 GUI Skill。
 
 - OpenRouter: [English](prompts/openrouter.md) · [简体中文](prompts/openrouter.zh-CN.md)
 - Theta: [English](prompts/theta.md) · [简体中文](prompts/theta.zh-CN.md)
