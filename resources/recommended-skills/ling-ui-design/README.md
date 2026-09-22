@@ -122,3 +122,7 @@ python -m pytest
 
 The tests do not call live services. If available, run `skills-ref validate .` to
 validate the skill manifest.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
