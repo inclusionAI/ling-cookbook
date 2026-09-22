@@ -1,3 +1,7 @@
+<p align="right">
+  <b>English</b> | <a href="README-zh.md">简体中文</a>
+</p>
+
 # Ling GUI Agent Skill
 
 Ling GUI Agent Skill is a GUI automation skill built for the Ling VL (Vision-Language) model family. Powered by Ling VL models—such as Ling-3.0-flash-VL—it interprets on-screen visuals and carries out actions across desktop and Android interfaces.

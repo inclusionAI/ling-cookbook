@@ -1,3 +1,7 @@
+<p align="right">
+  <b>English</b> | <a href="README-zh.md">简体中文</a>
+</p>
+
 # Image to Editable PPT
 
 Recreate one slide image, screenshot, or AI-rendered page as one editable PowerPoint slide. Ordinary text becomes text boxes, simple containers become native shapes, and complex artwork becomes tightly cropped images.
@@ -35,3 +39,7 @@ Use $image-to-editable-ppt to recreate this slide image as an editable PowerPoin
 You can also say "turn this slide image into an editable PPT." A matching description selects the skill automatically.
 
 It converts one reference image into one slide. Do not use it for ordinary presentation writing, text-to-deck authoring, or replication when transparent layers are already provided.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).

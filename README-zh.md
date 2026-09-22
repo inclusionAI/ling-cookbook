@@ -68,8 +68,8 @@
 
 | 名字 | 演示模型 | 简单介绍 | 链接 |
 | :--- | :--- | :--- | :--- |
-| `image-to-editable-ppt` | Ming-Image-0.1-Design-Layer [Hugging Face](https://huggingface.co/inclusionAI/Ming-Image-0.1-Design-Layer) [ModelScope](https://www.modelscope.cn/models/inclusionAI/Ming-Image-0.1-Design-Layer) | 将单张幻灯片图片/截图逆向重建为原生可编辑 `.pptx` | [README](resources/recommended-skills/image-to-editable-ppt/README.md) |
-| `ling-gui-agent-skill` | Ling-3.0-flash-VL [OpenRouter](https://openrouter.ai/models/inclusionai/ling-3.0-flash-vl) [Hugging Face](https://huggingface.co/inclusionAI/Ling-3.0-flash-VL) [ModelScope](https://www.modelscope.cn/models/inclusionAI/Ling-3.0-flash-VL) | 基于视觉定位与键鼠/触控操作的跨平台桌面与 Android GUI 自动化 | [README](resources/recommended-skills/ling-gui-agent-skill/README.md) |
+| `image-to-editable-ppt` | Ming-Image-0.1-Design-Layer [Hugging Face](https://huggingface.co/inclusionAI/Ming-Image-0.1-Design-Layer) [ModelScope](https://www.modelscope.cn/models/inclusionAI/Ming-Image-0.1-Design-Layer) | 将单张幻灯片图片/截图逆向重建为原生可编辑 `.pptx` | [README](resources/recommended-skills/image-to-editable-ppt/README-zh.md) |
+| `ling-gui-agent-skill` | Ling-3.0-flash-VL [OpenRouter](https://openrouter.ai/models/inclusionai/ling-3.0-flash-vl) [Hugging Face](https://huggingface.co/inclusionAI/Ling-3.0-flash-VL) [ModelScope](https://www.modelscope.cn/models/inclusionAI/Ling-3.0-flash-VL) | 基于视觉定位与键鼠/触控操作的跨平台桌面与 Android GUI 自动化 | [README](resources/recommended-skills/ling-gui-agent-skill/README-zh.md) |
 | `ling-ui-design` | Ming-Image-0.1-Design [Hugging Face](https://huggingface.co/inclusionAI/Ming-Image-0.1-Design) [ModelScope](https://www.modelscope.cn/models/inclusionAI/Ming-Image-0.1-Design)<br>Ming-Image-0.1-Design-Layer [Hugging Face](https://huggingface.co/inclusionAI/Ming-Image-0.1-Design-Layer) [ModelScope](https://www.modelscope.cn/models/inclusionAI/Ming-Image-0.1-Design-Layer) | 视觉优先的前端界面生成、图层解耦、切图提取与浏览器校验闭环 | [README](resources/recommended-skills/ling-ui-design/README.md) |
 
 ---
