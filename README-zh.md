@@ -55,6 +55,23 @@
 | Ling-3.0-tiny | Apple Silicon Mac | llama.cpp | BF16 / Q8_0 / Q4_K_M (GGUF) | [文档: llama.cpp Metal 端侧部署指南](guide/local-deploy/ling-3.0-tiny/mac-llamacpp-ling-3-tiny-zh.ipynb) |
 | Ling-3.0-tiny | Apple Silicon Mac | MLX | BF16 / MXFP8 / 4-bit | [文档: MLX-LM 原生端侧部署指南](guide/local-deploy/ling-3.0-tiny/mac-mlx-ling-3-tiny-zh.ipynb) |
 
+<a id="recommended-skills"></a>
+### 部分能力 Agent Skill
+
+我们的部分模型提供了相对独特的多模态 / Agentic 能力。为了方便大家体验这些能力，我们提供了一些预制 Agent Skill 。你可以下载到本地使用，也可以 clone 仓库，让你的 agent 阅读这些 skill，审计其安全性，并协助你体验模型能力。
+
+这些 agent skill 和对应的模型包括：
+
+<p align="right">
+  <a href="README.md#recommended-skills">English</a> | <b>简体中文</b>
+</p>
+
+| 名字 | 演示模型 | 简单介绍 | 链接 |
+| :--- | :--- | :--- | :--- |
+| `image-to-editable-ppt` | Ming-Image-0.1-Design-Layer [Hugging Face](https://huggingface.co/inclusionAI/Ming-Image-0.1-Design-Layer) [ModelScope](https://www.modelscope.cn/models/inclusionAI/Ming-Image-0.1-Design-Layer) | 将单张幻灯片图片/截图逆向重建为原生可编辑 `.pptx` | [README](resources/recommended-skills/image-to-editable-ppt/README.md) |
+| `ling-gui-agent-skill` | Ling-3.0-flash-VL [OpenRouter](https://openrouter.ai/models/inclusionai/ling-3.0-flash-vl) [Hugging Face](https://huggingface.co/inclusionAI/Ling-3.0-flash-VL) [ModelScope](https://www.modelscope.cn/models/inclusionAI/Ling-3.0-flash-VL) | 基于视觉定位与键鼠/触控操作的跨平台桌面与 Android GUI 自动化 | [README](resources/recommended-skills/ling-gui-agent-skill/README.md) |
+| `ling-ui-design` | Ming-Image-0.1-Design [Hugging Face](https://huggingface.co/inclusionAI/Ming-Image-0.1-Design) [ModelScope](https://www.modelscope.cn/models/inclusionAI/Ming-Image-0.1-Design)<br>Ming-Image-0.1-Design-Layer [Hugging Face](https://huggingface.co/inclusionAI/Ming-Image-0.1-Design-Layer) [ModelScope](https://www.modelscope.cn/models/inclusionAI/Ming-Image-0.1-Design-Layer) | 视觉优先的前端界面生成、图层解耦、切图提取与浏览器校验闭环 | [README](resources/recommended-skills/ling-ui-design/README.md) |
+
 ---
 
 ## 构建文档
@@ -65,6 +82,6 @@
 
 ---
 
-## 致谢 (Acknowledgements)
+## 致谢
 
 - 感谢 Nvidia 团队 [@ly01325](https://github.com/ly01325) 优化和提供 [SGLang Humming 优化部署指南](guide/local-deploy/ling-3.0-flash/dgx-spark-sglang-ling-3-flash-mxfp4-humming-zh.ipynb)，针对 Grace Blackwell (GB10 / SM121) 硬件实现了 Humming MoE 算子加速、在线 FP8 LM Head 与 MTP 投机解码协同优化。

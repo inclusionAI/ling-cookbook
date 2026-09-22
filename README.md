@@ -55,6 +55,23 @@ Recipes for deploying Ling models for local inference across consumer and workst
 | Ling-3.0-tiny | Apple Silicon Mac | llama.cpp | BF16 / Q8_0 / Q4_K_M (GGUF) | [Recipe: llama.cpp Metal On-Device Deployment Guide](guide/local-deploy/ling-3.0-tiny/mac-llamacpp-ling-3-tiny.ipynb) |
 | Ling-3.0-tiny | Apple Silicon Mac | MLX | BF16 / MXFP8 / 4-bit | [Recipe: MLX-LM On-Device Deployment Guide](guide/local-deploy/ling-3.0-tiny/mac-mlx-ling-3-tiny.ipynb) |
 
+<a id="recommended-skills"></a>
+### Agent Skills for Specialized Capabilities
+
+Some of our models provide distinctive multimodal and agentic capabilities. To help users explore these features, we provide pre-built Agent Skills. You can download and use them locally, or clone the repository to let your agent inspect the skills, audit their safety, and assist you in experiencing the model capabilities.
+
+These agent skills and their associated models include:
+
+<p align="right">
+  <b>English</b> | <a href="README-zh.md#recommended-skills">简体中文</a>
+</p>
+
+| Name | Demo Model | Description | Link |
+| :--- | :--- | :--- | :--- |
+| `image-to-editable-ppt` | Ming-Image-0.1-Design-Layer [Hugging Face](https://huggingface.co/inclusionAI/Ming-Image-0.1-Design-Layer) [ModelScope](https://www.modelscope.cn/models/inclusionAI/Ming-Image-0.1-Design-Layer) | Reconstructs a slide image/screenshot into an editable native `.pptx` | [README](resources/recommended-skills/image-to-editable-ppt/README.md) |
+| `ling-gui-agent-skill` | Ling-3.0-flash-VL [OpenRouter](https://openrouter.ai/models/inclusionai/ling-3.0-flash-vl) [Hugging Face](https://huggingface.co/inclusionAI/Ling-3.0-flash-VL) [ModelScope](https://www.modelscope.cn/models/inclusionAI/Ling-3.0-flash-VL) | Vision-grounded GUI automation across desktop (macOS/Win/Linux) and Android | [README](resources/recommended-skills/ling-gui-agent-skill/README.md) |
+| `ling-ui-design` | Ming-Image-0.1-Design [Hugging Face](https://huggingface.co/inclusionAI/Ming-Image-0.1-Design) [ModelScope](https://www.modelscope.cn/models/inclusionAI/Ming-Image-0.1-Design)<br>Ming-Image-0.1-Design-Layer [Hugging Face](https://huggingface.co/inclusionAI/Ming-Image-0.1-Design-Layer) [ModelScope](https://www.modelscope.cn/models/inclusionAI/Ming-Image-0.1-Design-Layer) | Visual-first web UI generation, layer decomposition, asset extraction, and browser validation | [README](resources/recommended-skills/ling-ui-design/README.md) |
+
 ---
 
 ## Building Documentation
