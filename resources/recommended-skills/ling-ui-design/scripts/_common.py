@@ -13,8 +13,8 @@ from typing import Any, Sequence
 SKILL_ROOT = Path(__file__).resolve().parents[1]
 ENV_FILE = SKILL_ROOT / ".env"
 ENV_EXAMPLE = SKILL_ROOT / ".env.example"
-DEFAULT_API_BASE = "https://openrouter.ai/api/v1/"
-KEY_SETUP_URL = "https://openrouter.ai/"
+DEFAULT_API_BASE = "https://api.novita.ai/openai/v1/"
+KEY_SETUP_URL = "https://novita.ai/"
 _ENV_NAME = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 
 
@@ -279,7 +279,7 @@ def post_json(
             prefix, encoded = item["image_url"].split(",", 1)
             mime = prefix.removeprefix("data:").removesuffix(";base64")
             extension = {"image/png": "png", "image/jpeg": "jpg", "image/webp": "webp"}.get(mime, "bin")
-            files.append(("image[]", (f"image_{index}.{extension}", base64.b64decode(encoded, validate=True), mime)))
+            files.append(("image", (f"image_{index}.{extension}", base64.b64decode(encoded, validate=True), mime)))
         request_body = {
             "data": {
                 name: json.dumps(value) if isinstance(value, (bool, dict, list)) else str(value)

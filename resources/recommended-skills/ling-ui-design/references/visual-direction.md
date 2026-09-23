@@ -35,13 +35,13 @@ Keep the same page type and sections. Do not introduce a dashboard, campaign spl
 or magazine layout unless requested. Apply this visual direction:
 <preset, custom direction, or no extra style direction>
 
-Render a scrollable <desktop or mobile> page on a 2048x2048 design canvas; no browser,
+Render a scrollable <desktop or mobile> page with <target aspect ratio>; no browser,
 device, or operating-system chrome. Keep the above-fold UI at a natural scale and let
 later sections continue below it instead of shrinking the complete page to fit. Use
 text as a layout cue; the brief remains authoritative for readable copy.
 ```
 
-Use the default 2048x2048 output unless the user specifies another reference canvas.
+Describe the intended canvas in the prompt; the service determines actual output dimensions.
 Inspect the result before writing page code. Regenerating is only for an unusable
 visual direction: wrong page type, collapsed layout, or wrong mood. Missing or merged
 sections and garbled mockup text are not reasons to regenerate; the brief still owns

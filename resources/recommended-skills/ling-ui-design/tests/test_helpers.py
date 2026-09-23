@@ -30,40 +30,36 @@ def test_capture_page_allows_slow_pages_by_default() -> None:
     assert args.timeout == 300.0
 
 
-def test_generation_defaults_and_standard_image_field(tmp_path: Path) -> None:
-    source = tmp_path / "source.png"
-    Image.new("RGB", (12, 8), "red").save(source)
+def test_generation_payload_omits_size_and_image_input() -> None:
     args = argparse.Namespace(
-        image=str(source),
-        prompt="repair only the background",
-        size=generate_image.DEFAULT_SIZE,
+        prompt="museum website",
         format="png",
-        resize=None,
-        use_pe=False,
-        steps=30,
-        seed=248,
         model=generate_image.DEFAULT_MODEL,
     )
 
     route, payload = generate_image.build_payload(args)
 
-    assert route == "images/edits"
-    assert payload["model"] == "inclusionai/ming-image-0.1-design"
-    assert payload["size"] == "2048x2048"
-    assert payload["images"][0]["image_url"].startswith("data:image/png;base64,")
-    assert "image_url" not in payload["prompt"]
+    assert route == "images/generations"
+    assert payload["model"] == "ming-image-0.1-design"
+    assert "size" not in payload
+    assert "images" not in payload
+
+
+@pytest.mark.parametrize("flags", [
+    ["--image", "source.png"], ["--size", "2048x2048"],
+    ["--resize", "1024"], ["--seed", "42"], ["--steps", "30"], ["--use-pe"],
+])
+def test_generation_rejects_removed_options(flags) -> None:
+    with pytest.raises(SystemExit) as error:
+        generate_image.parser().parse_args(["--prompt", "test", "--out", "out.jpg", *flags])
+    assert error.value.code == 2
 
 
 @pytest.mark.parametrize("format_name", ["jpg", "jpeg", "png", "webp"])
-@pytest.mark.parametrize("edit", [False, True])
-def test_generation_format_alias_reaches_api(format_name: str, edit: bool, tmp_path: Path) -> None:
-    source = tmp_path / "source.png"
-    Image.new("RGB", (12, 8), "red").save(source)
+def test_generation_format_alias_reaches_api(format_name: str, tmp_path: Path) -> None:
     flags = ["--prompt", "test", "--format", format_name, "--out", str(tmp_path / f"out.{format_name}")]
-    if edit:
-        flags += ["--image", str(source)]
     route, payload = generate_image.build_payload(generate_image.parser().parse_args(flags))
-    assert route == ("images/edits" if edit else "images/generations")
+    assert route == "images/generations"
     assert payload["output_format"] == ("jpeg" if format_name == "jpg" else format_name)
 
 

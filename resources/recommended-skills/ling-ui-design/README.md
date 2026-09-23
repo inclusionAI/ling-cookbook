@@ -55,9 +55,9 @@ not the downloaded source directory.
 
 ## Configuration
 
-Create a personal API key at [OpenRouter](https://openrouter.ai/).
+Create a personal API key at [Novita](https://novita.ai/).
 Set it as `LING_UI_DESIGN_API_KEY` for
-image generation, editing, and layer decomposition.
+image generation and layer decomposition.
 
 Choose either configuration method:
 
@@ -78,9 +78,8 @@ The check verifies key presence, not validity or service connectivity. If the ke
 missing, it exits with status 1 and provides the key-creation guide and configuration
 instructions. Do not share the key in chat.
 
-The default API base is `https://openrouter.ai/api/v1/`. The default model IDs,
-`inclusionai/ming-image-0.1-design` and `inclusionai/ming-image-0.1-design-layer`,
-are placeholders pending provider availability and API compatibility verification.
+The default API base is `https://api.novita.ai/openai/v1/`. The default model IDs
+are `ming-image-0.1-design` and `ming-image-0.1-design-layer`.
 For a compatible service, override `LING_UI_DESIGN_API_BASE`,
 `LING_UI_DESIGN_IMAGE_MODEL`, `LING_UI_DESIGN_DECOMPOSE_MODEL`, and
 `LING_UI_DESIGN_API_KEY` in `.env` or the process environment. Resolution and timeout

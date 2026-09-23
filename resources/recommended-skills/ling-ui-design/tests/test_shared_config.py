@@ -43,7 +43,7 @@ def test_multipart_preserves_image_and_fields_on_retry(monkeypatch):
         assert "json" not in call
         assert "Content-Type" not in call["headers"]
         assert call["timeout"] == 600
-        assert call["files"] == [("image[]", ("image_0.png", b"image-bytes", "image/png"))]
+        assert call["files"] == [("image", ("image_0.png", b"image-bytes", "image/png"))]
         assert call["data"] == {"model": "test", "prompt": "original prompt",
                                 "use_pe": "true", "stream": "false", "num_inference_steps": "14"}
     assert "images" in payload
@@ -88,8 +88,8 @@ def test_shared_endpoint_default_and_cli_override(
     module = generate_image if kind == "generate" else decompose_layers
     args = (["--prompt", "test", "--out", "out.png"] if kind == "generate"
             else ["--image", "reference.png", "--outdir", "layers"])
-    assert module.parser().parse_args(args).api_base == "https://openrouter.ai/api/v1/"
-    expected_model = "inclusionai/ming-image-0.1-design" + ("-layer" if kind == "decompose" else "")
+    assert module.parser().parse_args(args).api_base == "https://api.novita.ai/openai/v1/"
+    expected_model = "ming-image-0.1-design" + ("-layer" if kind == "decompose" else "")
     assert module.parser().parse_args(args).model == expected_model
     example = _common.read_dotenv(_common.ENV_EXAMPLE)
     assert example[model_setting] == expected_model
@@ -99,7 +99,7 @@ def test_shared_endpoint_default_and_cli_override(
     assert module.parser().parse_args(args + ["--api-base", "https://override.invalid/v1"]).api_base == "https://override.invalid/v1"
 
 
-@pytest.mark.parametrize("kind", ["generate", "edit", "decompose"])
+@pytest.mark.parametrize("kind", ["generate", "decompose"])
 @pytest.mark.parametrize("source", ["file", "environment"])
 @pytest.mark.parametrize("configured_timeout", [None, 777])
 def test_shared_key_and_prefixed_settings_reach_requests(
@@ -119,6 +119,7 @@ def test_shared_key_and_prefixed_settings_reach_requests(
     settings = {
         "LING_UI_DESIGN_API_BASE": "https://example.invalid/v1/",
         f"{prefix}_MODEL": "test-model",
+        # A legacy image-size setting must not reintroduce the rejected parameter.
         f"{prefix}_SIZE": "1k" if kind == "decompose" else "1024x1024",
         "LING_UI_DESIGN_DECOMPOSE_STEPS": "12",
         "LING_UI_DESIGN_DECOMPOSE_SEED": "7",
@@ -152,10 +153,13 @@ def test_shared_key_and_prefixed_settings_reach_requests(
         assert api_key == expected_key
         assert timeout == (configured_timeout if configured_timeout is not None else default_timeout)
         assert payload["model"] == "test-model"
-        assert payload["size"] == settings[f"{prefix}_SIZE"]
         if kind == "decompose":
+            assert payload["size"] == settings[f"{prefix}_SIZE"]
             assert payload["num_inference_steps"] == 12
             assert payload["seed"] == 7
+        else:
+            assert "size" not in payload
+            assert "images" not in payload
         return {"data": [item] * (4 if kind == "decompose" else 1)}
 
     monkeypatch.setattr(module, "post_json", post)
@@ -163,8 +167,6 @@ def test_shared_key_and_prefixed_settings_reach_requests(
         args = ["--image", str(image_path), "--outdir", str(tmp_path / "layers")]
     else:
         args = ["--prompt", "test", "--out", str(tmp_path / "generated.png")]
-        if kind == "edit":
-            args += ["--image", str(image_path)]
     monkeypatch.setattr(sys, "argv", [module.__name__, *args])
     module.main()
     assert len(calls) == 1
@@ -185,7 +187,7 @@ def test_configuration_reports_one_key_without_its_value(
         with pytest.raises(SystemExit, match="is not configured") as error:
             configure.main()
         message = str(error.value)
-        assert _common.KEY_SETUP_URL == "https://openrouter.ai/"
+        assert _common.KEY_SETUP_URL == "https://novita.ai/"
         assert _common.KEY_SETUP_URL in message
         assert "export LING_UI_DESIGN_API_KEY=" in message
         assert str(dotenv) in message
