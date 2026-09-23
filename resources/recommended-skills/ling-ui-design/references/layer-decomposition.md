@@ -9,8 +9,8 @@ photographs, illustrations, textures, logos, or partially occluded assets.
 
 | Setting | Default |
 |---|---|
-| API base | `https://openrouter.ai/api/v1/` |
-| Model | `inclusionai/ming-image-0.1-design-layer` |
+| API base | `https://api.novita.ai/openai/v1/` |
+| Model | `ming-image-0.1-design-layer` |
 | Output | RGBA PNG (`output_format=png`) |
 | Target resolution | `auto` (`512`, `1k`, and `2k` are available) |
 | Inference steps | `14` |
@@ -22,7 +22,7 @@ transparent. Keep that alpha when cropping and when using the crop. Do not
 convert layers to JPEG. Do not flatten them onto a solid background. A
 checkerboard in a viewer is transparency, not a pattern to copy.
 
-`LING_UI_DESIGN_API_KEY` is shared with image generation and editing. Configure it
+`LING_UI_DESIGN_API_KEY` is shared with image generation. Configure it
 in the skill-root `.env` or process environment. `LING_UI_DESIGN_API_BASE` sets the
 shared endpoint; `LING_UI_DESIGN_DECOMPOSE_*` settings override decomposition defaults.
 
@@ -107,5 +107,5 @@ layer, or every crop of it is unusable. Then run **once** more:
 2. Use `--prompt-file` and `--no-pe`. Keep `--size` and `--seed` the same.
 
 Stop after that second call. Keep the better of the two. Do not regenerate the page
-because of an overlay. Edit an asset only if both decomposition attempts still lack the hidden
-pixels.
+because of an overlay. If neither attempt recovers the required asset, report the limitation
+and ask for a replacement or permission to generate an alternative.

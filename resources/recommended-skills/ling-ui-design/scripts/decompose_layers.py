@@ -23,7 +23,7 @@ from _common import (
 )
 
 
-DEFAULT_MODEL = "inclusionai/ming-image-0.1-design-layer"
+DEFAULT_MODEL = "ming-image-0.1-design-layer"
 DEFAULT_SIZE = "auto"
 DEFAULT_ROLES = ("text", "image", "container", "background")
 EXTRACTABLE_ROLES = ("image", "background")
@@ -149,7 +149,8 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
         "size": args.size,
         "images": [{"image_url": image_data_url(args.image, args.resize)}],
         "output_format": "png",
-        "response_format": "b64_json",
+        "response_format": "url",
+        "watermark": True,
         "use_pe": not args.no_pe,
         "get_assets": True,
         "num_inference_steps": args.steps,

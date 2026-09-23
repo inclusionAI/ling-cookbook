@@ -1,26 +1,25 @@
-# Image generation and editing
+# Image generation
 
 Read this reference when text-to-code needs its page reference, when a new complex
-raster asset is needed, or when an existing image must be repaired, extended, or
-restyled. For page references, first read [visual direction](visual-direction.md).
+raster asset is needed. For page references, first read [visual direction](visual-direction.md).
 
 ## Defaults
 
 | Setting | Default |
 |---|---|
-| API base | `https://openrouter.ai/api/v1/` |
-| Model | `inclusionai/ming-image-0.1-design` |
-| Size | `2048x2048` |
+| API base | `https://api.novita.ai/openai/v1/` |
+| Model | `ming-image-0.1-design` |
+| Size | Selected by the service |
 
 Set the shared endpoint with `LING_UI_DESIGN_API_BASE` and image defaults with
 `LING_UI_DESIGN_IMAGE_*` in the skill-root `.env` or process environment.
 `LING_UI_DESIGN_API_KEY` is required, shared with decomposition, and has no default.
 
-Use the default `2048x2048` for page references. Treat it as a design canvas for a
+Describe the target device and aspect ratio in the prompt; no `size` parameter is sent.
+Inspect the actual output dimensions. Treat the result as a design canvas for a
 scrollable page, not as proof that the entire page fits in one browser viewport. Keep
 sections at a believable scale and let the composition continue below the fold rather
-than compressing the whole page. Override the size only when the user specifies a
-different reference canvas. Do not upscale a visibly soft result in CSS.
+than compressing the whole page. Do not upscale a visibly soft result in CSS.
 
 ## Generate
 
@@ -43,29 +42,12 @@ the implementation. Do not regenerate it to fix copy or to re-split sections; do
 in code. For text-only work, skip generation only when existing visual references
 already define the design or the user explicitly chooses direct coding.
 
-## Edit or reconstruct
-
-```bash
-python "$LING_UI_DESIGN_SKILL_ROOT/scripts/generate_image.py" \
-  --image artifacts/occluded-product.png \
-  --prompt "restore the complete product behind the foreground label; preserve shape, material, camera angle, and lighting" \
-  --format png \
-  --out artifacts/product-restored.png
-```
-
-Do not regenerate the page because an asset has an overlay. Extract rasters from
-the image and background layers with `scripts/crop_elements.py --layers
-<decompose-dir> --outdir <crops-dir>`. If the asset is absent from every layer
-or every crop is unusable, use the one allowed targeted decomposition retry
-first. Edit the asset only if that retry still cannot recover it.
-
 ## Inspect and retry
 
 Open every result before integrating it. For a **page mockup**, retry only if it is
-unusable as visual direction. For an **asset** edit, revise the prompt to name the
+unusable as visual direction. For a generated **asset**, revise the prompt to name the
 observed defect: wrong crop, incorrect subject count, unwanted lettering, palette
 drift, missing negative space, or inconsistent perspective. Do not repeat an identical
 failed request more than once; normally stop after three attempts.
 
-The helper sends images in a standard multimodal `image_url` field. It never places
-base64 image bytes into a text prompt and never logs the API key.
+The helper accepts text prompts only and never logs the API key.

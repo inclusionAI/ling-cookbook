@@ -94,8 +94,9 @@ restore those in code from the brief.
 For decomposition, overlap or imperfect separation alone does not justify a retry. Generate and
 review asset candidates first. Rerun decompose at most once, only when a material
 raster is missing from every layer or every candidate for it is unusable. Name that exact
-defect in the revised prompt; keep the size and seed fixed. Edit or reconstruct the
-asset only if the second decomposition still cannot recover it.
+defect in the revised prompt; keep the size and seed fixed. If the second decomposition
+still cannot recover the asset, report the limitation and ask for a replacement or
+permission to generate an alternative.
 
 For a misplaced or noisy crop, reclean it with `scripts/refine_crop.py` in that
 image's own coordinates, or pass an explicit `--box` to `crop_elements.py`.
@@ -112,7 +113,7 @@ Do not let a lower source override a visibly contradictory higher source.
 
 ## Service and environment rules
 
-- Use one `LING_UI_DESIGN_API_KEY` for image generation, editing, and decomposition.
+- Use one `LING_UI_DESIGN_API_KEY` for image generation and decomposition.
   Read it from the process environment first, then the gitignored `.env` in this
   skill's real root. Never place the key in prompts, command arguments, logs,
   committed files, or generated debug JSON.
