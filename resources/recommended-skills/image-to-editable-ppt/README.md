@@ -26,7 +26,13 @@ Requires Python 3.9+. If an import is missing, install the declared dependencies
 python3 -m pip install -r requirements.txt
 ```
 
-Copy `.env.example` to `.env` in this directory and fill in `LING_BASE_URL`, `LING_MODEL`, and `LING_API_KEY`. Do not commit `.env` or pass the key on the command line.
+Copy `.env.example` to `.env` in this directory and replace the API key. Do not commit `.env` or pass the key on the command line. The layer API is [Ming Image Layer Decoupling](https://docs.novita.ai/api-reference/model-apis-ming-image-layer):
+
+```bash
+LING_BASE_URL=https://api.novita.ai/openai/v1
+LING_API_KEY=sk_xxx
+LING_MODEL=ming-image-0.1-design-layer
+```
 
 ## Use
 
