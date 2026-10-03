@@ -21,6 +21,11 @@
 
 ## Table of Contents
 
+### Agent setup (`resources/setup/`)
+
+Standalone OpenRouter installers for Claude Code, Codex, and Hermes Agent:
+[English guide](resources/setup/README.md) · [简体中文](resources/setup/README.zh-CN.md).
+
 ### Local Deployment (`guide/local-deploy/`)
 
 Recipes for deploying Ling models for local inference across consumer and workstation hardware.
