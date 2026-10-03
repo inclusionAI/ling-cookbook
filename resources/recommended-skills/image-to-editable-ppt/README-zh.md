@@ -26,7 +26,23 @@
 python3 -m pip install -r requirements.txt
 ```
 
-在当前目录下复制 `.env.example` 为 `.env`，并配置 `LING_BASE_URL`、`LING_MODEL` 与 `LING_API_KEY`。切勿将 `.env` 提交至代码仓库，也切勿在命令行参数中明文传递密钥。
+在当前目录下复制 `.env.example` 为 `.env`，保留其中一个服务商，并替换 API key。切勿将 `.env` 提交至代码仓库，也切勿在命令行参数中明文传递密钥。客户端会根据 `LING_BASE_URL` 选择请求格式。
+
+[OpenRouter](https://openrouter.ai/inclusionai/ming-image-0.1-design-layer)：
+
+```bash
+LING_BASE_URL=https://openrouter.ai/api/v1
+LING_API_KEY=sk-or-v1-xxx
+LING_MODEL=inclusionai/ming-image-0.1-design-layer
+```
+
+[Novita](https://docs.novita.ai/api-reference/model-apis-ming-image-layer)：
+
+```bash
+LING_BASE_URL=https://api.novita.ai/openai/v1
+LING_API_KEY=sk_xxx
+LING_MODEL=ming-image-0.1-design-layer
+```
 
 ## 使用方式
 

@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
 """Layer-decomposition API client.
 
-Call chain:
-    local image → POST {BASE}/images/edits (multipart, field image=file) →
-    each layer's b64_json (or url) → layer_1.png ... layer_N.png
+Call chain depends on the host in LING_BASE_URL. The client picks it; there is
+no separate switch.
+
+- openrouter.ai: JSON POST {BASE}/images, one base64 image in input_references.
+  Size is omitted. That API rejects explicit sizes and follows the source.
+- any other host: multipart POST {BASE}/images/edits, field image=file.
+
+Each layer's b64_json (or url) is saved as layer_1.png ... layer_N.png.
 
 Two differences from the old client:
 
@@ -234,8 +239,19 @@ _IMAGE_MIME = {
 }
 
 
+def _request_style(base_url: str) -> str:
+    """Pick the request shape from the base URL host. Callers do not choose."""
+    host = (urlsplit(base_url.strip()).hostname or "").lower()
+    if host == "openrouter.ai" or host.endswith(".openrouter.ai"):
+        return "openrouter"
+    return "edits"
+
+
 def _endpoint(base_url: str) -> str:
-    return base_url.rstrip("/") + "/" + DECOMPOSE_ENDPOINT.lstrip("/")
+    base = base_url.rstrip("/")
+    if _request_style(base) == "openrouter":
+        return base if base.endswith("/images") else base + "/images"
+    return base + "/" + DECOMPOSE_ENDPOINT.lstrip("/")
 
 
 def _read_image_bytes(source) -> tuple[bytes, str]:
@@ -286,25 +302,24 @@ def _form_fields(prompt: str, size, model: str) -> dict[str, str]:
     }
 
 
-def _call_edits_once(source, prompt: str, size, timeout: int) -> list:
-    """Call the decomposition API once and return front-to-back layer entries.
+def _openrouter_body(prompt: str, model: str, raw: bytes, mime: str) -> dict:
+    """JSON body for POST /images. Size is omitted; this model rejects it."""
+    encoded = base64.b64encode(raw).decode("ascii")
+    return {
+        "model": model,
+        "prompt": prompt,
+        "output_format": "png",
+        "input_references": [
+            {
+                "type": "image_url",
+                "image_url": {"url": f"data:{mime};base64,{encoded}"},
+            }
+        ],
+    }
 
-    Sends the file as multipart, matching ``client.images.edit(image=[open(...)])``.
-    The source is not first turned into a public URL. Entries carry b64_json by
-    default; url is only a compatibility channel.
-    """
-    settings = _ling_settings()
-    raw, mime = _read_image_bytes(source)
-    resp = requests.post(
-        _endpoint(settings["LING_BASE_URL"]),
-        headers={
-            "Authorization": f"Bearer {settings['LING_API_KEY']}",
-            "Accept": "application/json",
-        },
-        data=_form_fields(prompt, size, settings["LING_MODEL"]),
-        files={"image": (_source_filename(source, mime), raw, mime)},
-        timeout=timeout,
-    )
+
+def _items_from_response(resp) -> list:
+    """Read front-to-back layer entries from either provider's JSON body."""
     try:
         result = resp.json()
     except Exception:
@@ -312,7 +327,12 @@ def _call_edits_once(source, prompt: str, size, timeout: int) -> list:
     if not resp.ok:
         msg = ""
         if isinstance(result, dict):
-            msg = (result.get("error") or {}).get("message") or result.get("message") or ""
+            err = result.get("error")
+            if isinstance(err, dict):
+                msg = err.get("message") or ""
+            elif isinstance(err, str):
+                msg = err
+            msg = msg or result.get("message") or ""
         raise RuntimeError(f"decompose HTTP {resp.status_code}: {msg or resp.text[:200]}")
 
     data = (result or {}).get("data") or []
@@ -333,6 +353,39 @@ def _call_edits_once(source, prompt: str, size, timeout: int) -> list:
     if not items:
         raise RuntimeError(f"decomposition model returned no layers: {json.dumps(result)[:300]}")
     return items
+
+
+def _call_edits_once(source, prompt: str, size, timeout: int) -> list:
+    """Call the decomposition API once and return front-to-back layer entries.
+
+    openrouter.ai sends JSON to /images. Every other host sends multipart to
+    /images/edits, matching ``client.images.edit(image=[open(...)])``. The
+    source is not first turned into a public URL. Entries carry b64_json by
+    default; url is only a compatibility channel.
+    """
+    settings = _ling_settings()
+    raw, mime = _read_image_bytes(source)
+    base_url = settings["LING_BASE_URL"]
+    headers = {
+        "Authorization": f"Bearer {settings['LING_API_KEY']}",
+        "Accept": "application/json",
+    }
+    if _request_style(base_url) == "openrouter":
+        resp = requests.post(
+            _endpoint(base_url),
+            headers={**headers, "Content-Type": "application/json"},
+            json=_openrouter_body(prompt, settings["LING_MODEL"], raw, mime),
+            timeout=timeout,
+        )
+    else:
+        resp = requests.post(
+            _endpoint(base_url),
+            headers=headers,
+            data=_form_fields(prompt, size, settings["LING_MODEL"]),
+            files={"image": (_source_filename(source, mime), raw, mime)},
+            timeout=timeout,
+        )
+    return _items_from_response(resp)
 
 
 def decompose_layers(source, prompt: str, size=None, stage: str = "final",
