@@ -48,7 +48,10 @@
 
 | 模型 | 设备 | 框架 | 量化 | 说明 |
 | :--- | :--- | :--- | :--- | :--- |
+| Ling-3.0-flash-Fin | 单台 NVIDIA DGX Spark | SGLang | MXFP4 (速度优化) | [文档: SGLang MXFP4 Humming 优化部署指南](guide/local-deploy/ling-3.0-flash-fin/dgx-spark-sglang-ling-3-flash-fin-mxfp4-humming-zh.ipynb) |
 | Ling-3.0-flash-Fin | 单台 NVIDIA DGX Spark | SGLang | MXFP4 | [文档: SGLang MXFP4 部署指南](guide/local-deploy/ling-3.0-flash-fin/dgx-spark-sglang-ling-3-flash-fin-mxfp4-zh.ipynb) |
+| Ling-3.0-flash-Fin | 单台 NVIDIA DGX Spark | vLLM | FP4 | [文档: vLLM FP4 部署指南](guide/local-deploy/ling-3.0-flash-fin/dgx-spark-vllm-ling-3-flash-fin-fp4-zh.ipynb) |
+| Ling-3.0-flash-Fin | 单台 NVIDIA DGX Spark | llama.cpp | GGUF (Q4_K_M) | [文档: llama.cpp GGUF 部署指南](guide/local-deploy/ling-3.0-flash-fin/dgx-spark-llamacpp-ling-3-flash-fin-q4-gguf-zh.ipynb) |
 
 #### Ling-3.0-tiny
 
@@ -80,7 +83,7 @@
 | :--- | :--- | :--- | :--- |
 | `image-to-editable-ppt` | Ming-Image-0.1-Design-Layer [Hugging Face](https://huggingface.co/inclusionAI/Ming-Image-0.1-Design-Layer) [ModelScope](https://www.modelscope.cn/models/inclusionAI/Ming-Image-0.1-Design-Layer) | 将单张幻灯片图片/截图逆向重建为原生可编辑 `.pptx` | [README](resources/recommended-skills/image-to-editable-ppt/README-zh.md) |
 | `ling-gui-agent-skill` | Ling-3.0-flash-VL [OpenRouter](https://openrouter.ai/models/inclusionai/ling-3.0-flash-vl) [Hugging Face](https://huggingface.co/inclusionAI/Ling-3.0-flash-VL) [ModelScope](https://www.modelscope.cn/models/inclusionAI/Ling-3.0-flash-VL) | 基于视觉定位与键鼠/触控操作的跨平台桌面与 Android GUI 自动化 | [README](resources/recommended-skills/ling-gui-agent-skill/README-zh.md) |
-| `ling-ui-design` | Ming-Image-0.1-Design [Hugging Face](https://huggingface.co/inclusionAI/Ming-Image-0.1-Design) [ModelScope](https://www.modelscope.cn/models/inclusionAI/Ming-Image-0.1-Design)<br>Ming-Image-0.1-Design-Layer [Hugging Face](https://huggingface.co/inclusionAI/Ming-Image-0.1-Design-Layer) [ModelScope](https://www.modelscope.cn/models/inclusionAI/Ming-Image-0.1-Design-Layer) | 视觉优先的前端界面生成、图层解耦、切图提取与浏览器校验闭环 | [README](resources/recommended-skills/ling-ui-design/README.md) |
+| `ling-ui-design` | Ming-Image-0.1-Design [Hugging Face](https://huggingface.co/inclusionAI/Ming-Image-0.1-Design) [ModelScope](https://www.modelscope.cn/models/inclusionAI/Ming-Image-0.1-Design)<br>Ming-Image-0.1-Design-Layer [Hugging Face](https://huggingface.co/inclusionAI/Ming-Image-0.1-Design-Layer) [ModelScope](https://www.modelscope.cn/models/inclusionAI/Ming-Image-0.1-Design-Layer) | 视觉优先的前端界面生成、图层解耦、切图提取与浏览器端自动化校验 | [README](resources/recommended-skills/ling-ui-design/README.md) |
 
 ---
 

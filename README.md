@@ -48,7 +48,10 @@ Recipes for deploying Ling models for local inference across consumer and workst
 
 | Model | Device | Framework | Quant | Info |
 | :--- | :--- | :--- | :--- | :--- |
+| Ling-3.0-flash-Fin | Single NVIDIA DGX Spark | SGLang | MXFP4 (Speed Optimized) | [Recipe: SGLang MXFP4 Humming Optimization Deployment Guide](guide/local-deploy/ling-3.0-flash-fin/dgx-spark-sglang-ling-3-flash-fin-mxfp4-humming.ipynb) |
 | Ling-3.0-flash-Fin | Single NVIDIA DGX Spark | SGLang | MXFP4 | [Recipe: SGLang MXFP4 Deployment Guide](guide/local-deploy/ling-3.0-flash-fin/dgx-spark-sglang-ling-3-flash-fin-mxfp4.ipynb) |
+| Ling-3.0-flash-Fin | Single NVIDIA DGX Spark | vLLM | FP4 | [Recipe: vLLM FP4 Deployment Guide](guide/local-deploy/ling-3.0-flash-fin/dgx-spark-vllm-ling-3-flash-fin-fp4.ipynb) |
+| Ling-3.0-flash-Fin | Single NVIDIA DGX Spark | llama.cpp | GGUF (Q4_K_M) | [Recipe: llama.cpp GGUF Deployment Guide](guide/local-deploy/ling-3.0-flash-fin/dgx-spark-llamacpp-ling-3-flash-fin-q4-gguf.ipynb) |
 
 #### Ling-3.0-tiny
 

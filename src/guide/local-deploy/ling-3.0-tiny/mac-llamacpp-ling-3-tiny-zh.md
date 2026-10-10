@@ -52,7 +52,7 @@ limitations under the License.
 
 <br><br>
 
-`Ling-3.0-tiny` 是百灵大模型系列中的 7.9B 轻量 Sparse MoE 语言模型，单 Token 激活参数量仅 1.3B，原生支持 128K 长上下文。针对 Apple Silicon Mac 的统一内存架构，通过 `llama.cpp` 原生 Metal 硬件加速结合 GGUF 量化，可在消费级 Mac 上实现极致低内存占用、高吞吐的端侧推理与智能体工具调用。
+`Ling-3.0-tiny` 是百灵大模型系列中的 7.9B 轻量 Sparse MoE 语言模型，单 Token 激活参数量仅 1.3B，原生支持 128K 长上下文。针对 Apple Silicon Mac 的统一内存架构，通过 `llama.cpp` 原生 Metal 硬件加速结合 GGUF 量化，可在消费级 Mac 上实现低内存占用、高吞吐的端侧推理与智能体工具调用。
 
 本指南介绍如何在 Apple Silicon Mac（M1 / M2 / M3 / M4 系列）上，通过 Homebrew 安装 `llama.cpp` 并启动 `Ling-3.0-tiny` GGUF 版本的推理服务，提供 OpenAI 兼容的 HTTP API。
 

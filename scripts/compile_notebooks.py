@@ -12,9 +12,16 @@ scripts/compile_notebooks.py
 """
 
 import sys
+import os
 import subprocess
 import argparse
 from pathlib import Path
+
+# 确保在受限沙箱或无权限环境中也能安全运行 jupytext
+os.environ.setdefault("JUPYTER_DATA_DIR", "/tmp/jupyter")
+os.environ.setdefault("JUPYTER_RUNTIME_DIR", "/tmp/jupyter")
+os.environ.setdefault("JUPYTER_CONFIG_DIR", "/tmp/jupyter")
+Path("/tmp/jupyter").mkdir(parents=True, exist_ok=True)
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 SRC_DIR = ROOT_DIR / "src"

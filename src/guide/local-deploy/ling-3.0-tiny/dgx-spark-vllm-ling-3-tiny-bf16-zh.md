@@ -121,7 +121,7 @@ Successfully downloaded Ling-3.0-tiny to ~/models/Ling-3.0-tiny
 
 ### 步骤 4: 启动 vLLM HTTP 推理服务
 
-启动 vLLM Server，提供标准 OpenAI 兼容 HTTP 接口。部分核心参数说明：
+启动 vLLM Server，提供标准 OpenAI 兼容 HTTP 接口。关键运行参数说明：
 - `--trust-remote-code`：信任百灵 MoE 混合架构模型定义与计算图；
 - `--dtype bfloat16`：以 BF16 全精度加载权重与执行推理；
 - `--gpu-memory-utilization 0.35`：显存预分配 35%（约 42 GiB），为 128K 超长上下文留出充足 KV 缓存；
