@@ -80,6 +80,7 @@ limitations under the License.
 !pip install -U uv
 !uv venv --python 3.11 .venv
 !source .venv/bin/activate && uv pip install --upgrade 'openai>=1.52.0,<2.0.0'
+# 说明：本方案依赖在线 FP8 LM Head 动态转换与 Eagle/MTP 模块级参数共享加速，官方主干尚未合入该机制，需使用专用优化分支
 !git clone -b ling_v3_support_mxfp4_humming https://github.com/inclusionAI/sglang.git
 ```
 

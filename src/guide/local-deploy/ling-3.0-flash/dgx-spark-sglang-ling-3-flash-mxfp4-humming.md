@@ -80,6 +80,7 @@ Clone the SGLang repository branch (`inclusionAI/sglang` branch `ling_v3_support
 !pip install -U uv
 !uv venv --python 3.11 .venv
 !source .venv/bin/activate && uv pip install --upgrade 'openai>=1.52.0,<2.0.0'
+# Note: This scheme relies on online FP8 LM head conversion and Eagle/MTP module-level parameter sharing, which are not yet merged upstream
 !git clone -b ling_v3_support_mxfp4_humming https://github.com/inclusionAI/sglang.git
 ```
 

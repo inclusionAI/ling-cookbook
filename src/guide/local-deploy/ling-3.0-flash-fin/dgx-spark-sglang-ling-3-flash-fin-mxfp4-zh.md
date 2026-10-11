@@ -71,6 +71,7 @@ Ling-3.0-flash-Fin 是百灵大模型系列首个金融增强大模型，以 Lin
 !pip install -U uv
 !uv venv --python 3.11 .venv
 !source .venv/bin/activate && uv pip install --upgrade 'openai>=1.52.0,<2.0.0'
+# 说明：本方案依赖针对 GB10 (SM121) 的 W4A8 CUTLASS 硬件内核加速与 SwiGLU-step 裁剪修复，官方主干尚未合入，需使用专用优化分支
 !git clone -b ling_v3_support_mxfp4 https://github.com/inclusionAI/sglang.git
 ```
 

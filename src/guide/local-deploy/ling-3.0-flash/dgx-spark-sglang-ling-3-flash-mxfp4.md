@@ -71,6 +71,7 @@ We recommend using `uv` to create an isolated Python virtual environment and ins
 !pip install -U uv
 !uv venv --python 3.11 .venv
 !source .venv/bin/activate && uv pip install --upgrade 'openai>=1.52.0,<2.0.0'
+# Note: This scheme relies on GB10 (SM121) specialized W4A8 CUTLASS hardware kernels and SwiGLU-step activation clipping fixes, which are not yet merged upstream
 !git clone -b ling_v3_support_mxfp4 https://github.com/inclusionAI/sglang.git
 ```
 

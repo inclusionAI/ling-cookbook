@@ -65,13 +65,13 @@ This notebook demonstrates how to build `SGLang` from source on `NVIDIA DGX Spar
 
 ### Step 1: Set Up Python Virtual Environment (uv) and Clone SGLang Repository
 
-We recommend using `uv` to create an isolated Python virtual environment and install the OpenAI client, while cloning the official Ling-3.0 support branch (`inclusionAI/sglang:ling_v3_support_mxfp4`):
+We recommend using `uv` to create an isolated Python virtual environment and install the OpenAI client, while cloning the official SGLang repository (Ling-3.0-tiny model architecture is natively supported on main):
 
 ```{code-cell}
 !pip install -U uv
 !uv venv --python 3.11 .venv
 !source .venv/bin/activate && uv pip install --upgrade 'openai>=1.52.0,<2.0.0'
-!git clone -b ling_v3_support_mxfp4 https://github.com/inclusionAI/sglang.git
+!git clone https://github.com/sgl-project/sglang.git
 ```
 
 Typical execution output:
@@ -80,7 +80,7 @@ Using CPython 3.11 interpreter at: /usr/bin/python3.11
 Creating virtualenv at: .venv
 Cloning into 'sglang'...
 remote: Enumerating objects: 38200, done.
-Switched to a new branch 'ling_v3_support_mxfp4'
+Resolving deltas: 100% (28500/28500), done.
 ```
 
 +++

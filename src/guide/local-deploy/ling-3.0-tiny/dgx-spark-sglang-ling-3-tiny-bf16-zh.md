@@ -65,13 +65,13 @@ Ling-3.0-tiny 是总参数量 7.9B、单 Token 激活仅 1.3B 的轻量型 Spars
 
 ### 步骤 1: 准备 Python 虚拟环境 (uv) 与克隆 SGLang 仓库
 
-推荐使用 `uv` 创建独立的 Python 虚拟环境并安装 OpenAI 客户端。同时克隆官方维护的 Ling-3.0 支持分支（`inclusionAI/sglang:ling_v3_support_mxfp4`）：
+推荐使用 `uv` 创建独立的 Python 虚拟环境并安装 OpenAI 客户端。同时克隆 SGLang 官方主仓库（Ling-3.0-tiny 模型架构已由官方主干原生支持）：
 
 ```{code-cell}
 !pip install -U uv
 !uv venv --python 3.11 .venv
 !source .venv/bin/activate && uv pip install --upgrade 'openai>=1.52.0,<2.0.0'
-!git clone -b ling_v3_support_mxfp4 https://github.com/inclusionAI/sglang.git
+!git clone https://github.com/sgl-project/sglang.git
 ```
 
 典型运行输出：
@@ -80,7 +80,7 @@ Using CPython 3.11 interpreter at: /usr/bin/python3.11
 Creating virtualenv at: .venv
 Cloning into 'sglang'...
 remote: Enumerating objects: 38200, done.
-Switched to a new branch 'ling_v3_support_mxfp4'
+Resolving deltas: 100% (28500/28500), done.
 ```
 
 +++
