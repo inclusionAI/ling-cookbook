@@ -64,15 +64,15 @@ This guide demonstrates how to deploy the pre-quantized **INT4 (W4A16 Marlin MoE
 
 +++
 
-### Step 1: Set Up Python Virtual Environment (uv) and Clone SGLang Repository
+### Step 1: Set Up Python Virtual Environment (uv) and Clone Official SGLang Repository
 
-Use `uv` to create an isolated Python 3.12 virtual environment and install client dependencies. Clone the SGLang branch supporting Ling-3.0-flash-VL:
+Use `uv` to create an isolated Python 3.12 virtual environment and install client dependencies. The official SGLang upstream repository natively supports Ling-3.0-flash-VL via PR #38526 and incorporates single-pass streaming weight dispatch to safely prevent host OOM on unified memory architectures. Clone the official repository directly:
 
 ```{code-cell}
 !pip install -U uv
 !uv venv --python 3.12 .venv
 !source .venv/bin/activate && uv pip install --upgrade 'openai>=1.52.0,<2.0.0' requests pillow
-!git clone -b Ling_v3_vl_for_pr https://github.com/inclusionAI/sglang_ling_v3.git sglang
+!git clone https://github.com/sgl-project/sglang.git
 ```
 
 Typical execution output:
@@ -80,8 +80,7 @@ Typical execution output:
 Using CPython 3.12 interpreter at: /usr/bin/python3.12
 Creating virtualenv at: .venv
 Cloning into 'sglang'...
-remote: Enumerating objects: 41200, done.
-Switched to a new branch 'Ling_v3_vl_for_pr'
+remote: Enumerating objects: 42300, done.
 ```
 
 +++
