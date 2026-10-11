@@ -54,19 +54,19 @@ limitations under the License.
 
 Ling-3.0-flash-VL 是原生支持图文与视频理解的多模态 MoE 大模型，具备 124B 总参数量，每个 Token 激活约 5.5B 参数，延续 5:1 的 KDA（线性注意力）与 MLA（潜变量多头注意力）交替混合架构。
 
-本指南演示如何在单台 `NVIDIA DGX Spark`（GB10 统一内存 121 GiB 可用）上，**直接在宿主机通过 Python 虚拟环境（不依赖 Docker 容器）**，基于源码构建 `SGLang` 部署 Ling-3.0-flash-VL 的官方预量化 **INT4 (W4A16 Marlin MoE)** 权重版本。模型权重与运行时占用 ~74 GiB 统一内存，为 PagedAttention KV Cache 留出 32+ GiB 充裕空间，实测纯文本与图像多模态可稳定达到 **22.5 ~ 23.2 tokens/s** 的连续解码速率。
+本指南演示如何在单台 `NVIDIA DGX Spark`（GB10 统一内存 121 GiB 可用）上，基于源码构建 `SGLang` 部署 Ling-3.0-flash-VL 的官方预量化 INT4 (W4A16 Marlin MoE) 权重版本。模型权重与运行时占用约 74 GiB 统一内存，为 PagedAttention KV Cache 留出约 32 GiB 空间，实测纯文本与图像多模态连续解码速率约为 22.5 ~ 23.2 tokens/s。
 
 > [!TIP]
-> **环境要求与准备建议**：
+> 环境要求与准备建议：
 > - 操作系统：Ubuntu 24.04 LTS (aarch64 / ARM64)；
-> - 推荐使用 **Python 3.12** 虚拟环境（通过 `uv` 极速安装管理）；
+> - 推荐使用 Python 3.12 虚拟环境（通过 `uv` 管理）；
 > - 依赖工具链：CUDA 13.0 / PyTorch 2.6+，FlashInfer 0.6+。
 
 +++
 
 ### 步骤 1: 准备 Python 虚拟环境 (uv) 与克隆 SGLang 官方仓库
 
-推荐使用现代包管理工具 `uv` 创建隔离的 Python 3.12 虚拟环境并安装客户端库。SGLang 官方仓库已于 PR #38526 原生支持 Ling-3.0-flash-VL，且其官方主干实现内置了单遍流式分派（Single-pass Streaming Dispatch），可在统一内存设备上安全加载。直接克隆官方主仓库即可：
+使用 `uv` 创建隔离的 Python 3.12 虚拟环境并安装客户端库。SGLang 官方主干已支持 Ling-3.0-flash-VL，直接克隆官方主仓库：
 
 ```{code-cell}
 !pip install -U uv
@@ -126,18 +126,18 @@ Successfully downloaded Ling-3.0-flash-VL-int4 to ~/models/Ling-3.0-flash-VL-int
 
 ### 步骤 4: 启动 SGLang HTTP 推理服务
 
-启动 SGLang Server，提供标准 OpenAI 兼容的多模态 HTTP 接口。为确保在 GB10 统一内存上稳定启动与运行，固化以下工程配置：
+启动 SGLang Server，提供标准 OpenAI 兼容的多模态 HTTP 接口，配置参数如下：
 - `--tp-size 1`：单张 NVIDIA GB10 独立运行，使用单卡张量并行；
 - `--model-loader-extra-config '{"disable_multithread_load":true}'`：强制单线程顺序加载权重分片，避免统一内存并发峰值引发启动 OOM；
 - `--context-length 16384`：适配通用高频图文推理场景，确保显存分配安全稳定；
 - `--enable-http2`：使用 Granian 运行时，规避特定路径写死缺陷；
-- `--mem-fraction-static 0.80`：静态显存分配比例设为 80%（实机占用约 97.3 GiB），为 PagedAttention KV Cache 留出 32.72 GiB 充裕空间，并防范系统其他进程内存争抢；
+- `--mem-fraction-static 0.80`：静态显存分配比例设为 0.80（实机占用约 97.3 GiB），为 PagedAttention KV Cache 留出约 32.7 GiB 空间；
 - `--max-mamba-cache-size 64`：设定 Mamba 状态缓存上限为 64，优化混合架构在统一内存下的状态池分配；
 - `--tool-call-parser ling3 --reasoning-parser ling3`：启用 Ling-3.0 原生工具调用与 `<think>` 思考链解析器；
 - `--disable-shared-experts-fusion`：针对 MoE 混合量化内核保持稳定性。
 
 > [!WARNING]
-> **前台常驻与阻塞提示**：
+> 前台常驻与阻塞提示：
 > `sglang.launch_server` 属于常驻服务进程。如果你直接在 Notebook 中点击运行下方单元格，Jupyter 单元格将持续处于执行状态并阻塞后续代码。建议你在独立的终端窗口中执行以下启动命令，待服务端输出 `The server is fired up and ready to roll!` 后，再回到本 Notebook 运行后续步骤进行验证。
 
 ```{code-cell}
@@ -182,9 +182,9 @@ INFO:     Uvicorn/Granian running on http://0.0.0.0:30000 (Press CTRL+C to quit)
 ### 步骤 5: 验证部署成功并进行多模态端到端测试
 
 服务就绪后，即可通过兼容 OpenAI 协议的客户端进行端到端验证。测试覆盖：
-1. **健康检查**：验证模型端点与基本元数据；
-2. **多模态图文流式推理与测速**：输入图片与提示词，流式获取 `<think>` 思考过程及最终回答，测定首包时间 (TTFT) 与解码速率 (TPS)；
-3. **视觉上下文下的 Tool Calling**：测试基于图片内容的函数工具结构化参数抽取。
+1. 健康检查：验证模型端点与基本元数据；
+2. 多模态图文流式推理与测速：输入图片与提示词，流式获取 `<think>` 思考过程及最终回答，测定首包时间 (TTFT) 与解码速率 (TPS)；
+3. 视觉上下文下的 Tool Calling：测试基于图片内容的函数工具结构化参数抽取。
 
 +++
 
@@ -219,7 +219,7 @@ Models response: {"object":"list","data":[{"id":"ling-3.0-flash-vl-int4","object
 
 #### 步骤 5.2: 纯文本 vs 多模态图文流式推理、Reasoning 与速度基准测量
 
-为精准评估视觉编码器（ViT）带来的前向计算开销，我们通过流式接口对比测试**纯文本请求**与**图像多模态请求**，并提取 `<think>` 思考链标签，测算首字时间 (TTFT)、视觉额外开销 (ViT Overhead) 及单 Token 解码吞吐 (TPS)：
+为精准评估视觉编码器（ViT）带来的前向计算开销，我们通过流式接口对比测试纯文本请求与图像多模态请求，并提取 `<think>` 思考链标签，测算首字时间 (TTFT)、视觉额外开销 (ViT Overhead) 及单 Token 解码吞吐 (TPS)：
 
 ```{code-cell}
 import time
@@ -229,6 +229,7 @@ client = OpenAI(
     base_url="http://localhost:30000/v1",
     api_key="sk-ling-cookbook-test"
 )
+```
 
 def benchmark_stream(name, messages):
     print(f"\n============================================================")
@@ -307,7 +308,7 @@ text_msg = [
 text_res = benchmark_stream("纯文本基准", text_msg)
 
 # 2. 图像多模态视觉推理测试 (以几何视觉分析为例)
-image_url = "https://raw.githubusercontent.com/inclusionAI/ling-cookbook/main/resources/recommended-skills/ling-ui-design/assets/preview.png"
+image_url = "https://raw.githubusercontent.com/inclusionAI/ling-cookbook/main/resources/assets/ling-flash-vl-benchmark.jpg"
 mm_msg = [
     {
         "role": "user",
@@ -390,16 +391,16 @@ mm_res = benchmark_stream("图像多模态", mm_msg)
 
 | 评测维度 | 纯文本推理 | 图像多模态推理 | 视觉带来的额外增量 |
 | :--- | :--- | :--- | :--- |
-| **输入 Prompt Tokens** | 26 tokens | 286 tokens | +260 tokens (视觉 Patch 特征投影) |
-| **首字延迟 (TTFT)** | **163.71 ms** (0.16 s) | **1178.02 ms** (1.18 s) | **+1014.31 ms (~1.01 s ViT 前向开销)** |
-| **单 Token 耗时 (TPOT)** | 43.08 ms/tok | 44.44 ms/tok | +1.36 ms/tok |
-| **连续解码速率 (TPS)** | **23.21 tokens/s** | **22.50 tokens/s** | 解码速率几乎无损（降幅仅 ~3%） |
-| **256 Token 端到端用时** | 11.15 s | 12.51 s | +1.36 s |
+| 输入 Prompt Tokens | 26 tokens | 286 tokens | +260 tokens |
+| 首字延迟 (TTFT) | 163.71 ms (0.16 s) | 1178.02 ms (1.18 s) | +1014.31 ms (~1.01 s) |
+| 单 Token 耗时 (TPOT) | 43.08 ms/tok | 44.44 ms/tok | +1.36 ms/tok |
+| 连续解码速率 (TPS) | 23.21 tokens/s | 22.50 tokens/s | -0.71 tokens/s (-3.1%) |
+| 256 Token 端到端用时 | 11.15 s | 12.51 s | +1.36 s |
 
 > [!TIP]
-> **基准结论**：
-> 1. **ViT 视觉处理延迟可控**：图像经过 Vision Encoder 与 Projector 投影为 260 个视觉 tokens 的耗时约为 **1.01 秒**，在端侧多模态交互中具备极佳的响应体验；
-> 2. **解码速率达标**：进入自回归解码阶段后，图像多模态依然跑出 **22.50 tokens/s** 的稳定吞吐，与纯文本的 23.21 tokens/s 表现相当，完全满足日常端侧人机协作与 Agent 多模态视觉理解需求。
+> 测试指标说明：
+> 1. 图像前向耗时：图像输入转换为 260 个视觉 tokens 的前向耗时约为 1.01 秒；
+> 2. 连续解码速率：自回归解码阶段，图像多模态为 22.50 tokens/s，与纯文本基准（23.21 tokens/s）一致。
 
 +++
 
@@ -435,7 +436,7 @@ def test_multimodal_tool_calling():
             {
                 "role": "user",
                 "content": [
-                    {"type": "image_url", "image_url": {"url": "https://raw.githubusercontent.com/inclusionAI/ling-cookbook/main/resources/recommended-skills/ling-ui-design/assets/preview.png"}},
+                    {"type": "image_url", "image_url": {"url": "https://raw.githubusercontent.com/inclusionAI/ling-cookbook/main/resources/assets/ling-flash-vl-benchmark.jpg"}},
                     {"type": "text", "text": "分析该界面的配色方案并调用工具提取设计元数据。"}
                 ]
             }

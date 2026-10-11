@@ -54,19 +54,19 @@ limitations under the License.
 
 Ling-3.0-flash-VL is a native multimodal Mixture-of-Experts (MoE) model supporting image and video understanding. It features 124B total parameters with 5.5B activated parameters per token, inheriting a 5:1 alternating ratio of Kimi Delta Attention (KDA) to Multi-Head Latent Attention (MLA).
 
-This guide demonstrates how to deploy the pre-quantized **INT4 (W4A16 Marlin MoE)** checkpoint of Ling-3.0-flash-VL on a single **NVIDIA DGX Spark** (single GB10 with 121 GiB unified memory available) using **source-built SGLang directly on host Python virtual environment (without Docker dependencies)**. The model weights and runtime occupy ~74 GiB of unified memory, leaving 32+ GiB for PagedAttention KV Cache and achieving a steady decoding speed of **22.5 ~ 23.2 tokens/s**.
+This guide demonstrates how to deploy the pre-quantized INT4 (W4A16 Marlin MoE) checkpoint of Ling-3.0-flash-VL on a single NVIDIA DGX Spark (single GB10 with 121 GiB unified memory available) using source-built SGLang. The model weights and runtime occupy ~74 GiB of unified memory, reserving ~32 GiB for PagedAttention KV Cache with a continuous decoding speed of 22.5 ~ 23.2 tokens/s.
 
 > [!TIP]
-> **Environment Recommendations**:
+> Environment Recommendations:
 > - Operating System: Ubuntu 24.04 LTS (aarch64 / ARM64);
-> - Recommended runtime: **Python 3.12** virtual environment managed via `uv`;
+> - Recommended runtime: Python 3.12 virtual environment managed via `uv`;
 > - Toolchain dependencies: CUDA 13.0 / PyTorch 2.6+, FlashInfer 0.6+.
 
 +++
 
 ### Step 1: Set Up Python Virtual Environment (uv) and Clone Official SGLang Repository
 
-Use `uv` to create an isolated Python 3.12 virtual environment and install client dependencies. The official SGLang upstream repository natively supports Ling-3.0-flash-VL via PR #38526 and incorporates single-pass streaming weight dispatch to safely prevent host OOM on unified memory architectures. Clone the official repository directly:
+Use `uv` to create an isolated Python 3.12 virtual environment and install client dependencies. SGLang upstream natively supports Ling-3.0-flash-VL. Clone the official repository directly:
 
 ```{code-cell}
 !pip install -U uv
@@ -131,13 +131,13 @@ Launch the SGLang server exposing an OpenAI-compatible multimodal endpoint. Key 
 - `--model-loader-extra-config '{"disable_multithread_load":true}'`: Enforce single-threaded sequential weight loading to prevent memory spikes during cold start;
 - `--context-length 16384`: Safe context window tailored for image and text workflows;
 - `--enable-http2`: Use Granian runtime to bypass hardcoded path limitations;
-- `--mem-fraction-static 0.80`: Allocate 80% of unified memory (~97.3 GiB) statically, reserving 32.72 GiB for PagedAttention KV Cache and avoiding resource contention;
+- `--mem-fraction-static 0.80`: Allocate 80% of unified memory statically (~97.3 GiB), reserving ~32.7 GiB for PagedAttention KV Cache;
 - `--max-mamba-cache-size 64`: Cap the Mamba layer state cache to 64 to optimize unified memory usage under hybrid attention;
 - `--tool-call-parser ling3 --reasoning-parser ling3`: Enable Ling-3.0 native tool calling and `<think>` chain-of-thought parsing;
 - `--disable-shared-experts-fusion`: Keep stability for MoE quantization kernels.
 
 > [!WARNING]
-> **Foreground Execution Note**:
+> Foreground Execution Note:
 > `sglang.launch_server` runs as a persistent service. Executing the cell below directly inside Jupyter will block further notebook execution. It is recommended to run the command in a separate terminal. After the server prints `The server is fired up and ready to roll!`, proceed with verification steps below.
 
 ```{code-cell}
@@ -182,9 +182,9 @@ INFO:     Uvicorn/Granian running on http://0.0.0.0:30000 (Press CTRL+C to quit)
 ### Step 5: Verify Deployment and Run Multimodal Tests
 
 Once the server is running, perform end-to-end verification covering:
-1. **Health Check**: Verify model registration and endpoint connectivity;
-2. **Multimodal Streaming Reasoning & Speed Benchmark**: Stream token generation with `<think>` thinking chain extraction and measure TTFT / TPS;
-3. **Vision-based Tool Calling**: Verify structured function call extraction against image inputs.
+1. Health Check: Verify model registration and endpoint connectivity;
+2. Multimodal Streaming Reasoning & Speed Benchmark: Stream token generation with `<think>` thinking chain extraction and measure TTFT / TPS;
+3. Vision-based Tool Calling: Verify structured function call extraction against image inputs.
 
 +++
 
@@ -219,7 +219,7 @@ Models response: {"object":"list","data":[{"id":"ling-3.0-flash-vl-int4","object
 
 #### Step 5.2: Text vs Multimodal Streaming Inference, Reasoning, and Benchmark Measurement
 
-To accurately evaluate the computational overhead introduced by the vision encoder (ViT), we benchmark a **pure text request** alongside an **image multimodal request**, streaming tokens with `<think>` tags to capture Time to First Token (TTFT), visual forward overhead, and decoding throughput (TPS):
+To accurately evaluate the computational overhead introduced by the vision encoder (ViT), we benchmark a pure text request alongside an image multimodal request, streaming tokens with `<think>` tags to capture Time to First Token (TTFT), visual forward overhead, and decoding throughput (TPS):
 
 ```{code-cell}
 import time
@@ -229,6 +229,7 @@ client = OpenAI(
     base_url="http://localhost:30000/v1",
     api_key="sk-ling-cookbook-test"
 )
+```
 
 def benchmark_stream(name, messages):
     print(f"\n============================================================")
@@ -307,7 +308,7 @@ text_msg = [
 text_res = benchmark_stream("Pure Text Baseline", text_msg)
 
 # 2. Image multimodal visual reasoning
-image_url = "https://raw.githubusercontent.com/inclusionAI/ling-cookbook/main/resources/recommended-skills/ling-ui-design/assets/preview.png"
+image_url = "https://raw.githubusercontent.com/inclusionAI/ling-cookbook/main/resources/assets/ling-flash-vl-benchmark.jpg"
 mm_msg = [
     {
         "role": "user",
@@ -390,16 +391,16 @@ Metrics:
 
 | Evaluation Metric | Pure Text Inference | Image Multimodal Inference | Visual Overhead Impact |
 | :--- | :--- | :--- | :--- |
-| **Input Prompt Tokens** | 26 tokens | 286 tokens | +260 tokens (ViT patch projection) |
-| **Time to First Token (TTFT)** | **163.71 ms** (0.16 s) | **1178.02 ms** (1.18 s) | **+1014.31 ms (~1.01 s ViT forward pass)** |
-| **Time Per Output Token (TPOT)** | 43.08 ms/tok | 44.44 ms/tok | +1.36 ms/tok |
-| **Continuous Decoding TPS** | **23.21 tokens/s** | **22.50 tokens/s** | Negligible throughput degradation (~3%) |
-| **E2E Latency (256 Tokens)** | 11.15 s | 12.51 s | +1.36 s |
+| Input Prompt Tokens | 26 tokens | 286 tokens | +260 tokens |
+| Time to First Token (TTFT) | 163.71 ms (0.16 s) | 1178.02 ms (1.18 s) | +1014.31 ms (~1.01 s) |
+| Time Per Output Token (TPOT) | 43.08 ms/tok | 44.44 ms/tok | +1.36 ms/tok |
+| Continuous Decoding TPS | 23.21 tokens/s | 22.50 tokens/s | -0.71 tokens/s (-3.1%) |
+| E2E Latency (256 Tokens) | 11.15 s | 12.51 s | +1.36 s |
 
 > [!TIP]
-> **Key Benchmark Takeaways**:
-> 1. **ViT Processing Latency**: Projecting image patches into 260 visual embedding tokens takes approximately **1.01 seconds**, delivering responsive real-time interaction for agentic workflows;
-> 2. **Sustained Decoding Speed**: Once autoregressive generation begins, multimodal decoding reaches a steady **22.50 tokens/s** (virtually identical to the 23.21 tokens/s text baseline), proving that INT4 W4A16 Marlin MoE maintains high execution throughput across both modalities.
+> Benchmark Notes:
+> 1. Visual Forward Latency: Image input processing to 260 visual tokens takes approximately 1.01 seconds;
+> 2. Continuous Decoding Rate: During autoregressive decoding, multimodal throughput is 22.50 tokens/s, consistent with the pure text baseline (23.21 tokens/s).
 
 +++
 
@@ -435,7 +436,7 @@ def test_multimodal_tool_calling():
             {
                 "role": "user",
                 "content": [
-                    {"type": "image_url", "image_url": {"url": "https://raw.githubusercontent.com/inclusionAI/ling-cookbook/main/resources/recommended-skills/ling-ui-design/assets/preview.png"}},
+                    {"type": "image_url", "image_url": {"url": "https://raw.githubusercontent.com/inclusionAI/ling-cookbook/main/resources/assets/ling-flash-vl-benchmark.jpg"}},
                     {"type": "text", "text": "Extract design metadata and invoke the palette extraction tool."}
                 ]
             }
