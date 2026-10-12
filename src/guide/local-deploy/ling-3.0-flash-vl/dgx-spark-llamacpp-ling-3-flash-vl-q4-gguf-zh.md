@@ -106,28 +106,36 @@ Cloning into 'llama.cpp'...
 
 +++
 
-### 步骤 3: 获取 Ling-3.0-flash-VL GGUF 与 mmproj 权重
+### 步骤 3: 获取官方权重并构建 Q4_K_M GGUF 与 mmproj
 
-全精度 BF16 权重达 ~248 GB，单张 121 GiB 统一内存设备无法直接加载转换。推荐使用 ModelScope CLI 下载由社区预构建的 GGUF 权重与对应的视觉投影文件（`mmproj`）：
-- [AtomicChat/Ling-3.0-flash-VL-GGUF on ModelScope](https://modelscope.cn/models/AtomicChat/Ling-3.0-flash-VL-GGUF)
-- [bartowski/Ling-3.0-flash-VL-GGUF on Hugging Face](https://huggingface.co/bartowski/Ling-3.0-flash-VL-GGUF)
+为了确保多模态投影层与门控张量 100% 契合 `llama.cpp` upstream 规范（避免早期社区草案分支的键名漂移问题），推荐从 ModelScope 官方下载 BF16 原生权重并执行单次全量量化：
+- [inclusionAI/Ling-3.0-flash-VL on ModelScope](https://modelscope.cn/models/inclusionAI/Ling-3.0-flash-VL)
 
-使用 `modelscope` 命令行工具下载 `Q4_K_M` 权重分卷及 `mmproj-Ling-3.0-flash-VL-F32.gguf`：
+```bash
+# 1. 下载官方原生 BF16 权重 (233 GB)
+source .venv/bin/activate
+python3 -c "from modelscope import snapshot_download; snapshot_download('inclusionAI/Ling-3.0-flash-VL', local_dir='/home/squall/models/Ling-3.0-flash-VL')"
 
-```{code-cell}
-!source .venv/bin/activate && modelscope download --model AtomicChat/Ling-3.0-flash-VL-GGUF \
-  --include "Ling-3.0-flash-VL-AD-Q4_K_M*" "mmproj-Ling-3.0-flash-VL-F32.gguf" \
-  --local-dir ~/models/Ling-3.0-flash-VL-GGUF
+# 2. 导出官方原生 mmproj 视觉投影层 (838 MB)
+python3 llama.cpp/convert_hf_to_gguf.py /home/squall/models/Ling-3.0-flash-VL \
+  --mmproj --outfile /home/squall/models/mmproj-Ling-3.0-flash-VL-BF16.gguf
+
+# 3. 转换语言主干为 BF16 GGUF 并使用 16 线程量化至 Q4_K_M (71 GB)
+python3 llama.cpp/convert_hf_to_gguf.py /home/squall/models/Ling-3.0-flash-VL \
+  --outtype bf16 --outfile /home/squall/models/Ling-3.0-flash-VL-BF16.gguf
+./llama.cpp/build/bin/llama-quantize /home/squall/models/Ling-3.0-flash-VL-BF16.gguf \
+  /home/squall/models/Ling-3.0-flash-VL-Q4_K_M.gguf Q4_K_M 16
+
+# 4. 清理中间 248 GB 浮点 GGUF，释放磁盘空间
+rm -f /home/squall/models/Ling-3.0-flash-VL-BF16.gguf
 ```
 
-典型输出：
+典型量化输出：
 ```text
-Downloading snapshot of AtomicChat/Ling-3.0-flash-VL-GGUF (model)…
-Downloading 7 files from AtomicChat/Ling-3.0-flash-VL-GGUF@master
-Ling-3.0-flash-VL-AD-Q4_K_M-00001-of-00006.gguf: 100%|██████████| 15.6G/15.6G [08:12<00:00, 31.7MB/s]
-...
-mmproj-Ling-3.0-flash-VL-F32.gguf: 100%|██████████| 1.74G/1.74G [00:58<00:00, 29.8MB/s]
-Successfully downloaded to ~/models/Ling-3.0-flash-VL-GGUF
+llama_model_quantize_impl: model size  = 237405.30 MiB (16.01 BPW)
+llama_model_quantize_impl: quant size  = 71783.71 MiB (4.84 BPW)
+llama_quantize: quantize time = 469529.20 ms
+llama_quantize:    total time = 469529.20 ms
 ```
 
 +++
@@ -135,12 +143,14 @@ Successfully downloaded to ~/models/Ling-3.0-flash-VL-GGUF
 ### 步骤 4: 启动 llama-server 推理服务
 
 启动 `llama-server` 提供兼容 OpenAI 的 HTTP 接口，核心参数说明：
-- `-m`: 指定语言模型主权重（可直接指定分片根路径或合并文件）；
-- `--mmproj`: 挂载多模态视觉投影权重，用于图像特征编码；
-- `--host 0.0.0.0 --port 9102`: 监听端口设为 9102；
+- `-m`: 指定语言模型主权重 `Ling-3.0-flash-VL-Q4_K_M.gguf`；
+- `--mmproj`: 挂载多模态视觉投影权重 `mmproj-Ling-3.0-flash-VL-BF16.gguf`；
+- `--alias ling-3.0-flash-vl-q4`: 注册模型别名，便于客户端直接调用；
+- `--host 0.0.0.0 --port 9102`: 锁定监听端口为 9102；
 - `-ngl 99`: 将全部 42 层 Transformer 与 MoE 算子卸载至 GPU；
+- `-fa on`: 启用 FlashAttention 优化；
 - `-c 32768`: 设置上下文长度为 32,768 tokens，预留显存给 KV Cache；
-- `--jinja`: 启用 Jinja 模板引擎，解析系统指令与 `<think>` 思考链。
+- `--jinja`: 启用 Jinja 模板引擎，原生支持 `<think>` 思考链解析与 Tool Calling。
 
 > [!WARNING]
 > 前台运行说明：
@@ -148,26 +158,25 @@ Successfully downloaded to ~/models/Ling-3.0-flash-VL-GGUF
 
 ```{code-cell}
 !./llama.cpp/build/bin/llama-server \
-  -m ~/models/Ling-3.0-flash-VL-GGUF/Ling-3.0-flash-VL-AD-Q4_K_M-00001-of-00006.gguf \
-  --mmproj ~/models/Ling-3.0-flash-VL-GGUF/mmproj-Ling-3.0-flash-VL-F32.gguf \
+  -m ~/models/Ling-3.0-flash-VL-Q4_K_M.gguf \
+  --mmproj ~/models/mmproj-Ling-3.0-flash-VL-BF16.gguf \
+  --alias ling-3.0-flash-vl-q4 \
   --host 0.0.0.0 \
   --port 9102 \
   --api-key sk-ling-cookbook-test \
   -ngl 99 \
+  -fa on \
   -c 32768 \
   --jinja
 ```
 
 典型启动日志：
 ```text
-llama_model_loader: loaded meta data with 38 key-value pairs and 685 tensors
-llama_model_load: general.architecture       = bailingmoe3
-llama_model_load: bailingmoe3.expert_count    = 512
-llama_model_load: bailingmoe3.expert_used_count = 8
-clip_model_load: loaded multimodal projector
-clip_model_load: vision encoder initialized
-llama_backend_init: GGML_CUDA enabled
-main: HTTP server listening on http://0.0.0.0:9102
+load_model: loading model '/home/squall/models/Ling-3.0-flash-VL-Q4_K_M.gguf'
+load_model: loaded multimodal model, '/home/squall/models/mmproj-Ling-3.0-flash-VL-BF16.gguf'
+load_model: initializing, n_slots = 4, n_ctx_slot = 32768, kv_unified = 'true'
+init: chat template supports preserving reasoning, it is enabled by default
+llama_server: listening on http://0.0.0.0:9102
 ```
 
 +++
@@ -206,7 +215,7 @@ except Exception as e:
 典型输出：
 ```text
 Health check status: 200
-Models response: {"object":"list","data":[{"id":"Ling-3.0-flash-VL-Q4_K_M","object":"model","created":1791788200,"owned_by":"llamacpp"}]}
+Models response: {"object":"list","data":[{"id":"ling-3.0-flash-vl-q4","object":"model","architecture":{"input_modalities":["text","image","video"],"output_modalities":["text"]},"meta":{"vocab_type":2,"n_ctx":32768,"n_params":124414211552,"size":75270677376,"ftype":"Q4_K - Medium"},"capabilities":["completion","multimodal"]}]}
 ```
 
 +++
@@ -239,7 +248,7 @@ def benchmark_stream(name, messages):
 
     try:
         response = client.chat.completions.create(
-            model="Ling-3.0-flash-VL-Q4_K_M",
+            model="ling-3.0-flash-vl-q4",
             messages=messages,
             temperature=0.7,
             top_p=0.95,
@@ -322,41 +331,47 @@ mm_res = benchmark_stream("图像多模态", mm_msg)
 ============================================================
 Sending [纯文本基准] request to llama-server...
 ------------------------------------------------------------
+[Thinking Process]:
+用户要求我用一段话简要评述人工智能与人类协同的未来发展方向。这是一个开放性的评述题，需要涵盖AI与人类协作的关键趋势、机遇与挑战，语言要精炼、有深度，同时保持客观平衡的视角...
+------------------------------------------------------------
 [Model Answer]:
-人机协同的未来演进正从指令交互迈向认知共生。AI 模型在海量数据整合、规律洞察与自动化执行中展现优势，而人类则在价值判断、跨领域综合与创新直觉中发挥主导作用...
+人工智能与人类协同的未来发展方向，核心在于构建"以人类价值为主导、以技术能力为延伸"的共生关系。随着大模型、具身智能等技术的持续演进，人工智能将从当前的辅助工具逐步深化为各领域的"协作伙伴"——在医疗诊断、科学研究、创意生产及复杂决策中，AI负责处理海量数据与模式识别，人类则把控价值判断、伦理底线与战略方向，二者形成优势互补的闭环。与此同时，这一进程也伴随着对就业结构的重塑、数据隐私的保护以及算法透明度的严峻考验，因此建立完善的治理框架与人机信任机制至关重要。总体而言，未来人机协同的终极目标并非让AI取代人类，而是通过技术赋能拓展人类的认知边界与行动能力，使社会在效率提升的同时，始终守住以人为本的文明根基。
 ============================================================
 Metrics:
-  Input Prompt Tokens: 32
-  TTFT: 245.30 ms (0.245 s)
-  Total Duration: 6.820 s
-  Generated Tokens: 135
-  Decoding Throughput (TPS): 20.38 tokens/s
-  Time Per Output Token (TPOT): 49.07 ms/tok
+  Input Prompt Tokens: 34
+  TTFT: 684.60 ms (0.685 s)
+  Total Duration: 6.821 s
+  Generated Tokens: 276
+  Decoding Throughput (TPS): 44.81 tokens/s
+  Time Per Output Token (TPOT): 22.31 ms/tok
 ============================================================
 
 ============================================================
 Sending [图像多模态] request to llama-server...
 ------------------------------------------------------------
 [Model Answer]:
-## 1. 视觉元素识别
-画面由三个带文字标注的独立几何图形构成：
-1. 红色矩形（RED RECT）：位于左上方；
-2. 蓝色圆形（BLUE CIRCLE）：位于右上方；
-3. 绿色三角形（GREEN TRI）：居中位于下方。
+该图片呈现了一幅简洁的几何构成设计，以下是详细分析：
 
-## 2. 构图层次
-整体呈倒三角稳定布局，下方的绿色三角形作为视觉基座，上方两个图形保持横向对称平衡。
+## 一、视觉元素分析
+1. 核心图形元素：
+- 红色矩形（RED RECT）：位于左上角，呈标准正方形；
+- 蓝色圆形（BLUE CIRCLE）：位于右上角，纯蓝色填充；
+- 绿色三角形（GREEN TRI）：位于底部中央，面积最大。
+2. 文字信息：每个几何图形内部均有白色英文标签，指明颜色与形状名称。
 
-## 3. 配色关系
-采用红、蓝、绿三原色高对比配置，底色为中性浅蓝灰色，层次分明。
+## 二、构图层级与空间关系
+呈现稳定的"品"字形倒三角构图，绿色三角形作为画面的视觉锚点与重心，上方两元素保持对称呼应。
+
+## 三、主色调与色彩关系
+采用经典三原色（RGB）高对比组合，整体呈现包豪斯（Bauhaus）极简主义风格。
 ============================================================
 Metrics:
-  Input Prompt Tokens: 296
-  TTFT: 1780.20 ms (1.780 s)
-  Total Duration: 24.150 s
-  Generated Tokens: 450
-  Decoding Throughput (TPS): 20.12 tokens/s
-  Time Per Output Token (TPOT): 49.70 ms/tok
+  Input Prompt Tokens: 295
+  TTFT: 2378.58 ms (2.379 s)
+  Total Duration: 27.869 s
+  Generated Tokens: 1162
+  Decoding Throughput (TPS): 45.55 tokens/s
+  Time Per Output Token (TPOT): 21.96 ms/tok
 ============================================================
 ```
 
@@ -364,17 +379,17 @@ Metrics:
 
 | 评测指标 | 纯文本流式 | 图像多模态流式 | 增量/差值 |
 | :--- | :--- | :--- | :--- |
-| 输入 Prompt Tokens | 32 tokens | 296 tokens | +264 tokens |
-| 首字延迟 (TTFT) | 245.30 ms (0.25 s) | 1780.20 ms (1.78 s) | +1534.90 ms (~1.53 s) |
-| 单 Token 耗时 (TPOT) | 49.07 ms/tok | 49.70 ms/tok | +0.63 ms/tok |
-| 连续解码速率 (TPS) | 20.38 tokens/s | 20.12 tokens/s | -0.26 tokens/s (-1.3%) |
-| 生成 Token 总数 | 135 tokens | 450 tokens | +315 tokens |
-| 端到端总用时 | 6.82 s | 24.15 s | - |
+| 输入 Prompt Tokens | 34 tokens | 295 tokens | +261 tokens |
+| 首字延迟 (TTFT) | 684.60 ms (0.68 s) | 2378.58 ms (2.38 s) | +1693.98 ms (~1.69 s) |
+| 单 Token 耗时 (TPOT) | 22.31 ms/tok | 21.96 ms/tok | -0.35 ms/tok |
+| 连续解码速率 (TPS) | 44.81 tokens/s | 45.55 tokens/s | +0.74 tokens/s (+1.7%) |
+| 生成 Token 总数 | 276 tokens | 1162 tokens | +886 tokens |
+| 端到端总用时 | 6.82 s | 27.87 s | - |
 
 > [!TIP]
 > 测试指标说明：
-> 1. 首字延迟 (TTFT)：图像输入（含视觉特征投影）首字响应为 1780.20 ms，较纯文本增加约 1.53 秒；
-> 2. 连续解码速率：纯文本解码速率为 20.38 tokens/s，图像输入为 20.12 tokens/s；
+> 1. 首字延迟 (TTFT)：纯文本响应仅需 684.60 ms（服务端提示词计算仅 542.45 ms）；图像输入（含图片拉取与视觉 Tower 特征编码）首字响应为 2378.58 ms；
+> 2. 连续解码速率：纯文本与图像多模态解码速率均稳定在 **44.8 ~ 45.6 tokens/s**，发挥了 MoE 稀疏激活的高效特性；
 > 3. 多模态投影配置：运行必须显式提供 `--mmproj` 参数，否则模型仅能处理纯文本请求。
 
 +++
@@ -406,7 +421,7 @@ def test_multimodal_tool_calling():
     ]
     
     response = client.chat.completions.create(
-        model="Ling-3.0-flash-VL-Q4_K_M",
+        model="ling-3.0-flash-vl-q4",
         messages=[
             {
                 "role": "user",
@@ -435,7 +450,7 @@ test_multimodal_tool_calling()
 ```text
 测试多模态场景下的 Tool Calling...
 成功触发工具调用: generate_design_palette
-参数 JSON: {"primary_color": "#E53935", "theme_mode": "light", "element_count": 3}
+参数 JSON: {"primary_color": "#1976D2", "theme_mode": "light", "element_count": 3}
 ```
 
 +++
@@ -444,12 +459,16 @@ test_multimodal_tool_calling()
 
 - 显存不足与上下文长度控制：
   - 现象：启动时分配 KV Cache 失败或报 `CUDA out of memory`；
-  - 原因：`llama-server` 默认会尝试分配尽可能大的上下文缓存。在 121 GiB 统一内存设备上加载 80 GB 权重后，若上下文设为 131,072 会超出物理内存；
-  - 解决：显式传入 `-c 32768`（或按需设为 `16384`），为系统预留 40 GiB 左右物理空间。
-- 多模态 mmproj 配对要求：
-  - 现象：传入图片时服务返回 `image input is not supported` 或忽略图片内容；
-  - 原因：未在启动参数中配置 `--mmproj`；
-  - 解决：启动命令必须包含 `--mmproj ~/models/Ling-3.0-flash-VL-Q4_K_M/mmproj-Ling-3.0-flash-VL-f16.gguf`。
+  - 原因：`llama-server` 默认会尝试分配尽可能大的上下文缓存。在 121 GiB 统一内存设备上加载 71 GB 权重后，若上下文设为 131,072 会超出物理内存；
+  - 解决：显式传入 `-c 32768`（或按需设为 `16384`），为系统预留 40+ GiB 物理空间。
+- 社区早期 GGUF 投影层兼容报错 (`unknown projector type: bailing3vl_merger`)：
+  - 现象：挂载早期社区 GGUF 的 `mmproj` 时报错 `unknown projector type` 或 LayerNorm 张量缺失；
+  - 原因：社区早期权重基于 PR 合并前的草案分支导出。上游 PR #29151 最终合入时规范投影类型为 `"ling3vl"`，并将归一化层定名为 `mm.input_norm`；
+  - 解决：直接从官方原生 BF16 权重调用官方 `convert_hf_to_gguf.py --mmproj` 导出，确保元数据与主干完全对齐。
+- KDA 递归门控张量缺失 (`check_tensor_dims: tensor 'blk.0.ssm_f_a.weight' not found`)：
+  - 现象：加载语言模型 GGUF 分片时报门控张量缺失；
+  - 原因：上游 `bailingmoe3.cpp` 规范门控张量带有 `_a` 后缀（`ssm_f_a` / `ssm_g_a`），社区早期版本未带后缀；
+  - 解决：采用官方转换脚本从 BF16 safetensors 统一导出并量化，即可自动生成带 `_a` 的全秩门控张量。
 - 构建编译架构匹配：
   - 现象：CMake 编译出的二进制在 Blackwell 架构上执行较慢；
   - 解决：在构建时指定 `-DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES=native`，启用本地 GPU 硬件原生架构优化。

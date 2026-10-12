@@ -106,28 +106,36 @@ Cloning into 'llama.cpp'...
 
 +++
 
-### Step 3: Download Ling-3.0-flash-VL GGUF and mmproj Weights
+### Step 3: Download Official Weights and Build Q4_K_M GGUF & mmproj
 
-Unquantized BF16 weights require ~248 GB of memory, which exceeds physical memory on a single 121 GiB device. Use the ModelScope CLI to download pre-quantized GGUF files and the multimodal projector (`mmproj`):
-- [AtomicChat/Ling-3.0-flash-VL-GGUF on ModelScope](https://modelscope.cn/models/AtomicChat/Ling-3.0-flash-VL-GGUF)
-- [bartowski/Ling-3.0-flash-VL-GGUF on Hugging Face](https://huggingface.co/bartowski/Ling-3.0-flash-VL-GGUF)
+To ensure 100% compliance with upstream `llama.cpp` naming conventions (avoiding tensor key mismatches in early community drafts), download official BF16 weights from ModelScope and run the quantization pipeline:
+- [inclusionAI/Ling-3.0-flash-VL on ModelScope](https://modelscope.cn/models/inclusionAI/Ling-3.0-flash-VL)
 
-Use the `modelscope` CLI to download the `Q4_K_M` shards and `mmproj-Ling-3.0-flash-VL-F32.gguf`:
+```bash
+# 1. Download official BF16 weights (233 GB)
+source .venv/bin/activate
+python3 -c "from modelscope import snapshot_download; snapshot_download('inclusionAI/Ling-3.0-flash-VL', local_dir='/home/squall/models/Ling-3.0-flash-VL')"
 
-```{code-cell}
-!source .venv/bin/activate && modelscope download --model AtomicChat/Ling-3.0-flash-VL-GGUF \
-  --include "Ling-3.0-flash-VL-AD-Q4_K_M*" "mmproj-Ling-3.0-flash-VL-F32.gguf" \
-  --local-dir ~/models/Ling-3.0-flash-VL-GGUF
+# 2. Export official mmproj vision projector (838 MB)
+python3 llama.cpp/convert_hf_to_gguf.py /home/squall/models/Ling-3.0-flash-VL \
+  --mmproj --outfile /home/squall/models/mmproj-Ling-3.0-flash-VL-BF16.gguf
+
+# 3. Convert language model to BF16 GGUF and quantize to Q4_K_M (71 GB, 16 threads)
+python3 llama.cpp/convert_hf_to_gguf.py /home/squall/models/Ling-3.0-flash-VL \
+  --outtype bf16 --outfile /home/squall/models/Ling-3.0-flash-VL-BF16.gguf
+./llama.cpp/build/bin/llama-quantize /home/squall/models/Ling-3.0-flash-VL-BF16.gguf \
+  /home/squall/models/Ling-3.0-flash-VL-Q4_K_M.gguf Q4_K_M 16
+
+# 4. Remove intermediate 248 GB BF16 file to reclaim disk space
+rm -f /home/squall/models/Ling-3.0-flash-VL-BF16.gguf
 ```
 
-Typical output:
+Typical quantization output:
 ```text
-Downloading snapshot of AtomicChat/Ling-3.0-flash-VL-GGUF (model)…
-Downloading 7 files from AtomicChat/Ling-3.0-flash-VL-GGUF@master
-Ling-3.0-flash-VL-AD-Q4_K_M-00001-of-00006.gguf: 100%|██████████| 15.6G/15.6G [08:12<00:00, 31.7MB/s]
-...
-mmproj-Ling-3.0-flash-VL-F32.gguf: 100%|██████████| 1.74G/1.74G [00:58<00:00, 29.8MB/s]
-Successfully downloaded to ~/models/Ling-3.0-flash-VL-GGUF
+llama_model_quantize_impl: model size  = 237405.30 MiB (16.01 BPW)
+llama_model_quantize_impl: quant size  = 71783.71 MiB (4.84 BPW)
+llama_quantize: quantize time = 469529.20 ms
+llama_quantize:    total time = 469529.20 ms
 ```
 
 +++
@@ -135,12 +143,14 @@ Successfully downloaded to ~/models/Ling-3.0-flash-VL-GGUF
 ### Step 4: Launch llama-server Inference Service
 
 Launch `llama-server` providing an OpenAI-compatible HTTP interface:
-- `-m`: Specify the language model weight path (shard root or single file);
-- `--mmproj`: Mount the multimodal vision projector for image encoding;
-- `--host 0.0.0.0 --port 9102`: Listen on port 9102;
+- `-m`: Path to language model weights `Ling-3.0-flash-VL-Q4_K_M.gguf`;
+- `--mmproj`: Mount multimodal vision projector `mmproj-Ling-3.0-flash-VL-BF16.gguf`;
+- `--alias ling-3.0-flash-vl-q4`: Register alias for client invocations;
+- `--host 0.0.0.0 --port 9102`: Lock communication port to 9102;
 - `-ngl 99`: Offload all 42 Transformer and MoE layers to GPU;
-- `-c 32768`: Set context length to 32,768 tokens to reserve KV Cache memory;
-- `--jinja`: Enable Jinja template rendering for `<think>` reasoning chains.
+- `-fa on`: Enable FlashAttention;
+- `-c 32768`: Set context length to 32,768 tokens, preserving KV Cache headroom;
+- `--jinja`: Enable Jinja template rendering for `<think>` reasoning chains and tool calls.
 
 > [!WARNING]
 > Foreground Execution Notice:
@@ -148,26 +158,25 @@ Launch `llama-server` providing an OpenAI-compatible HTTP interface:
 
 ```{code-cell}
 !./llama.cpp/build/bin/llama-server \
-  -m ~/models/Ling-3.0-flash-VL-GGUF/Ling-3.0-flash-VL-AD-Q4_K_M-00001-of-00006.gguf \
-  --mmproj ~/models/Ling-3.0-flash-VL-GGUF/mmproj-Ling-3.0-flash-VL-F32.gguf \
+  -m ~/models/Ling-3.0-flash-VL-Q4_K_M.gguf \
+  --mmproj ~/models/mmproj-Ling-3.0-flash-VL-BF16.gguf \
+  --alias ling-3.0-flash-vl-q4 \
   --host 0.0.0.0 \
   --port 9102 \
   --api-key sk-ling-cookbook-test \
   -ngl 99 \
+  -fa on \
   -c 32768 \
   --jinja
 ```
 
 Typical startup log:
 ```text
-llama_model_loader: loaded meta data with 38 key-value pairs and 685 tensors
-llama_model_load: general.architecture       = bailingmoe3
-llama_model_load: bailingmoe3.expert_count    = 512
-llama_model_load: bailingmoe3.expert_used_count = 8
-clip_model_load: loaded multimodal projector
-clip_model_load: vision encoder initialized
-llama_backend_init: GGML_CUDA enabled
-main: HTTP server listening on http://0.0.0.0:9102
+load_model: loading model '/home/squall/models/Ling-3.0-flash-VL-Q4_K_M.gguf'
+load_model: loaded multimodal model, '/home/squall/models/mmproj-Ling-3.0-flash-VL-BF16.gguf'
+load_model: initializing, n_slots = 4, n_ctx_slot = 32768, kv_unified = 'true'
+init: chat template supports preserving reasoning, it is enabled by default
+llama_server: listening on http://0.0.0.0:9102
 ```
 
 +++
@@ -206,7 +215,7 @@ except Exception as e:
 Typical output:
 ```text
 Health check status: 200
-Models response: {"object":"list","data":[{"id":"Ling-3.0-flash-VL-Q4_K_M","object":"model","created":1791788200,"owned_by":"llamacpp"}]}
+Models response: {"object":"list","data":[{"id":"ling-3.0-flash-vl-q4","object":"model","architecture":{"input_modalities":["text","image","video"],"output_modalities":["text"]},"meta":{"vocab_type":2,"n_ctx":32768,"n_params":124414211552,"size":75270677376,"ftype":"Q4_K - Medium"},"capabilities":["completion","multimodal"]}]}
 ```
 
 +++
@@ -239,7 +248,7 @@ def benchmark_stream(name, messages):
 
     try:
         response = client.chat.completions.create(
-            model="Ling-3.0-flash-VL-Q4_K_M",
+            model="ling-3.0-flash-vl-q4",
             messages=messages,
             temperature=0.7,
             top_p=0.95,
@@ -322,41 +331,45 @@ Typical output:
 ============================================================
 Sending [Pure Text Benchmark] request to llama-server...
 ------------------------------------------------------------
+[Thinking Process]:
+The user wants a concise paragraph reviewing the future direction of human-AI collaboration. Key points should cover complementary strengths, augmentation over replacement, ethics and trust, and broad societal impact...
+------------------------------------------------------------
 [Model Answer]:
-Human-AI collaboration is evolving toward cognitive symbiosis. Machine learning models contribute vast data processing, pattern recognition, and automated synthesis, while humans guide normative choices, context-sensitive judgment, and intentional framing...
+Human-AI collaboration is evolving toward cognitive symbiosis where artificial intelligence serves as an extensible partner rather than a mere automated tool. Machine learning models contribute vast data processing, pattern recognition, and scalable synthesis across research and decision-making, while humans retain authority over normative judgment, strategic intent, and ethical boundaries. Realizing this potential demands robust governance frameworks, transparency in algorithmic reasoning, and resilient human-in-the-loop validation, ultimately expanding cognitive horizons while anchoring progress in shared human values.
 ============================================================
 Metrics:
-  Input Prompt Tokens: 32
-  TTFT: 245.30 ms (0.245 s)
-  Total Duration: 6.820 s
-  Generated Tokens: 135
-  Decoding Throughput (TPS): 20.38 tokens/s
-  Time Per Output Token (TPOT): 49.07 ms/tok
+  Input Prompt Tokens: 34
+  TTFT: 684.60 ms (0.685 s)
+  Total Duration: 6.821 s
+  Generated Tokens: 276
+  Decoding Throughput (TPS): 44.81 tokens/s
+  Time Per Output Token (TPOT): 22.31 ms/tok
 ============================================================
 
 ============================================================
 Sending [Image Multimodal] request to llama-server...
 ------------------------------------------------------------
 [Model Answer]:
-## 1. Visual Element Identification
-The image features three labeled geometric shapes:
-1. Red Rectangle (RED RECT): Located at the upper left.
-2. Blue Circle (BLUE CIRCLE): Located at the upper right.
-3. Green Triangle (GREEN TRI): Centered at the bottom.
+The image presents a clean geometric composition. Below is a structured analysis:
+
+## 1. Visual Elements
+- Red Rectangle (RED RECT): Located in the upper-left, filled with bold red and labeled with white text.
+- Blue Circle (BLUE CIRCLE): Located in the upper-right, pure blue fill with centered white text.
+- Green Triangle (GREEN TRI): Centered at the bottom, occupying the largest area.
 
 ## 2. Compositional Hierarchy
-The arrangement forms an inverted triangle, where the base is anchored by the wide green triangle below, balanced by the two upper shapes.
+Arranged in an inverted triangular / triad layout. The wide green triangle serves as the grounding anchor, balanced symmetrically by the two upper geometric shapes against a clean light background.
 
-## 3. Color Palette
-The triad uses red, blue, and green on a neutral light blue-gray background.
+## 3. Color Palette & Style
+Utilizes the classic RGB primary color palette with high saturation contrast, reflecting a minimalist Bauhaus / De Stijl design aesthetic.
 ============================================================
 Metrics:
-  Input Prompt Tokens: 296
-  TTFT: 1780.20 ms (1.780 s)
-  Total Duration: 24.150 s
-  Generated Tokens: 450
-  Decoding Throughput (TPS): 20.12 tokens/s
-  Time Per Output Token (TPOT): 49.70 ms/tok
+  Input Prompt Tokens: 295
+  TTFT: 2378.58 ms (2.379 s)
+  Total Duration: 27.869 s
+  Generated Tokens: 1162
+  Decoding Throughput (TPS): 45.55 tokens/s
+  Time Per Output Token (TPOT): 21.96 ms/tok
 ============================================================
 ```
 
@@ -364,17 +377,17 @@ Metrics:
 
 | Metric | Pure Text Streaming | Image Multimodal Streaming | Delta |
 | :--- | :--- | :--- | :--- |
-| Input Prompt Tokens | 32 tokens | 296 tokens | +264 tokens |
-| First Token Latency (TTFT) | 245.30 ms (0.25 s) | 1780.20 ms (1.78 s) | +1534.90 ms (~1.53 s) |
-| Time Per Token (TPOT) | 49.07 ms/tok | 49.70 ms/tok | +0.63 ms/tok |
-| Decoding Throughput (TPS) | 20.38 tokens/s | 20.12 tokens/s | -0.26 tokens/s (-1.3%) |
-| Total Output Tokens | 135 tokens | 450 tokens | +315 tokens |
-| End-to-End Latency | 6.82 s | 24.15 s | - |
+| Input Prompt Tokens | 34 tokens | 295 tokens | +261 tokens |
+| First Token Latency (TTFT) | 684.60 ms (0.68 s) | 2378.58 ms (2.38 s) | +1693.98 ms (~1.69 s) |
+| Time Per Token (TPOT) | 22.31 ms/tok | 21.96 ms/tok | -0.35 ms/tok |
+| Decoding Throughput (TPS) | 44.81 tokens/s | 45.55 tokens/s | +0.74 tokens/s (+1.7%) |
+| Total Output Tokens | 276 tokens | 1162 tokens | +886 tokens |
+| End-to-End Latency | 6.82 s | 27.87 s | - |
 
 > [!TIP]
 > Benchmark Notes:
-> 1. First-token latency (TTFT): Image input records a TTFT of 1780.20 ms, adding ~1.53 seconds over the text baseline;
-> 2. Continuous decoding throughput: Throughput remains steady across modalities at 20.38 tokens/s for text and 20.12 tokens/s for vision;
+> 1. First-token latency (TTFT): Pure text responds in 684.60 ms (server-side prompt eval is only 542.45 ms). Image input (including image fetch and vision Tower encoding) records a TTFT of 2378.58 ms;
+> 2. Continuous decoding throughput: Decoding throughput remains high across modalities at **44.8 ~ 45.6 tokens/s**, capitalizing on MoE sparse activation;
 > 3. Multimodal projector requirement: The `--mmproj` flag is mandatory to process image or video queries.
 
 +++
@@ -406,7 +419,7 @@ def test_multimodal_tool_calling():
     ]
     
     response = client.chat.completions.create(
-        model="Ling-3.0-flash-VL-Q4_K_M",
+        model="ling-3.0-flash-vl-q4",
         messages=[
             {
                 "role": "user",
@@ -435,7 +448,7 @@ Typical output:
 ```text
 Testing multimodal Tool Calling...
 Tool call triggered: generate_design_palette
-Arguments JSON: {"primary_color": "#E53935", "theme_mode": "light", "element_count": 3}
+Arguments JSON: {"primary_color": "#1976D2", "theme_mode": "light", "element_count": 3}
 ```
 
 +++
@@ -444,12 +457,16 @@ Arguments JSON: {"primary_color": "#E53935", "theme_mode": "light", "element_cou
 
 - Memory Allocation & Context Length:
   - Symptom: Startup fails during KV Cache allocation or triggers `CUDA out of memory`;
-  - Root cause: `llama-server` defaults to large context windows. On 121 GiB unified memory systems, loading 80 GB of weights leaves insufficient RAM if context length is unconstrained;
-  - Solution: Explicitly pass `-c 32768` (or `16384`) to reserve ~40 GiB for the host OS and buffers.
-- Multimodal Projector (`mmproj`) Requirement:
-  - Symptom: Server returns `image input is not supported` or ignores image tokens;
-  - Root cause: Missing `--mmproj` flag at server launch;
-  - Solution: Ensure `--mmproj ~/models/Ling-3.0-flash-VL-Q4_K_M/mmproj-Ling-3.0-flash-VL-f16.gguf` is provided.
+  - Root cause: `llama-server` defaults to large context windows. On 121 GiB unified memory systems, loading 71 GB of weights leaves insufficient RAM if context length is unconstrained;
+  - Solution: Explicitly pass `-c 32768` (or `16384`) to reserve 40+ GiB for the host OS and KV Cache buffers.
+- Early Community GGUF Projector Incompatibility (`unknown projector type: bailing3vl_merger`):
+  - Symptom: Mounting community `mmproj` yields `unknown projector type` or missing LayerNorm tensors;
+  - Root cause: Early community weights were generated against pre-merge PR drafts. Upstream PR #29151 standardized projector type as `"ling3vl"` and norm layer as `mm.input_norm`;
+  - Solution: Export `mmproj` directly from official ModelScope BF16 weights using upstream `convert_hf_to_gguf.py --mmproj`.
+- KDA Recurrent Gate Tensor Missing (`check_tensor_dims: tensor 'blk.0.ssm_f_a.weight' not found`):
+  - Symptom: Language model load fails checking gate tensors;
+  - Root cause: Upstream `bailingmoe3.cpp` expects `_a` suffix on full-rank gate tensors (`ssm_f_a` / `ssm_g_a`);
+  - Solution: Run the official conversion and quantization script from native BF16 safetensors, which automatically generates the proper `_a` tensor keys.
 - CUDA Build Architecture:
   - Symptom: Lower than expected performance on NVIDIA Blackwell architectures;
   - Solution: Build CMake with `-DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES=native` to enable native architecture optimizations.
