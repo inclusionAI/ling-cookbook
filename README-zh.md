@@ -50,6 +50,7 @@
 | :--- | :--- | :--- | :--- | :--- |
 | Ling-3.0-flash-VL | 单台 NVIDIA DGX Spark | SGLang | INT4 | [文档: SGLang INT4 部署指南](guide/local-deploy/ling-3.0-flash-vl/dgx-spark-sglang-ling-3-flash-vl-int4-zh.ipynb) |
 | Ling-3.0-flash-VL | 单台 NVIDIA DGX Spark | vLLM | INT4 | [文档: vLLM INT4 部署指南](guide/local-deploy/ling-3.0-flash-vl/dgx-spark-vllm-ling-3-flash-vl-int4-zh.ipynb) |
+| Ling-3.0-flash-VL | 单台 NVIDIA DGX Spark | llama.cpp | GGUF (Q4_K_M) | [文档: llama.cpp GGUF 部署指南](guide/local-deploy/ling-3.0-flash-vl/dgx-spark-llamacpp-ling-3-flash-vl-q4-gguf-zh.ipynb) |
 
 #### Ling-3.0-flash-Fin
 
