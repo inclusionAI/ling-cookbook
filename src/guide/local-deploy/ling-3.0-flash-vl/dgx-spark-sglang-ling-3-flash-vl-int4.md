@@ -52,9 +52,9 @@ limitations under the License.
 
 +++
 
-Ling-3.0-flash-VL is a native multimodal Mixture-of-Experts (MoE) model supporting image and video understanding. It features 124B total parameters with 5.5B activated parameters per token, inheriting a 5:1 alternating ratio of Kimi Delta Attention (KDA) to Multi-Head Latent Attention (MLA).
+Ling-3.0-flash-VL is a multimodal model supporting image and video understanding, featuring 124B total parameters with ~5.5B activated parameters per token.
 
-This guide demonstrates how to deploy the pre-quantized INT4 (W4A16 Marlin MoE) checkpoint of Ling-3.0-flash-VL on a single NVIDIA DGX Spark (single GB10 with 121 GiB unified memory available) using source-built SGLang. The model weights and runtime occupy ~74 GiB of unified memory, reserving ~32 GiB for PagedAttention KV Cache with a continuous decoding speed of 22.5 ~ 23.2 tokens/s.
+This guide demonstrates how to deploy the pre-quantized INT4 checkpoint of Ling-3.0-flash-VL on a single NVIDIA DGX Spark (single GB10 with 121 GiB unified memory available) using SGLang. The model weights and runtime occupy ~74 GiB of memory, reserving ~32 GiB for KV Cache and providing an OpenAI-compatible multimodal HTTP interface.
 
 > [!TIP]
 > Environment Recommendations:
@@ -126,15 +126,15 @@ Successfully downloaded Ling-3.0-flash-VL-int4 to ~/models/Ling-3.0-flash-VL-int
 
 ### Step 4: Launch SGLang HTTP Inference Server
 
-Launch the SGLang server exposing an OpenAI-compatible multimodal endpoint. Key configuration flags for GB10 unified memory:
-- `--tp-size 1`: Single GB10 execution with tensor parallelism size 1;
-- `--model-loader-extra-config '{"disable_multithread_load":true}'`: Enforce single-threaded sequential weight loading to prevent memory spikes during cold start;
-- `--context-length 16384`: Safe context window tailored for image and text workflows;
-- `--enable-http2`: Use Granian runtime to bypass hardcoded path limitations;
-- `--mem-fraction-static 0.80`: Allocate 80% of unified memory statically (~97.3 GiB), reserving ~32.7 GiB for PagedAttention KV Cache;
-- `--max-mamba-cache-size 64`: Cap the Mamba layer state cache to 64 to optimize unified memory usage under hybrid attention;
-- `--tool-call-parser ling3 --reasoning-parser ling3`: Enable Ling-3.0 native tool calling and `<think>` chain-of-thought parsing;
-- `--disable-shared-experts-fusion`: Keep stability for MoE quantization kernels.
+Launch the SGLang server exposing an OpenAI-compatible multimodal endpoint. Key configuration flags:
+- `--tp-size 1`: Run on a single GPU with tensor parallelism size 1;
+- `--model-loader-extra-config '{"disable_multithread_load":true}'`: Sequential single-threaded weight loading;
+- `--context-length 16384`: Maximum context length set to 16,384 tokens;
+- `--enable-http2`: Enable HTTP/2 protocol support;
+- `--mem-fraction-static 0.80`: Allocate up to 80% memory statically, reserving headroom for KV Cache;
+- `--max-mamba-cache-size 64`: Cap the state cache to 64;
+- `--tool-call-parser ling3 --reasoning-parser ling3`: Enable tool calling and reasoning chain parsing;
+- `--disable-shared-experts-fusion`: Disable shared experts fusion for kernel stability.
 
 > [!WARNING]
 > Foreground Execution Note:

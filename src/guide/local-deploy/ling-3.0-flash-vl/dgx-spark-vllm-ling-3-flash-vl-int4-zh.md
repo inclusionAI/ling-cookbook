@@ -52,9 +52,9 @@ limitations under the License.
 
 +++
 
-Ling-3.0-flash-VL 是多模态 MoE 架构模型，支持图文与视频理解，具备 124B 总参数量与 ~5.5B 激活参数量，采用 5:1 的 KDA 与 MLA 交替注意力结构。
+Ling-3.0-flash-VL 是多模态模型，支持图文与视频理解，具备 124B 总参数量与 ~5.5B 激活参数量。
 
-本指南演示在单台 `NVIDIA DGX Spark`（单张 GB10 统一内存 121 GiB 可用）上，基于 `vLLM` 部署 Ling-3.0-flash-VL INT4 (compressed-tensors / Marlin MoE) 量化权重。配置上下文长度为 32,768 tokens 与显存比例 0.80，为 KV Cache 与系统预留物理空间。实测单图视觉编码与首字 Prefill 延迟约 1.5 秒（TTFT 1596 ms），单图端到端耗时约 1.5~2.0 秒，适用于图片批量打标、分类与属性提取等任务。
+本指南演示在单台 `NVIDIA DGX Spark`（单张 GB10 统一内存 121 GiB 可用）上，基于 `vLLM` 部署 Ling-3.0-flash-VL INT4 量化权重。配置上下文长度为 32,768 tokens，为 KV Cache 与系统预留空间，提供兼容 OpenAI 的多模态 HTTP 接口。
 
 > [!TIP]
 > 环境准备建议：
@@ -66,7 +66,7 @@ Ling-3.0-flash-VL 是多模态 MoE 架构模型，支持图文与视频理解，
 
 ### 步骤 1: 准备 Python 3.12 虚拟环境 (uv)
 
-使用 `uv` 创建隔离的 Python 3.12 虚拟环境，适配 PEP 701 语法规范：
+使用 `uv` 创建隔离的 Python 3.12 虚拟环境：
 
 ```{code-cell}
 !pip install -U uv
@@ -84,7 +84,7 @@ Activate with: source .venv/bin/activate
 
 ### 步骤 2: 安装 vLLM 官方 ARM64 CUDA 13.0 预编译包与测试依赖
 
-Ling-3.0 架构（`BailingMoeV3VLForConditionalGeneration`）及 `ling3` 思考链与工具调用解析器已合入 vLLM 官方主干。通过 `uv pip` 安装针对 GB10 (sm_121 / cu130) 的预编译 Nightly Wheel，并补充安装测试库（`requests`、`pillow`）：
+Ling-3.0 架构已合入 vLLM 官方主干。安装针对 CUDA 13.0 的预编译包及测试依赖：
 
 ```{code-cell}
 !source .venv/bin/activate && uv pip install \
@@ -133,8 +133,8 @@ Successfully downloaded Ling-3.0-flash-VL-int4 to ~/models/Ling-3.0-flash-VL-int
 启动 `vllm serve` 提供兼容 OpenAI 的 HTTP 接口，配置参数如下：
 - `--tensor-parallel-size 1`：单卡张量并行；
 - `--trust-remote-code`：允许加载 Ling-3.0-flash-VL 模型架构代码；
-- `--max-model-len 32768`：将最大上下文长度设为 32,768 tokens（官方默认 131,072），为 KV Cache 预留物理空间；
-- `--gpu-memory-utilization 0.80`：静态显存上限设为 80%（约 96.8 GiB），为操作系统与缓冲保留 24+ GiB 物理空间，其余用于权重加载与 PagedAttention 显存池；
+- `--max-model-len 32768`：设置最大上下文长度为 32,768 tokens；
+- `--gpu-memory-utilization 0.80`：显存占用比例上限设为 0.80，预留系统缓冲空间；
 - `--reasoning-parser ling3`：启用 ling3 思考链解析器，输出 `reasoning_content`；
 - `--enable-auto-tool-choice --tool-call-parser ling3`：启用 ling3 工具调用解析。
 
@@ -479,6 +479,6 @@ test_multimodal_tool_calling()
   - 现象：多模态图像分辨率动态变化时捕获图报错或运行卡顿；
   - 解决：追加 `--enforce-eager` 参数关闭 CUDA Graph，采用 Eager 模式执行。
 - Python 3.12 虚拟环境要求：
-  - 现象：启动报错 `SyntaxError: unterminated string literal` 或 `ImportError: cannot import name 'NamespaceTool' from 'openai.types.responses'`；
-  - 原因：vLLM 官方代码采用 PEP 701 语法，要求 Python 3.12 及以上解释器；同时 vLLM 依赖 `openai>=2.0.0`（如 `openai 3.28.0`），旧版本会导致类导入失败；
+  - 现象：启动报错 `SyntaxError` 或缺少相关类型类导入失败；
+  - 原因：vLLM 依赖 Python 3.12 及以上解释器环境，且需要较新的 openai 库支持；
   - 解决：通过 `uv venv --python 3.12 .venv` 创建环境，并通过 `uv pip install vllm` 安装依赖。

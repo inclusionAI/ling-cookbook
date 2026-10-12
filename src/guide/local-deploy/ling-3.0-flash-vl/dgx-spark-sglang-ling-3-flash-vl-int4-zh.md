@@ -52,9 +52,9 @@ limitations under the License.
 
 +++
 
-Ling-3.0-flash-VL 是原生支持图文与视频理解的多模态 MoE 大模型，具备 124B 总参数量，每个 Token 激活约 5.5B 参数，延续 5:1 的 KDA（线性注意力）与 MLA（潜变量多头注意力）交替混合架构。
+Ling-3.0-flash-VL 是多模态模型，支持图文与视频理解，具备 124B 总参数量与 ~5.5B 激活参数量。
 
-本指南演示如何在单台 `NVIDIA DGX Spark`（GB10 统一内存 121 GiB 可用）上，基于源码构建 `SGLang` 部署 Ling-3.0-flash-VL 的官方预量化 INT4 (W4A16 Marlin MoE) 权重版本。模型权重与运行时占用约 74 GiB 统一内存，为 PagedAttention KV Cache 留出约 32 GiB 空间，实测纯文本与图像多模态连续解码速率约为 22.5 ~ 23.2 tokens/s。
+本指南演示在单台 `NVIDIA DGX Spark`（GB10 统一内存 121 GiB 可用）上，使用 `SGLang` 部署 Ling-3.0-flash-VL 官方预量化 INT4 权重版本。模型权重与运行时占用约 74 GiB 内存，为 KV Cache 预留约 32 GiB 空间，提供兼容 OpenAI 的多模态 HTTP 接口。
 
 > [!TIP]
 > 环境要求与准备建议：
@@ -127,14 +127,14 @@ Successfully downloaded Ling-3.0-flash-VL-int4 to ~/models/Ling-3.0-flash-VL-int
 ### 步骤 4: 启动 SGLang HTTP 推理服务
 
 启动 SGLang Server，提供标准 OpenAI 兼容的多模态 HTTP 接口，配置参数如下：
-- `--tp-size 1`：单张 NVIDIA GB10 独立运行，使用单卡张量并行；
-- `--model-loader-extra-config '{"disable_multithread_load":true}'`：强制单线程顺序加载权重分片，避免统一内存并发峰值引发启动 OOM；
-- `--context-length 16384`：适配通用高频图文推理场景，确保显存分配安全稳定；
-- `--enable-http2`：使用 Granian 运行时，规避特定路径写死缺陷；
-- `--mem-fraction-static 0.80`：静态显存分配比例设为 0.80（实机占用约 97.3 GiB），为 PagedAttention KV Cache 留出约 32.7 GiB 空间；
-- `--max-mamba-cache-size 64`：设定 Mamba 状态缓存上限为 64，优化混合架构在统一内存下的状态池分配；
-- `--tool-call-parser ling3 --reasoning-parser ling3`：启用 Ling-3.0 原生工具调用与 `<think>` 思考链解析器；
-- `--disable-shared-experts-fusion`：针对 MoE 混合量化内核保持稳定性。
+- `--tp-size 1`：使用单卡张量并行；
+- `--model-loader-extra-config '{"disable_multithread_load":true}'`：单线程顺序加载权重分片；
+- `--context-length 16384`：设置最大上下文长度为 16,384 tokens；
+- `--enable-http2`：启用 HTTP/2 协议支持；
+- `--mem-fraction-static 0.80`：显存占用比例上限设为 0.80，预留空间给 KV Cache；
+- `--max-mamba-cache-size 64`：设定状态缓存上限为 64；
+- `--tool-call-parser ling3 --reasoning-parser ling3`：启用工具调用与思考链解析；
+- `--disable-shared-experts-fusion`：禁用共享专家融合以保持运行稳定。
 
 > [!WARNING]
 > 前台常驻与阻塞提示：

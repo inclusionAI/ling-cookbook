@@ -52,7 +52,7 @@ limitations under the License.
 
 +++
 
-Ling-3.0-flash-VL is a multimodal MoE model supporting image and video understanding, featuring 124B total parameters with ~5.5B activated parameters per token and a 5:1 alternating ratio of KDA to MLA.
+Ling-3.0-flash-VL is a multimodal model supporting image and video understanding, featuring 124B total parameters with ~5.5B activated parameters per token.
 
 This guide demonstrates deploying a 4-bit quantized (Q4_K_M) checkpoint of Ling-3.0-flash-VL and its paired multimodal vision projector (`mmproj`) on a single `NVIDIA DGX Spark` (single GB10 with 121 GiB unified memory) using `llama.cpp`. Static weights and projector occupy ~80 GB, reserving ~40 GiB for KV Cache and the host OS when configured with a context length of 32,768 tokens, offering a lightweight C++ runtime with an OpenAI-compatible multimodal HTTP interface.
 
@@ -86,7 +86,7 @@ Installed 4 packages in 12.3s
 
 ### Step 2: Clone and Build llama.cpp (CUDA Enabled)
 
-Support for the Ling-3.0 MoE architecture (`bailingmoe3`) and multimodal vision projection (`mmproj`) is merged upstream in `llama.cpp` (PR #26608 and PR #29151). Clone the repository and compile with CUDA acceleration:
+The architecture for the Ling-3.0 series is merged upstream in `llama.cpp`. Clone the repository and compile with CUDA acceleration:
 
 ```{code-cell}
 !git clone https://github.com/ggml-org/llama.cpp.git
@@ -108,7 +108,7 @@ Cloning into 'llama.cpp'...
 
 ### Step 3: Download Official Weights and Build Q4_K_M GGUF & mmproj
 
-To ensure 100% compliance with upstream `llama.cpp` naming conventions (avoiding tensor key mismatches in early community drafts), download official BF16 weights from ModelScope and run the quantization pipeline:
+Download official BF16 weights from ModelScope and run the quantization pipeline:
 - [inclusionAI/Ling-3.0-flash-VL on ModelScope](https://modelscope.cn/models/inclusionAI/Ling-3.0-flash-VL)
 
 ```bash
@@ -147,7 +147,7 @@ Launch `llama-server` providing an OpenAI-compatible HTTP interface:
 - `--mmproj`: Mount multimodal vision projector `mmproj-Ling-3.0-flash-VL-BF16.gguf`;
 - `--alias ling-3.0-flash-vl-q4`: Register alias for client invocations;
 - `--host 0.0.0.0 --port 9102`: Lock communication port to 9102;
-- `-ngl 99`: Offload all 42 Transformer and MoE layers to GPU;
+- `-ngl 99`: Offload all model operators to GPU;
 - `-fa on`: Enable FlashAttention;
 - `-c 32768`: Set context length to 32,768 tokens, preserving KV Cache headroom;
 - `--jinja`: Enable Jinja template rendering for `<think>` reasoning chains and tool calls.
@@ -386,9 +386,9 @@ Metrics:
 
 > [!TIP]
 > Benchmark Notes:
-> 1. First-token latency (TTFT): Pure text responds in 684.60 ms (server-side prompt eval is only 542.45 ms). Image input (including image fetch and vision Tower encoding) records a TTFT of 2378.58 ms;
-> 2. Continuous decoding throughput: Decoding throughput remains high across modalities at **44.8 ~ 45.6 tokens/s**, capitalizing on MoE sparse activation;
-> 3. Multimodal projector requirement: The `--mmproj` flag is mandatory to process image or video queries.
+> 1. First-token latency (TTFT): Pure text responds in ~684.60 ms. Image input (including image fetch and visual encoding) responds in ~2378.58 ms;
+> 2. Continuous decoding throughput: Decoding throughput remains stable at 44.8 ~ 45.6 tokens/s across modalities;
+> 3. Multimodal projector requirement: The `--mmproj` flag is required to process image queries.
 
 +++
 
@@ -459,18 +459,10 @@ Arguments JSON: {"primary_color": "#1976D2", "theme_mode": "light", "element_cou
   - Symptom: Startup fails during KV Cache allocation or triggers `CUDA out of memory`;
   - Root cause: `llama-server` defaults to large context windows. On 121 GiB unified memory systems, loading 71 GB of weights leaves insufficient RAM if context length is unconstrained;
   - Solution: Explicitly pass `-c 32768` (or `16384`) to reserve 40+ GiB for the host OS and KV Cache buffers.
-- Early Community GGUF Projector Incompatibility (`unknown projector type: bailing3vl_merger`):
-  - Symptom: Mounting community `mmproj` yields `unknown projector type` or missing LayerNorm tensors;
-  - Root cause: Early community weights were generated against pre-merge PR drafts. Upstream PR #29151 standardized projector type as `"ling3vl"` and norm layer as `mm.input_norm`;
-  - Solution: Export `mmproj` directly from official ModelScope BF16 weights using upstream `convert_hf_to_gguf.py --mmproj`.
-- KDA Recurrent Gate Tensor Missing (`check_tensor_dims: tensor 'blk.0.ssm_f_a.weight' not found`):
-  - Symptom: Language model load fails checking gate tensors;
-  - Root cause: Upstream `bailingmoe3.cpp` expects `_a` suffix on full-rank gate tensors (`ssm_f_a` / `ssm_g_a`);
-  - Solution: Run the official conversion and quantization script from native BF16 safetensors, which automatically generates the proper `_a` tensor keys.
-- CUDA Build Architecture:
-  - Symptom: Lower than expected performance on NVIDIA Blackwell architectures;
-  - Solution: Build CMake with `-DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES=native` to enable native architecture optimizations.
 - Non-Interactive Conversion Prompt (`trust_remote_code`):
   - Symptom: `convert_hf_to_gguf.py` hangs when executed inside background jobs or headless scripts;
   - Root cause: HuggingFace prompts for interactive confirmation `Do you wish to run the custom code? [y/N]` when loading remote architecture code;
   - Solution: Pipe standard input into the command (e.g., `echo "y" | python3 ...`) to automatically accept custom code execution in non-interactive pipelines.
+- CUDA Build Architecture:
+  - Symptom: Lower than expected performance on NVIDIA Blackwell architectures;
+  - Solution: Build CMake with `-DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES=native` to enable native architecture optimizations.

@@ -52,7 +52,7 @@ limitations under the License.
 
 +++
 
-Ling-3.0-flash-VL 是多模态 MoE 架构模型，支持图文与视频理解，具备 124B 总参数量与 ~5.5B 激活参数量，采用 5:1 的 KDA 与 MLA 交替注意力结构。
+Ling-3.0-flash-VL 是多模态模型，支持图文与视频理解，具备 124B 总参数量与 ~5.5B 激活参数量。
 
 本指南演示在单台 `NVIDIA DGX Spark`（单张 GB10 统一内存 121 GiB 可用）上，基于 `llama.cpp` 部署 4-bit 量化（Q4_K_M）与配套多模态视觉投影（`mmproj`）权重。模型权重与视觉投影静态常驻约 80 GB，在上下文长度设为 32,768 tokens 时为 KV Cache 与系统预留约 40 GiB 物理空间，提供轻量化 C++ 运行时与兼容 OpenAI 的多模态 HTTP 接口。
 
@@ -86,7 +86,7 @@ Installed 4 packages in 12.3s
 
 ### 步骤 2: 克隆并编译 llama.cpp (CUDA 支持)
 
-Ling-3.0 系列模型的 MoE 混合注意力架构（`bailingmoe3`）及其多模态视觉投影（`mmproj`）已合并至 `llama.cpp` 官方主干（PR #26608 与 PR #29151）。克隆官方仓库并启用 CUDA 加速编译：
+Ling-3.0 系列模型的架构已合并至 `llama.cpp` 官方主干。克隆官方仓库并启用 CUDA 加速编译：
 
 ```{code-cell}
 !git clone https://github.com/ggml-org/llama.cpp.git
@@ -108,7 +108,7 @@ Cloning into 'llama.cpp'...
 
 ### 步骤 3: 获取官方权重并构建 Q4_K_M GGUF 与 mmproj
 
-为了确保多模态投影层与门控张量 100% 契合 `llama.cpp` upstream 规范（避免早期社区草案分支的键名漂移问题），推荐从 ModelScope 官方下载 BF16 原生权重并执行单次全量量化：
+推荐从 ModelScope 官方下载 BF16 原生权重并执行量化：
 - [inclusionAI/Ling-3.0-flash-VL on ModelScope](https://modelscope.cn/models/inclusionAI/Ling-3.0-flash-VL)
 
 ```bash
@@ -147,7 +147,7 @@ llama_quantize:    total time = 469529.20 ms
 - `--mmproj`: 挂载多模态视觉投影权重 `mmproj-Ling-3.0-flash-VL-BF16.gguf`；
 - `--alias ling-3.0-flash-vl-q4`: 注册模型别名，便于客户端直接调用；
 - `--host 0.0.0.0 --port 9102`: 锁定监听端口为 9102；
-- `-ngl 99`: 将全部 42 层 Transformer 与 MoE 算子卸载至 GPU；
+- `-ngl 99`: 将全部模型算子卸载至 GPU；
 - `-fa on`: 启用 FlashAttention 优化；
 - `-c 32768`: 设置上下文长度为 32,768 tokens，预留显存给 KV Cache；
 - `--jinja`: 启用 Jinja 模板引擎，原生支持 `<think>` 思考链解析与 Tool Calling。
@@ -388,9 +388,9 @@ Metrics:
 
 > [!TIP]
 > 测试指标说明：
-> 1. 首字延迟 (TTFT)：纯文本响应仅需 684.60 ms（服务端提示词计算仅 542.45 ms）；图像输入（含图片拉取与视觉 Tower 特征编码）首字响应为 2378.58 ms；
-> 2. 连续解码速率：纯文本与图像多模态解码速率均稳定在 **44.8 ~ 45.6 tokens/s**，发挥了 MoE 稀疏激活的高效特性；
-> 3. 多模态投影配置：运行必须显式提供 `--mmproj` 参数，否则模型仅能处理纯文本请求。
+> 1. 首字延迟 (TTFT)：纯文本响应约 684.60 ms，图像输入（含图片拉取与视觉编码）首字响应约 2378.58 ms；
+> 2. 连续解码速率：纯文本与图像多模态解码速率均稳定在 44.8 ~ 45.6 tokens/s；
+> 3. 多模态投影配置：运行需提供 `--mmproj` 参数以支持多模态请求。
 
 +++
 
@@ -461,18 +461,10 @@ test_multimodal_tool_calling()
   - 现象：启动时分配 KV Cache 失败或报 `CUDA out of memory`；
   - 原因：`llama-server` 默认会尝试分配尽可能大的上下文缓存。在 121 GiB 统一内存设备上加载 71 GB 权重后，若上下文设为 131,072 会超出物理内存；
   - 解决：显式传入 `-c 32768`（或按需设为 `16384`），为系统预留 40+ GiB 物理空间。
-- 社区早期 GGUF 投影层兼容报错 (`unknown projector type: bailing3vl_merger`)：
-  - 现象：挂载早期社区 GGUF 的 `mmproj` 时报错 `unknown projector type` 或 LayerNorm 张量缺失；
-  - 原因：社区早期权重基于 PR 合并前的草案分支导出。上游 PR #29151 最终合入时规范投影类型为 `"ling3vl"`，并将归一化层定名为 `mm.input_norm`；
-  - 解决：直接从官方原生 BF16 权重调用官方 `convert_hf_to_gguf.py --mmproj` 导出，确保元数据与主干完全对齐。
-- KDA 递归门控张量缺失 (`check_tensor_dims: tensor 'blk.0.ssm_f_a.weight' not found`)：
-  - 现象：加载语言模型 GGUF 分片时报门控张量缺失；
-  - 原因：上游 `bailingmoe3.cpp` 规范门控张量带有 `_a` 后缀（`ssm_f_a` / `ssm_g_a`），社区早期版本未带后缀；
-  - 解决：采用官方转换脚本从 BF16 safetensors 统一导出并量化，即可自动生成带 `_a` 的全秩门控张量。
-- 构建编译架构匹配：
-  - 现象：CMake 编译出的二进制在 Blackwell 架构上执行较慢；
-  - 解决：在构建时指定 `-DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES=native`，启用本地 GPU 硬件原生架构优化。
 - 自动化流水线执行转换时挂起 (`trust_remote_code`)：
   - 现象：在后台脚本或无交互终端中运行 `convert_hf_to_gguf.py` 时进程持续阻塞；
   - 原因：HuggingFace 动态加载自定义模型架构代码时会在终端提示 `Do you wish to run the custom code? [y/N]` 等待键盘输入；
   - 解决：在自动化脚本中通过标准输入预设确认（如 `echo "y" | python3 ...`），确保无人值守流水线顺畅执行。
+- 构建编译架构匹配：
+  - 现象：CMake 编译出的二进制在 Blackwell 架构上执行较慢；
+  - 解决：在构建时指定 `-DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES=native`，启用本地 GPU 硬件原生架构优化。

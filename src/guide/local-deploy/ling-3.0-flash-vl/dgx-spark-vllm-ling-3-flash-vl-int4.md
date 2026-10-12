@@ -52,9 +52,9 @@ limitations under the License.
 
 +++
 
-Ling-3.0-flash-VL is a multimodal MoE model supporting image and video understanding, featuring 124B total parameters with ~5.5B activated parameters per token and a 5:1 alternating ratio of KDA to MLA.
+Ling-3.0-flash-VL is a multimodal model supporting image and video understanding, featuring 124B total parameters with ~5.5B activated parameters per token.
 
-This guide demonstrates deploying the official INT4 (`compressed-tensors` / Marlin MoE) quantized checkpoint of Ling-3.0-flash-VL on a single `NVIDIA DGX Spark` (single GB10 with 121 GiB unified memory) using `vLLM`. Configuring `--max-model-len 32768` and `--gpu-memory-utilization 0.80` reserves memory for KV Cache and the host OS. Measured visual encoding and prefill latency is ~1.5 seconds (TTFT 1596 ms), with end-to-end processing of ~1.5 to 2.0 seconds per image, suitable for batch image tagging, classification, and structured visual metadata extraction.
+This guide demonstrates deploying the official INT4 quantized checkpoint of Ling-3.0-flash-VL on a single `NVIDIA DGX Spark` (single GB10 with 121 GiB unified memory) using `vLLM`. Configuring `--max-model-len 32768` reserves memory for KV Cache and the host OS, providing an OpenAI-compatible multimodal HTTP interface.
 
 > [!TIP]
 > Environment Requirements:
@@ -66,7 +66,7 @@ This guide demonstrates deploying the official INT4 (`compressed-tensors` / Marl
 
 ### Step 1: Prepare Python 3.12 Virtual Environment (uv)
 
-Create an isolated Python 3.12 virtual environment using `uv` to satisfy PEP 701 syntax requirements:
+Create an isolated Python 3.12 virtual environment using `uv`:
 
 ```{code-cell}
 !pip install -U uv
@@ -84,7 +84,7 @@ Activate with: source .venv/bin/activate
 
 ### Step 2: Install Official vLLM ARM64 CUDA 13.0 Wheel and Dependencies
 
-The Ling-3.0 architecture (`BailingMoeV3VLForConditionalGeneration`) and the `ling3` reasoning chain and tool-call parsers are merged upstream in vLLM. Install the precompiled Nightly Wheel targeting GB10 (sm_121 / cu130) via `uv pip`, and install testing libraries (`requests`, `pillow`):
+The Ling-3.0 architecture is merged upstream in vLLM. Install the precompiled package for CUDA 13.0 and testing dependencies:
 
 ```{code-cell}
 !source .venv/bin/activate && uv pip install \
@@ -133,8 +133,8 @@ Successfully downloaded Ling-3.0-flash-VL-int4 to ~/models/Ling-3.0-flash-VL-int
 Launch `vllm serve` providing an OpenAI-compatible HTTP interface:
 - `--tensor-parallel-size 1`: Single GPU tensor parallelism;
 - `--trust-remote-code`: Allow loading Ling-3.0-flash-VL model architecture code;
-- `--max-model-len 32768`: Set context length to 32,768 tokens (default is 131,072) to reserve memory for KV Cache;
-- `--gpu-memory-utilization 0.80`: Cap static memory allocation at 80% (~96.8 GiB), reserving 24+ GiB for the host OS and buffers;
+- `--max-model-len 32768`: Set context length to 32,768 tokens to reserve memory for KV Cache;
+- `--gpu-memory-utilization 0.80`: Cap memory utilization at 0.80 to reserve memory for the host OS and buffers;
 - `--reasoning-parser ling3`: Enable the `ling3` parser to output `reasoning_content`;
 - `--enable-auto-tool-choice --tool-call-parser ling3`: Enable the `ling3` tool call parser.
 
@@ -478,6 +478,6 @@ Arguments JSON: {"primary_color": "#E53935", "theme_mode": "light", "element_cou
   - Symptom: Graph capture errors or stuttering under dynamic image resolutions;
   - Solution: Pass `--enforce-eager` to run in Eager mode.
 - Python 3.12 Requirements:
-  - Symptom: Startup fails with `SyntaxError: unterminated string literal` or `ImportError: cannot import name 'NamespaceTool' from 'openai.types.responses'`;
-  - Root cause: vLLM requires Python 3.12+ (PEP 701 syntax) and `openai>=2.0.0` (`openai 3.28.0`);
+  - Symptom: Startup fails with `SyntaxError` or missing symbol imports;
+  - Root cause: vLLM requires Python 3.12+ and a modern openai library;
   - Solution: Create an environment with `uv venv --python 3.12 .venv` and install dependencies with `uv pip install vllm`.
