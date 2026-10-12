@@ -66,12 +66,12 @@ Ling-3.0-flash-VL 是多模态 MoE 架构模型，支持图文与视频理解，
 
 ### 步骤 1: 准备 Python 3.12 虚拟环境 (uv)
 
-使用 `uv` 创建隔离的 Python 3.12 虚拟环境，并安装测试所需的依赖库：
+使用 `uv` 创建隔离的 Python 3.12 虚拟环境，并安装权重转换、测试与多模态依赖库：
 
 ```{code-cell}
 !pip install -U uv
 !uv venv --python 3.12 .venv
-!source .venv/bin/activate && uv pip install openai pillow requests modelscope
+!source .venv/bin/activate && uv pip install torch transformers sentencepiece protobuf openai pillow requests modelscope
 ```
 
 典型输出：
@@ -114,20 +114,20 @@ Cloning into 'llama.cpp'...
 ```bash
 # 1. 下载官方原生 BF16 权重 (233 GB)
 source .venv/bin/activate
-python3 -c "from modelscope import snapshot_download; snapshot_download('inclusionAI/Ling-3.0-flash-VL', local_dir='/home/squall/models/Ling-3.0-flash-VL')"
+python3 -c "import os; from modelscope import snapshot_download; snapshot_download('inclusionAI/Ling-3.0-flash-VL', local_dir=os.path.expanduser('~/models/Ling-3.0-flash-VL'))"
 
 # 2. 导出官方原生 mmproj 视觉投影层 (838 MB)
-python3 llama.cpp/convert_hf_to_gguf.py /home/squall/models/Ling-3.0-flash-VL \
-  --mmproj --outfile /home/squall/models/mmproj-Ling-3.0-flash-VL-BF16.gguf
+python3 llama.cpp/convert_hf_to_gguf.py ~/models/Ling-3.0-flash-VL \
+  --mmproj --outfile ~/models/mmproj-Ling-3.0-flash-VL-BF16.gguf
 
 # 3. 转换语言主干为 BF16 GGUF 并使用 16 线程量化至 Q4_K_M (71 GB)
-python3 llama.cpp/convert_hf_to_gguf.py /home/squall/models/Ling-3.0-flash-VL \
-  --outtype bf16 --outfile /home/squall/models/Ling-3.0-flash-VL-BF16.gguf
-./llama.cpp/build/bin/llama-quantize /home/squall/models/Ling-3.0-flash-VL-BF16.gguf \
-  /home/squall/models/Ling-3.0-flash-VL-Q4_K_M.gguf Q4_K_M 16
+python3 llama.cpp/convert_hf_to_gguf.py ~/models/Ling-3.0-flash-VL \
+  --outtype bf16 --outfile ~/models/Ling-3.0-flash-VL-BF16.gguf
+./llama.cpp/build/bin/llama-quantize ~/models/Ling-3.0-flash-VL-BF16.gguf \
+  ~/models/Ling-3.0-flash-VL-Q4_K_M.gguf Q4_K_M 16
 
 # 4. 清理中间 248 GB 浮点 GGUF，释放磁盘空间
-rm -f /home/squall/models/Ling-3.0-flash-VL-BF16.gguf
+rm -f ~/models/Ling-3.0-flash-VL-BF16.gguf
 ```
 
 典型量化输出：
@@ -178,6 +178,14 @@ load_model: initializing, n_slots = 4, n_ctx_slot = 32768, kv_unified = 'true'
 init: chat template supports preserving reasoning, it is enabled by default
 llama_server: listening on http://0.0.0.0:9102
 ```
+
+> [!TIP]
+> 本地客户端远程调用说明：
+> 若在本地开发机（如 Mac / PC）上的桌面客户端（如 Cherry Studio、Chatbox 等）连接远程 DGX Spark 服务，可通过 SSH 本地端口转发打通访问链路：
+> ```bash
+> ssh -N -L 9102:127.0.0.1:9102 <user>@<dgx-spark-ip>
+> ```
+> 建立隧道后，本地客户端将 API Base URL 配置为 `http://127.0.0.1:9102/v1`，API Key 填入 `sk-ling-cookbook-test`，模型名选择 `ling-3.0-flash-vl-q4` 即可进行多模态对话与流式推理。
 
 +++
 
@@ -472,3 +480,7 @@ test_multimodal_tool_calling()
 - 构建编译架构匹配：
   - 现象：CMake 编译出的二进制在 Blackwell 架构上执行较慢；
   - 解决：在构建时指定 `-DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES=native`，启用本地 GPU 硬件原生架构优化。
+- 自动化流水线执行转换时挂起 (`trust_remote_code`)：
+  - 现象：在后台脚本或无交互终端中运行 `convert_hf_to_gguf.py` 时进程持续阻塞；
+  - 原因：HuggingFace 动态加载自定义模型架构代码时会在终端提示 `Do you wish to run the custom code? [y/N]` 等待键盘输入；
+  - 解决：在自动化脚本中通过标准输入预设确认（如 `echo "y" | python3 ...`），确保无人值守流水线顺畅执行。

@@ -66,12 +66,12 @@ This guide demonstrates deploying a 4-bit quantized (Q4_K_M) checkpoint of Ling-
 
 ### Step 1: Prepare Python 3.12 Virtual Environment (uv)
 
-Create an isolated Python 3.12 virtual environment using `uv` and install testing dependencies:
+Create an isolated Python 3.12 virtual environment using `uv` and install conversion and testing dependencies:
 
 ```{code-cell}
 !pip install -U uv
 !uv venv --python 3.12 .venv
-!source .venv/bin/activate && uv pip install openai pillow requests modelscope
+!source .venv/bin/activate && uv pip install torch transformers sentencepiece protobuf openai pillow requests modelscope
 ```
 
 Typical output:
@@ -114,20 +114,20 @@ To ensure 100% compliance with upstream `llama.cpp` naming conventions (avoiding
 ```bash
 # 1. Download official BF16 weights (233 GB)
 source .venv/bin/activate
-python3 -c "from modelscope import snapshot_download; snapshot_download('inclusionAI/Ling-3.0-flash-VL', local_dir='/home/squall/models/Ling-3.0-flash-VL')"
+python3 -c "import os; from modelscope import snapshot_download; snapshot_download('inclusionAI/Ling-3.0-flash-VL', local_dir=os.path.expanduser('~/models/Ling-3.0-flash-VL'))"
 
 # 2. Export official mmproj vision projector (838 MB)
-python3 llama.cpp/convert_hf_to_gguf.py /home/squall/models/Ling-3.0-flash-VL \
-  --mmproj --outfile /home/squall/models/mmproj-Ling-3.0-flash-VL-BF16.gguf
+python3 llama.cpp/convert_hf_to_gguf.py ~/models/Ling-3.0-flash-VL \
+  --mmproj --outfile ~/models/mmproj-Ling-3.0-flash-VL-BF16.gguf
 
 # 3. Convert language model to BF16 GGUF and quantize to Q4_K_M (71 GB, 16 threads)
-python3 llama.cpp/convert_hf_to_gguf.py /home/squall/models/Ling-3.0-flash-VL \
-  --outtype bf16 --outfile /home/squall/models/Ling-3.0-flash-VL-BF16.gguf
-./llama.cpp/build/bin/llama-quantize /home/squall/models/Ling-3.0-flash-VL-BF16.gguf \
-  /home/squall/models/Ling-3.0-flash-VL-Q4_K_M.gguf Q4_K_M 16
+python3 llama.cpp/convert_hf_to_gguf.py ~/models/Ling-3.0-flash-VL \
+  --outtype bf16 --outfile ~/models/Ling-3.0-flash-VL-BF16.gguf
+./llama.cpp/build/bin/llama-quantize ~/models/Ling-3.0-flash-VL-BF16.gguf \
+  ~/models/Ling-3.0-flash-VL-Q4_K_M.gguf Q4_K_M 16
 
 # 4. Remove intermediate 248 GB BF16 file to reclaim disk space
-rm -f /home/squall/models/Ling-3.0-flash-VL-BF16.gguf
+rm -f ~/models/Ling-3.0-flash-VL-BF16.gguf
 ```
 
 Typical quantization output:
@@ -178,6 +178,14 @@ load_model: initializing, n_slots = 4, n_ctx_slot = 32768, kv_unified = 'true'
 init: chat template supports preserving reasoning, it is enabled by default
 llama_server: listening on http://0.0.0.0:9102
 ```
+
+> [!TIP]
+> Remote Access via SSH Port Forwarding:
+> When connecting desktop clients (e.g., Cherry Studio, Chatbox, or local SDKs) on your local workstation (Mac / PC) to a remote DGX Spark instance, establish an SSH tunnel:
+> ```bash
+> ssh -N -L 9102:127.0.0.1:9102 <user>@<dgx-spark-ip>
+> ```
+> Once the tunnel is active, configure your local client with API Base URL `http://127.0.0.1:9102/v1`, API Key `sk-ling-cookbook-test`, and model name `ling-3.0-flash-vl-q4`.
 
 +++
 
@@ -470,3 +478,7 @@ Arguments JSON: {"primary_color": "#1976D2", "theme_mode": "light", "element_cou
 - CUDA Build Architecture:
   - Symptom: Lower than expected performance on NVIDIA Blackwell architectures;
   - Solution: Build CMake with `-DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES=native` to enable native architecture optimizations.
+- Non-Interactive Conversion Prompt (`trust_remote_code`):
+  - Symptom: `convert_hf_to_gguf.py` hangs when executed inside background jobs or headless scripts;
+  - Root cause: HuggingFace prompts for interactive confirmation `Do you wish to run the custom code? [y/N]` when loading remote architecture code;
+  - Solution: Pipe standard input into the command (e.g., `echo "y" | python3 ...`) to automatically accept custom code execution in non-interactive pipelines.
