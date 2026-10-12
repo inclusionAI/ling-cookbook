@@ -179,14 +179,6 @@ init: chat template supports preserving reasoning, it is enabled by default
 llama_server: listening on http://0.0.0.0:9102
 ```
 
-> [!TIP]
-> 本地客户端远程调用说明：
-> 若在本地开发机（如 Mac / PC）上的桌面客户端（如 Cherry Studio、Chatbox 等）连接远程 DGX Spark 服务，可通过 SSH 本地端口转发打通访问链路：
-> ```bash
-> ssh -N -L 9102:127.0.0.1:9102 <user>@<dgx-spark-ip>
-> ```
-> 建立隧道后，本地客户端将 API Base URL 配置为 `http://127.0.0.1:9102/v1`，API Key 填入 `sk-ling-cookbook-test`，模型名选择 `ling-3.0-flash-vl-q4` 即可进行多模态对话与流式推理。
-
 +++
 
 ### 步骤 5: 验证部署与基准测速

@@ -179,14 +179,6 @@ init: chat template supports preserving reasoning, it is enabled by default
 llama_server: listening on http://0.0.0.0:9102
 ```
 
-> [!TIP]
-> Remote Access via SSH Port Forwarding:
-> When connecting desktop clients (e.g., Cherry Studio, Chatbox, or local SDKs) on your local workstation (Mac / PC) to a remote DGX Spark instance, establish an SSH tunnel:
-> ```bash
-> ssh -N -L 9102:127.0.0.1:9102 <user>@<dgx-spark-ip>
-> ```
-> Once the tunnel is active, configure your local client with API Base URL `http://127.0.0.1:9102/v1`, API Key `sk-ling-cookbook-test`, and model name `ling-3.0-flash-vl-q4`.
-
 +++
 
 ### Step 5: Verify Deployment and Run Benchmarks
