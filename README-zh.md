@@ -80,6 +80,19 @@
 | Ling-3.0-tiny | Apple Silicon Mac | llama.cpp | BF16 / Q8_0 / Q4_K_M (GGUF) | [文档: llama.cpp Metal 端侧部署指南](guide/local-deploy/ling-3.0-tiny/mac-llamacpp-ling-3-tiny-zh.ipynb) |
 | Ling-3.0-tiny | Apple Silicon Mac | MLX | BF16 / MXFP8 / 4-bit | [文档: MLX-LM 原生端侧部署指南](guide/local-deploy/ling-3.0-tiny/mac-mlx-ling-3-tiny-zh.ipynb) |
 
+<a id="fine-tuning"></a>
+### 微调 (`guide/finetuning/`)
+
+<p align="right">
+  <a href="README.md#fine-tuning">English</a> | <b>简体中文</b>
+</p>
+
+#### Ling-3.0-tiny
+
+| 模型 | 任务 | 方法 | 硬件 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| Ling-3.0-tiny | 中文发票字段抽取 → JSON | QLoRA (4-bit NF4) | Kaggle / Colab (T4, 16GB) | [文档: 发票字段抽取 QLoRA 微调实战](guide/finetuning/ling-3.0-tiny/ling-tiny-json-extraction/finetuning-ling-tiny-json-extraction-zh.ipynb) |
+
 <a id="recommended-skills"></a>
 ### 部分能力 Agent Skill
 

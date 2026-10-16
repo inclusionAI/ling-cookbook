@@ -80,6 +80,19 @@ Recipes for deploying Ling models for local inference across consumer and workst
 | Ling-3.0-tiny | Apple Silicon Mac | llama.cpp | BF16 / Q8_0 / Q4_K_M (GGUF) | [Recipe: llama.cpp Metal On-Device Deployment Guide](guide/local-deploy/ling-3.0-tiny/mac-llamacpp-ling-3-tiny.ipynb) |
 | Ling-3.0-tiny | Apple Silicon Mac | MLX | BF16 / MXFP8 / 4-bit | [Recipe: MLX-LM On-Device Deployment Guide](guide/local-deploy/ling-3.0-tiny/mac-mlx-ling-3-tiny.ipynb) |
 
+<a id="fine-tuning"></a>
+### Fine-tuning (`guide/finetuning/`)
+
+<p align="right">
+  <b>English</b> | <a href="README-zh.md#fine-tuning">简体中文</a>
+</p>
+
+#### Ling-3.0-tiny
+
+| Model | Task | Method | Hardware | Info |
+| :--- | :--- | :--- | :--- | :--- |
+| Ling-3.0-tiny | Chinese invoice field extraction → JSON | QLoRA (4-bit NF4) | Kaggle / Colab (T4, 16GB) | [Recipe: QLoRA Fine-tuning for Invoice Field Extraction](guide/finetuning/ling-3.0-tiny/ling-tiny-json-extraction/finetuning-ling-tiny-json-extraction.ipynb) |
+
 <a id="recommended-skills"></a>
 ### Agent Skills for Specialized Capabilities
 
