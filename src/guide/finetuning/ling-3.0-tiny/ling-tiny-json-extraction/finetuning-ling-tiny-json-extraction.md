@@ -558,21 +558,21 @@ Upload to Hugging Face (configure `HF_TOKEN` in Kaggle Secrets / Colab first; **
 # from huggingface_hub import HfApi, login
 # login(token=os.environ["HF_TOKEN"])
 # api = HfApi()
-# api.create_repo(repo_id="wanglin/ling-tiny-json-extraction-lora", repo_type="model", exist_ok=True)
-# api.upload_folder(repo_id="wanglin/ling-tiny-json-extraction-lora", folder_path="lora-adapter")
-# api.create_repo(repo_id="wanglin/ling-tiny-json-extraction-dataset", repo_type="dataset", exist_ok=True)
+# api.create_repo(repo_id="<your-name>/ling-tiny-json-extraction-lora", repo_type="model", exist_ok=True)
+# api.upload_folder(repo_id="<your-name>/ling-tiny-json-extraction-lora", folder_path="lora-adapter")
+# api.create_repo(repo_id="<your-name>/ling-tiny-json-extraction-dataset", repo_type="dataset", exist_ok=True)
 # for f in ["data/train.jsonl", "data/test.jsonl"]:
-#     api.upload_file(repo_id="wanglin/ling-tiny-json-extraction-dataset",
+#     api.upload_file(repo_id="<your-name>/ling-tiny-json-extraction-dataset",
 #                     path_or_fileobj=f, path_in_repo=f.split("/")[-1], repo_type="dataset")
 print("To upload, configure HF_TOKEN and uncomment the code above.")
 ```
 
-**Assets**: LoRA adapter and dataset produced by this recipe.
+**Assets**: the LoRA adapter and dataset produced by this recipe are not published yet; links will be added once they are uploaded.
 
 | Asset | Link |
 | :--- | :--- |
-| LoRA Adapter | `https://huggingface.co/wanglin/ling-tiny-json-extraction-lora` |
-| Dataset (train / test) | `https://huggingface.co/datasets/wanglin/ling-tiny-json-extraction-dataset` |
+| LoRA Adapter | To be filled in after upload |
+| Dataset (train / test) | To be filled in after upload |
 
 +++
 
