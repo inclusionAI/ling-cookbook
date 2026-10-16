@@ -560,10 +560,19 @@ print("saved to", SAVE_DIR, "->", os.listdir(SAVE_DIR))
 # api = HfApi()
 # api.create_repo(repo_id="<your-name>/ling-tiny-json-extraction-lora", repo_type="model", exist_ok=True)
 # api.upload_folder(repo_id="<your-name>/ling-tiny-json-extraction-lora", folder_path="lora-adapter")
-# api.upload_file(repo_id="<your-name>/ling-tiny-json-extraction-dataset", path_or_fileobj="data/train.jsonl",
-#                 path_in_repo="train.jsonl", repo_type="dataset")
+# api.create_repo(repo_id="<your-name>/ling-tiny-json-extraction-dataset", repo_type="dataset", exist_ok=True)
+# for f in ["data/train.jsonl", "data/test.jsonl"]:
+#     api.upload_file(repo_id="<your-name>/ling-tiny-json-extraction-dataset",
+#                     path_or_fileobj=f, path_in_repo=f.split("/")[-1], repo_type="dataset")
 print("如需上传，请在配置 HF_TOKEN 后取消上面代码的注释。")
 ```
+
+**资产链接（Assets）**：以下链接为占位，将在训练跑通后回填。
+
+| 资产 | 链接 |
+| :--- | :--- |
+| LoRA Adapter | `https://huggingface.co/<your-name>/ling-tiny-json-extraction-lora` |
+| 数据集（train / test） | `https://huggingface.co/datasets/<your-name>/ling-tiny-json-extraction-dataset` |
 
 +++
 

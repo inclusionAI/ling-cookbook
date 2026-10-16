@@ -560,10 +560,19 @@ Upload to Hugging Face (configure `HF_TOKEN` in Kaggle Secrets / Colab first; **
 # api = HfApi()
 # api.create_repo(repo_id="<your-name>/ling-tiny-json-extraction-lora", repo_type="model", exist_ok=True)
 # api.upload_folder(repo_id="<your-name>/ling-tiny-json-extraction-lora", folder_path="lora-adapter")
-# api.upload_file(repo_id="<your-name>/ling-tiny-json-extraction-dataset", path_or_fileobj="data/train.jsonl",
-#                 path_in_repo="train.jsonl", repo_type="dataset")
+# api.create_repo(repo_id="<your-name>/ling-tiny-json-extraction-dataset", repo_type="dataset", exist_ok=True)
+# for f in ["data/train.jsonl", "data/test.jsonl"]:
+#     api.upload_file(repo_id="<your-name>/ling-tiny-json-extraction-dataset",
+#                     path_or_fileobj=f, path_in_repo=f.split("/")[-1], repo_type="dataset")
 print("To upload, configure HF_TOKEN and uncomment the code above.")
 ```
+
+**Assets**: links below are placeholders and will be filled in after training.
+
+| Asset | Link |
+| :--- | :--- |
+| LoRA Adapter | `https://huggingface.co/<your-name>/ling-tiny-json-extraction-lora` |
+| Dataset (train / test) | `https://huggingface.co/datasets/<your-name>/ling-tiny-json-extraction-dataset` |
 
 +++
 
