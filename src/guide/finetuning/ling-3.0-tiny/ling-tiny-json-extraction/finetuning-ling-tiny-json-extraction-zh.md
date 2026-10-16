@@ -590,5 +590,6 @@ print("如需上传，请在配置 HF_TOKEN 后取消上面代码的注释。")
 2. **`target_modules` 未命中 / 挂载后几乎不训练**：回到 Step 2 打印 `leaf_names`，把实际层名填进 `CANDIDATE_TARGETS`；MoE 模型通常需要同时覆盖注意力与专家 FFN 投影。
 3. **输出不是合法 JSON**：`parse_json()` 已做正则兜底；训练数据里 JSON 字段顺序稳定也有助于模型收敛。
 4. **bf16 报错**：T4 不支持 bf16，务必使用 `fp16=True`；Ampere+ 才可切 `bf16`。
-5. **Kaggle 无网**：请在右侧 Settings 打开 **Internet**；若只需离线运行，可预先 `pip download` 依赖并上传为 Kaggle Dataset。
-6. **只想单文件运行**：`configs/` 读取失败时会自动回退到内置默认值，Notebook 可直接跑通。
+5. **Kaggle 无网**：请在右侧 Settings 打开 **Internet**（必需，基座模型需从 Hugging Face 下载）。若只能离线运行，请在有网机器上按 Step 0 相同的依赖清单预下载 wheel（`pip download -d wheels "transformers>=4.45" "peft>=0.13" "trl>=0.11" "datasets>=2.20" "accelerate>=0.34" "bitsandbytes>=0.43" "huggingface_hub" "sentencepiece" "protobuf"`；若下载机不是 Linux，需追加 `--platform manylinux2014_x86_64 --only-binary=:all: --python-version 3.10`），把 `wheels/` 上传为 Kaggle Dataset，再执行 `!pip install --no-index --find-links=/kaggle/input/<your-dataset>/wheels <同一清单>` 安装。
+6. **Kaggle 会话之间不保留产物**：在 Kaggle 上，`/kaggle/working` 每个新会话都从空目录开始，上一次运行的 output **不会**自动恢复到工作目录。重新运行是安全且确定的——Step 1 会按固定的 `SEED=42` 重新合成 `data/train.jsonl` / `data/test.jsonl`，**无需手工上传数据**；若想留存 adapter，请用 Step 7 上传到 Hugging Face（推荐），或运行 *Save Version* 后从 Notebook output 下载。
+7. **只想单文件运行**：`configs/` 读取失败时会自动回退到内置默认值，Notebook 可直接跑通。
