@@ -1,0 +1,84 @@
+{
+  "n": 1862,
+  "accuracy": 0.8818474758324383,
+  "parse_fail_rate": 0.0,
+  "mean_completion_tokens": 10.643931256713211,
+  "mean_latency_s": 1.2827153598281418,
+  "takeover_rate_midturn": 0.06035665294924554,
+  "false_response_rate_ignore": 0.003355704697986577,
+  "respond_rate_end_of_turn": 0.7354330708661417,
+  "stop_rate_interruption": 0.985,
+  "per_label": {
+    "LISTEN": {
+      "precision": 0.8128724672228844,
+      "recall": 0.9728958630527818,
+      "f1": 0.8857142857142857,
+      "support": 414
+    },
+    "BACKCHANNEL": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 315
+    },
+    "SPEAK": {
+      "precision": 0.913894324853229,
+      "recall": 0.7354330708661417,
+      "f1": 0.8150087260034905,
+      "support": 635
+    },
+    "STOP": {
+      "precision": 0.9949494949494949,
+      "recall": 0.985,
+      "f1": 0.9899497487437187,
+      "support": 200
+    },
+    "IGNORE": {
+      "precision": 0.9833887043189369,
+      "recall": 0.9932885906040269,
+      "f1": 0.9883138564273789,
+      "support": 298
+    }
+  },
+  "macro_f1": 0.7357973233777748,
+  "per_source_accuracy": {
+    "candor_pause_handling:LISTEN": 0.9422382671480144,
+    "icc_backchannel:BACKCHANNEL": 0.9111111111111111,
+    "synthetic_pause_handling:LISTEN": 0.9781021897810219,
+    "synthetic_pause_handling:SPEAK": 0.35036496350364965,
+    "v1.5_background_speech:IGNORE": 0.99,
+    "v1.5_background_speech:SPEAK": 0.82,
+    "v1.5_talking_to_other:IGNORE": 1.0,
+    "v1.5_talking_to_other:SPEAK": 0.91,
+    "v1.5_user_backchannel:IGNORE": 0.9897959183673469,
+    "v1.5_user_backchannel:SPEAK": 0.9897959183673469,
+    "v1.5_user_interruption:SPEAK": 0.745,
+    "v1.5_user_interruption:STOP": 0.985
+  },
+  "confusion": {
+    "LISTEN": {
+      "LISTEN": 395,
+      "SPEAK": 16,
+      "IGNORE": 2,
+      "BACKCHANNEL": 1
+    },
+    "BACKCHANNEL": {
+      "LISTEN": 287,
+      "SPEAK": 28
+    },
+    "SPEAK": {
+      "LISTEN": 156,
+      "BACKCHANNEL": 12,
+      "SPEAK": 467
+    },
+    "STOP": {
+      "STOP": 197,
+      "IGNORE": 3
+    },
+    "IGNORE": {
+      "IGNORE": 296,
+      "LISTEN": 1,
+      "STOP": 1
+    }
+  }
+}

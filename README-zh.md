@@ -80,6 +80,14 @@
 | Ling-3.0-tiny | Apple Silicon Mac | llama.cpp | BF16 / Q8_0 / Q4_K_M (GGUF) | [文档: llama.cpp Metal 端侧部署指南](guide/local-deploy/ling-3.0-tiny/mac-llamacpp-ling-3-tiny-zh.ipynb) |
 | Ling-3.0-tiny | Apple Silicon Mac | MLX | BF16 / MXFP8 / 4-bit | [文档: MLX-LM 原生端侧部署指南](guide/local-deploy/ling-3.0-tiny/mac-mlx-ling-3-tiny-zh.ipynb) |
 
+### 微调 (`guide/finetuning/`)
+
+面向特定任务的 Ling 模型微调实践，包含训练配置、评测方案与基线对比。
+
+| 模型 | 任务 | 方法 | 框架 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| Ling-3.0-tiny | 全双工对话大脑（话轮管理：LISTEN / BACKCHANNEL / SPEAK / STOP / IGNORE） | LoRA SFT | AReno | [文档: 全双工对话大脑](guide/finetuning/ling-3.0-tiny/full-duplex-dialogue-brain/README-zh.md) |
+
 <a id="recommended-skills"></a>
 ### 部分能力 Agent Skill
 

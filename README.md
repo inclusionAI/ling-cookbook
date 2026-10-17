@@ -80,6 +80,14 @@ Recipes for deploying Ling models for local inference across consumer and workst
 | Ling-3.0-tiny | Apple Silicon Mac | llama.cpp | BF16 / Q8_0 / Q4_K_M (GGUF) | [Recipe: llama.cpp Metal On-Device Deployment Guide](guide/local-deploy/ling-3.0-tiny/mac-llamacpp-ling-3-tiny.ipynb) |
 | Ling-3.0-tiny | Apple Silicon Mac | MLX | BF16 / MXFP8 / 4-bit | [Recipe: MLX-LM On-Device Deployment Guide](guide/local-deploy/ling-3.0-tiny/mac-mlx-ling-3-tiny.ipynb) |
 
+### Fine-tuning (`guide/finetuning/`)
+
+Recipes for adapting Ling models to specific tasks, with training configs, evaluation and baseline comparisons.
+
+| Model | Task | Method | Framework | Info |
+| :--- | :--- | :--- | :--- | :--- |
+| Ling-3.0-tiny | Full-duplex dialogue brain (turn-taking: LISTEN / BACKCHANNEL / SPEAK / STOP / IGNORE) | LoRA SFT | AReno | [Recipe: Full-Duplex Dialogue Brain](guide/finetuning/ling-3.0-tiny/full-duplex-dialogue-brain/README.md) |
+
 <a id="recommended-skills"></a>
 ### Agent Skills for Specialized Capabilities
 
