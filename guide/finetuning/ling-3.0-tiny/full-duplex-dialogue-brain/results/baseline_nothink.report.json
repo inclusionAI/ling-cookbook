@@ -1,0 +1,90 @@
+{
+  "n": 1862,
+  "accuracy": 0.5810955961331902,
+  "parse_fail_rate": 0.0010741138560687433,
+  "mean_completion_tokens": 39.453813104189045,
+  "mean_latency_s": 1.920077336197637,
+  "takeover_rate_midturn": 0.023319615912208505,
+  "false_response_rate_ignore": 0.33557046979865773,
+  "respond_rate_end_of_turn": 0.3937007874015748,
+  "stop_rate_interruption": 0.625,
+  "per_label": {
+    "LISTEN": {
+      "precision": 0.5680902497985496,
+      "recall": 0.975103734439834,
+      "f1": 0.7179226069246435,
+      "support": 414
+    },
+    "BACKCHANNEL": {
+      "precision": 0.010526315789473684,
+      "recall": 0.16666666666666666,
+      "f1": 0.0198019801980198,
+      "support": 315
+    },
+    "SPEAK": {
+      "precision": 0.8278145695364238,
+      "recall": 0.3937007874015748,
+      "f1": 0.5336179295624334,
+      "support": 635
+    },
+    "STOP": {
+      "precision": 0.5656108597285068,
+      "recall": 0.625,
+      "f1": 0.5938242280285035,
+      "support": 200
+    },
+    "IGNORE": {
+      "precision": 1.0,
+      "recall": 0.003355704697986577,
+      "f1": 0.006688963210702341,
+      "support": 298
+    }
+  },
+  "macro_f1": 0.3743711415848605,
+  "per_source_accuracy": {
+    "candor_pause_handling:LISTEN": 0.9530685920577617,
+    "icc_backchannel:BACKCHANNEL": 0.9841269841269841,
+    "synthetic_pause_handling:LISTEN": 0.9635036496350365,
+    "synthetic_pause_handling:SPEAK": 0.051094890510948905,
+    "v1.5_background_speech:IGNORE": 0.0,
+    "v1.5_background_speech:SPEAK": 0.45,
+    "v1.5_talking_to_other:IGNORE": 0.0,
+    "v1.5_talking_to_other:SPEAK": 0.43,
+    "v1.5_user_backchannel:IGNORE": 0.01020408163265306,
+    "v1.5_user_backchannel:SPEAK": 0.673469387755102,
+    "v1.5_user_interruption:SPEAK": 0.445,
+    "v1.5_user_interruption:STOP": 0.625
+  },
+  "confusion": {
+    "LISTEN": {
+      "LISTEN": 396,
+      "SPEAK": 12,
+      "BACKCHANNEL": 6
+    },
+    "BACKCHANNEL": {
+      "LISTEN": 309,
+      "SPEAK": 5,
+      "BACKCHANNEL": 1
+    },
+    "SPEAK": {
+      "LISTEN": 380,
+      "SPEAK": 250,
+      "None": 1,
+      "STOP": 4
+    },
+    "STOP": {
+      "STOP": 125,
+      "SPEAK": 27,
+      "LISTEN": 23,
+      "BACKCHANNEL": 24,
+      "None": 1
+    },
+    "IGNORE": {
+      "BACKCHANNEL": 64,
+      "LISTEN": 133,
+      "STOP": 92,
+      "SPEAK": 8,
+      "IGNORE": 1
+    }
+  }
+}

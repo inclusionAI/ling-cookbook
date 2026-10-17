@@ -1,0 +1,76 @@
+{
+  "n": 1525,
+  "accuracy": 0.9659016393442623,
+  "parse_fail_rate": 0.0,
+  "mean_completion_tokens": 11.241311475409836,
+  "mean_latency_s": 1.215304262295082,
+  "takeover_rate_midturn": 0.034482758620689655,
+  "false_response_rate_ignore": 0.007518796992481203,
+  "respond_rate_end_of_turn": 0.9432432432432433,
+  "stop_rate_interruption": 0.975609756097561,
+  "per_label": {
+    "LISTEN": {
+      "precision": 0.993421052631579,
+      "recall": 0.9890829694323144,
+      "f1": 0.9912472647702407,
+      "support": 458
+    },
+    "BACKCHANNEL": {
+      "precision": 0.7731958762886598,
+      "recall": 0.8064516129032258,
+      "f1": 0.7894736842105262,
+      "support": 93
+    },
+    "SPEAK": {
+      "precision": 0.9483695652173914,
+      "recall": 0.9432432432432433,
+      "f1": 0.94579945799458,
+      "support": 370
+    },
+    "STOP": {
+      "precision": 0.9852216748768473,
+      "recall": 0.975609756097561,
+      "f1": 0.9803921568627451,
+      "support": 205
+    },
+    "IGNORE": {
+      "precision": 0.9875311720698254,
+      "recall": 0.9924812030075187,
+      "f1": 0.99,
+      "support": 399
+    }
+  },
+  "macro_f1": 0.9393825127676184,
+  "per_source_accuracy": {
+    "synth_val:BACKCHANNEL": 0.8064516129032258,
+    "synth_val:IGNORE": 0.9924812030075187,
+    "synth_val:LISTEN": 0.9890829694323144,
+    "synth_val:SPEAK": 0.9432432432432433,
+    "synth_val:STOP": 0.975609756097561
+  },
+  "confusion": {
+    "LISTEN": {
+      "LISTEN": 453,
+      "BACKCHANNEL": 3,
+      "SPEAK": 2
+    },
+    "BACKCHANNEL": {
+      "BACKCHANNEL": 75,
+      "SPEAK": 17,
+      "LISTEN": 1
+    },
+    "SPEAK": {
+      "SPEAK": 349,
+      "BACKCHANNEL": 19,
+      "LISTEN": 2
+    },
+    "STOP": {
+      "STOP": 200,
+      "IGNORE": 5
+    },
+    "IGNORE": {
+      "IGNORE": 396,
+      "STOP": 3
+    }
+  }
+}

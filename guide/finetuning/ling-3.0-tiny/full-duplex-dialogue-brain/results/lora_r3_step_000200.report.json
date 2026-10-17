@@ -1,0 +1,84 @@
+{
+  "n": 1862,
+  "accuracy": 0.8399570354457573,
+  "parse_fail_rate": 0.0,
+  "mean_completion_tokens": 12.613856068743287,
+  "mean_latency_s": 1.4160059076262084,
+  "takeover_rate_midturn": 0.21810699588477367,
+  "false_response_rate_ignore": 0.0,
+  "respond_rate_end_of_turn": 0.8330708661417323,
+  "stop_rate_interruption": 0.875,
+  "per_label": {
+    "LISTEN": {
+      "precision": 0.8567073170731707,
+      "recall": 0.9123376623376623,
+      "f1": 0.8836477987421385,
+      "support": 414
+    },
+    "BACKCHANNEL": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 315
+    },
+    "SPEAK": {
+      "precision": 0.7688953488372093,
+      "recall": 0.8330708661417323,
+      "f1": 0.799697656840514,
+      "support": 635
+    },
+    "STOP": {
+      "precision": 0.9943181818181818,
+      "recall": 0.875,
+      "f1": 0.9308510638297873,
+      "support": 200
+    },
+    "IGNORE": {
+      "precision": 0.873900293255132,
+      "recall": 1.0,
+      "f1": 0.9327073552425664,
+      "support": 298
+    }
+  },
+  "macro_f1": 0.7093807749310013,
+  "per_source_accuracy": {
+    "candor_pause_handling:LISTEN": 0.8339350180505415,
+    "icc_backchannel:BACKCHANNEL": 0.6412698412698413,
+    "synthetic_pause_handling:LISTEN": 0.9416058394160584,
+    "synthetic_pause_handling:SPEAK": 0.6934306569343066,
+    "v1.5_background_speech:IGNORE": 1.0,
+    "v1.5_background_speech:SPEAK": 0.84,
+    "v1.5_talking_to_other:IGNORE": 1.0,
+    "v1.5_talking_to_other:SPEAK": 0.91,
+    "v1.5_user_backchannel:IGNORE": 1.0,
+    "v1.5_user_backchannel:SPEAK": 0.9489795918367347,
+    "v1.5_user_interruption:SPEAK": 0.83,
+    "v1.5_user_interruption:STOP": 0.875
+  },
+  "confusion": {
+    "LISTEN": {
+      "LISTEN": 360,
+      "SPEAK": 49,
+      "IGNORE": 5
+    },
+    "BACKCHANNEL": {
+      "LISTEN": 202,
+      "SPEAK": 110,
+      "IGNORE": 3
+    },
+    "SPEAK": {
+      "BACKCHANNEL": 1,
+      "LISTEN": 94,
+      "SPEAK": 529,
+      "STOP": 1,
+      "IGNORE": 10
+    },
+    "STOP": {
+      "IGNORE": 25,
+      "STOP": 175
+    },
+    "IGNORE": {
+      "IGNORE": 298
+    }
+  }
+}

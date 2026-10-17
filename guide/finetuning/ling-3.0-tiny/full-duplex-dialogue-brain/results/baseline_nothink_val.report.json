@@ -1,0 +1,79 @@
+{
+  "n": 489,
+  "accuracy": 0.32719836400818,
+  "parse_fail_rate": 0.002044989775051125,
+  "mean_completion_tokens": 45.05112474437628,
+  "mean_latency_s": 2.0508629856850713,
+  "takeover_rate_midturn": 0.03424657534246575,
+  "false_response_rate_ignore": 0.1,
+  "respond_rate_end_of_turn": 0.23300970873786409,
+  "stop_rate_interruption": 0.38333333333333336,
+  "per_label": {
+    "LISTEN": {
+      "precision": 0.2849162011173184,
+      "recall": 0.9902912621359223,
+      "f1": 0.4425162689804772,
+      "support": 103
+    },
+    "BACKCHANNEL": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 43
+    },
+    "SPEAK": {
+      "precision": 0.6153846153846154,
+      "recall": 0.23300970873786409,
+      "f1": 0.33802816901408456,
+      "support": 103
+    },
+    "STOP": {
+      "precision": 0.6216216216216216,
+      "recall": 0.38333333333333336,
+      "f1": 0.4742268041237113,
+      "support": 60
+    },
+    "IGNORE": {
+      "precision": 1.0,
+      "recall": 0.06111111111111111,
+      "f1": 0.11518324607329843,
+      "support": 180
+    }
+  },
+  "macro_f1": 0.2739908976383143,
+  "per_source_accuracy": {
+    "synth_val:BACKCHANNEL": 0.0,
+    "synth_val:IGNORE": 0.06111111111111111,
+    "synth_val:LISTEN": 0.9902912621359223,
+    "synth_val:SPEAK": 0.23300970873786409,
+    "synth_val:STOP": 0.38333333333333336
+  },
+  "confusion": {
+    "LISTEN": {
+      "LISTEN": 102,
+      "SPEAK": 1
+    },
+    "BACKCHANNEL": {
+      "LISTEN": 39,
+      "SPEAK": 4
+    },
+    "SPEAK": {
+      "LISTEN": 79,
+      "SPEAK": 24
+    },
+    "STOP": {
+      "LISTEN": 26,
+      "STOP": 23,
+      "SPEAK": 6,
+      "BACKCHANNEL": 5
+    },
+    "IGNORE": {
+      "STOP": 14,
+      "LISTEN": 112,
+      "BACKCHANNEL": 38,
+      "IGNORE": 11,
+      "SPEAK": 4,
+      "None": 1
+    }
+  }
+}
