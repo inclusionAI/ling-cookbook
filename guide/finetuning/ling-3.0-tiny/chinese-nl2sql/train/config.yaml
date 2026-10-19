@@ -1,0 +1,44 @@
+# QLoRA 微调配置 —— 中文 NL2SQL (Ling-3.0-tiny)
+# 用法: python3 train/train.py --config train/config.yaml
+# 也可用命令行参数覆盖以下任意字段 (--base-model / --epochs / --lr 等)。
+
+base_model: inclusionAI/Ling-3.0-tiny
+train_file: ../data/train.jsonl
+val_file: ../data/val.jsonl
+output_dir: ./output
+seed: 42
+
+quantization:
+  load_in_4bit: true
+  bnb_4bit_compute_dtype: bfloat16
+  bnb_4bit_quant_type: nf4
+  bnb_4bit_use_double_quant: true
+
+lora:
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  target_modules: all-linear
+  bias: none
+  task_type: CAUSAL_LM
+
+training:
+  num_train_epochs: 3
+  per_device_train_batch_size: 4
+  per_device_eval_batch_size: 4
+  gradient_accumulation_steps: 4
+  learning_rate: 1.0e-4
+  lr_scheduler_type: cosine
+  warmup_ratio: 0.03
+  max_seq_length: 1024
+  gradient_checkpointing: true
+  fp16: false
+  bf16: true
+  logging_steps: 10
+  save_strategy: steps
+  save_steps: 100
+  eval_strategy: steps
+  eval_steps: 100
+  save_total_limit: 2
+  load_best_model_at_end: false
+  report_to: none
