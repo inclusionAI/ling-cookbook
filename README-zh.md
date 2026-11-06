@@ -92,6 +92,7 @@
 | 模型 | 设备 | 框架 | 方法 | 说明 |
 | :--- | :--- | :--- | :--- | :--- |
 | Ling-3.0-tiny | Apple Silicon Mac (≥ 16GB) | AReno (MLX) | 4-bit QLoRA (SFT) | [文档: 基于 AReno 微调模拟组合支付决策](guide/finetuning/ling-3.0-tiny/mac-mlx-payment-lora-zh.ipynb) |
+| Ling-3.0-tiny | 8× NVIDIA H20 (96GB) | AReno | LoRA (SFT) | [文档: 全双工对话大脑（话轮管理）](guide/finetuning/ling-3.0-tiny/full-duplex-dialogue-brain/README-zh.md) |
 
 <a id="recommended-skills"></a>
 ### 部分能力 Agent Skill
