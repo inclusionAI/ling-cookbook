@@ -13,6 +13,7 @@ scripts/compile_notebooks.py
 
 import sys
 import os
+import shutil
 import subprocess
 import argparse
 from pathlib import Path
@@ -29,9 +30,22 @@ SRC_DIR = ROOT_DIR / "src"
 def find_md_files():
     return sorted(list(SRC_DIR.glob("**/*.md")))
 
+def find_companion_files():
+    return sorted(
+        p for p in SRC_DIR.rglob("*")
+        if p.is_file()
+        and p.suffix != ".md"
+        and "__pycache__" not in p.parts
+        and not p.name.startswith(".")
+    )
+
 def get_target_ipynb_path(md_path: Path) -> Path:
     rel_path = md_path.relative_to(SRC_DIR)
     return ROOT_DIR / rel_path.with_suffix(".ipynb")
+
+def get_target_companion_path(src_path: Path) -> Path:
+    rel_path = src_path.relative_to(SRC_DIR)
+    return ROOT_DIR / rel_path
 
 def get_source_md_path(ipynb_path: Path) -> Path:
     rel_path = ipynb_path.relative_to(ROOT_DIR)
@@ -65,6 +79,13 @@ def compile_all(verbose: bool = True) -> bool:
     for md_file in md_files:
         if not compile_single(md_file, verbose=verbose):
             success = False
+
+    for comp_file in find_companion_files():
+        target_comp = get_target_companion_path(comp_file)
+        target_comp.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(comp_file, target_comp)
+        if verbose:
+            print(f"📄 同步配套文件: {comp_file.relative_to(ROOT_DIR)} -> {target_comp.relative_to(ROOT_DIR)}")
     return success
 
 def export_all() -> bool:

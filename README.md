@@ -92,7 +92,7 @@ Practical recipes for fine-tuning and evaluating Ling models on local or cloud h
 | Model | Device | Framework | Method | Info |
 | :--- | :--- | :--- | :--- | :--- |
 | Ling-3.0-tiny | Apple Silicon Mac (≥ 16GB) | AReno (MLX) | 4-bit QLoRA (SFT) | [Recipe: Split-Payment Decision Fine-Tuning with AReno](guide/finetuning/ling-3.0-tiny/mac-mlx-payment-lora.ipynb) |
-| Ling-3.0-tiny | 8× NVIDIA H20 (96GB) | AReno | LoRA (SFT) | [Recipe: Full-Duplex Dialogue Brain (Turn-Taking)](guide/finetuning/ling-3.0-tiny/full-duplex-dialogue-brain/README.md) |
+| Ling-3.0-tiny | 8× NVIDIA H20 (96GB) | AReno | LoRA (SFT) | [Recipe: Full-Duplex Voice Dialogue (Turn-Taking)](guide/finetuning/ling-3.0-tiny/full-duplex-turn-taking-lora/full-duplex-turn-taking-lora.ipynb) |
 
 <a id="recommended-skills"></a>
 ### Agent Skills for Specialized Capabilities
