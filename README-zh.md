@@ -80,6 +80,19 @@
 | Ling-3.0-tiny | Apple Silicon Mac | llama.cpp | BF16 / Q8_0 / Q4_K_M (GGUF) | [文档: llama.cpp Metal 端侧部署指南](guide/local-deploy/ling-3.0-tiny/mac-llamacpp-ling-3-tiny-zh.ipynb) |
 | Ling-3.0-tiny | Apple Silicon Mac | MLX | BF16 / MXFP8 / 4-bit | [文档: MLX-LM 原生端侧部署指南](guide/local-deploy/ling-3.0-tiny/mac-mlx-ling-3-tiny-zh.ipynb) |
 
+<a id="finetuning"></a>
+### 后训练与微调 (`guide/finetuning/`)
+
+包含基于 Ling 系列模型进行端侧或云端微调与评测的实践示例。
+
+<p align="right">
+  <a href="README.md#finetuning">English</a> | <b>简体中文</b>
+</p>
+
+| 模型 | 设备 | 框架 | 方法 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| Ling-3.0-tiny | Apple Silicon Mac (≥ 16GB) | AReno (MLX) | 4-bit QLoRA (SFT) | [文档: 基于 AReno 微调模拟组合支付决策](guide/finetuning/ling-3.0-tiny/mac-mlx-payment-lora-zh.ipynb) |
+
 <a id="recommended-skills"></a>
 ### 部分能力 Agent Skill
 
@@ -110,3 +123,5 @@
 ## 致谢
 
 - 感谢 Nvidia 团队 [@ly01325](https://github.com/ly01325) 优化和提供 [SGLang Humming 优化部署指南](guide/local-deploy/ling-3.0-flash/dgx-spark-sglang-ling-3-flash-mxfp4-humming-zh.ipynb)，针对 Grace Blackwell (GB10 / SM121) 硬件实现了 Humming MoE 算子加速、在线 FP8 LM Head 与 MTP 投机解码协同优化。
+- 感谢 [@sofan110](https://github.com/sofan110) 提供 [基于 AReno 在 Mac 上微调 Ling-3.0-tiny 模拟组合支付决策指南](guide/finetuning/ling-3.0-tiny/mac-mlx-payment-lora-zh.ipynb)。
+

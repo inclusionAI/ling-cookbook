@@ -80,6 +80,19 @@ Recipes for deploying Ling models for local inference across consumer and workst
 | Ling-3.0-tiny | Apple Silicon Mac | llama.cpp | BF16 / Q8_0 / Q4_K_M (GGUF) | [Recipe: llama.cpp Metal On-Device Deployment Guide](guide/local-deploy/ling-3.0-tiny/mac-llamacpp-ling-3-tiny.ipynb) |
 | Ling-3.0-tiny | Apple Silicon Mac | MLX | BF16 / MXFP8 / 4-bit | [Recipe: MLX-LM On-Device Deployment Guide](guide/local-deploy/ling-3.0-tiny/mac-mlx-ling-3-tiny.ipynb) |
 
+<a id="finetuning"></a>
+### Post-Training & Fine-Tuning (`guide/finetuning/`)
+
+Practical recipes for fine-tuning and evaluating Ling models on local or cloud hardware.
+
+<p align="right">
+  <b>English</b> | <a href="README-zh.md#finetuning">简体中文</a>
+</p>
+
+| Model | Device | Framework | Method | Info |
+| :--- | :--- | :--- | :--- | :--- |
+| Ling-3.0-tiny | Apple Silicon Mac (≥ 16GB) | AReno (MLX) | 4-bit QLoRA (SFT) | [Recipe: Split-Payment Decision Fine-Tuning with AReno](guide/finetuning/ling-3.0-tiny/mac-mlx-payment-lora.ipynb) |
+
 <a id="recommended-skills"></a>
 ### Agent Skills for Specialized Capabilities
 
@@ -110,3 +123,4 @@ After editing files under `src/`, run `python3 scripts/compile_notebooks.py` to 
 ## Acknowledgements
 
 - Special thanks to the NVIDIA team [@ly01325](https://github.com/ly01325) for optimizing and contributing the [SGLang Humming Deployment Guide](guide/local-deploy/ling-3.0-flash/dgx-spark-sglang-ling-3-flash-mxfp4-humming.ipynb), delivering Humming MoE operator acceleration, online FP8 LM Head, and MTP speculative decoding synergy on Grace Blackwell (GB10 / SM121) hardware.
+- Thanks to [@sofan110](https://github.com/sofan110) for contributing the [Split-Payment Decision Fine-Tuning Guide on Mac with AReno](guide/finetuning/ling-3.0-tiny/mac-mlx-payment-lora.ipynb).
