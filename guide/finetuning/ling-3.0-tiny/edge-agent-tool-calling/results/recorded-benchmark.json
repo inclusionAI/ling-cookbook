@@ -1,0 +1,37 @@
+{
+  "base": {
+    "total": 60,
+    "first_object_json": 55,
+    "first_object_json_pct": 91.7,
+    "routing_correct": 53,
+    "routing_pct": 88.3,
+    "reject_case_hits": 5,
+    "reject_case_total": 8,
+    "reject_case_hit_rate_pct": 62.5,
+    "strict_full_response_json": 44,
+    "routing_failures": [
+      "ling_tool_0549",
+      "ling_tool_0552",
+      "ling_tool_0565",
+      "ling_tool_0569",
+      "ling_tool_0574",
+      "ling_tool_0579",
+      "ling_tool_0581"
+    ]
+  },
+  "lora": {
+    "total": 60,
+    "first_object_json": 60,
+    "first_object_json_pct": 100.0,
+    "routing_correct": 59,
+    "routing_pct": 98.3,
+    "reject_case_hits": 8,
+    "reject_case_total": 8,
+    "reject_case_hit_rate_pct": 100.0,
+    "strict_full_response_json": 0,
+    "routing_failures": [
+      "ling_tool_0570"
+    ]
+  },
+  "metric_definitions": "parse first complete JSON object; requires tool:string and arguments:object; use expected_tool for routing; reject-case success denominator 8"
+}

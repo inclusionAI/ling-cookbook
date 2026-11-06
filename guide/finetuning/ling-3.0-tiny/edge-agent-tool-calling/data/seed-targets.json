@@ -1,0 +1,1745 @@
+[
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "app/agents",
+        "recursive": false
+      }
+    },
+    "source_user_prompt": "列出 app/agents 目录的直接内容，不要展开子目录。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "app/agents",
+        "recursive": true
+      }
+    },
+    "source_user_prompt": "递归列出 app/agents 下面所有层级的文件和目录。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "app/agents"
+      }
+    },
+    "source_user_prompt": "看看 app/agents 里面有什么。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "app/agents"
+      }
+    },
+    "source_user_prompt": "显示 app/agents 文件夹下的项目。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "app/agents",
+        "recursive": true
+      }
+    },
+    "source_user_prompt": "把 app/agents 的目录树完整展开。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "app/agents",
+        "recursive": false
+      }
+    },
+    "source_user_prompt": "只查看 app/agents 当前这一层。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "app/agents"
+      }
+    },
+    "source_user_prompt": "请检查一下 app/agents 目录内容。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "app/agents",
+        "recursive": true
+      }
+    },
+    "source_user_prompt": "包含所有嵌套目录，列出 app/agents。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "engine/runtime",
+        "recursive": false
+      }
+    },
+    "source_user_prompt": "列出 engine/runtime 目录的直接内容，不要展开子目录。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "engine/runtime",
+        "recursive": true
+      }
+    },
+    "source_user_prompt": "递归列出 engine/runtime 下面所有层级的文件和目录。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "engine/runtime"
+      }
+    },
+    "source_user_prompt": "看看 engine/runtime 里面有什么。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "engine/runtime"
+      }
+    },
+    "source_user_prompt": "显示 engine/runtime 文件夹下的项目。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "engine/runtime",
+        "recursive": true
+      }
+    },
+    "source_user_prompt": "把 engine/runtime 的目录树完整展开。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "engine/runtime",
+        "recursive": false
+      }
+    },
+    "source_user_prompt": "只查看 engine/runtime 当前这一层。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "engine/runtime"
+      }
+    },
+    "source_user_prompt": "请检查一下 engine/runtime 目录内容。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "engine/runtime",
+        "recursive": true
+      }
+    },
+    "source_user_prompt": "包含所有嵌套目录，列出 engine/runtime。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "engine/connectors",
+        "recursive": false
+      }
+    },
+    "source_user_prompt": "列出 engine/connectors 目录的直接内容，不要展开子目录。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "engine/connectors",
+        "recursive": true
+      }
+    },
+    "source_user_prompt": "递归列出 engine/connectors 下面所有层级的文件和目录。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "engine/connectors"
+      }
+    },
+    "source_user_prompt": "看看 engine/connectors 里面有什么。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "engine/connectors"
+      }
+    },
+    "source_user_prompt": "显示 engine/connectors 文件夹下的项目。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "engine/connectors",
+        "recursive": true
+      }
+    },
+    "source_user_prompt": "把 engine/connectors 的目录树完整展开。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "engine/connectors",
+        "recursive": false
+      }
+    },
+    "source_user_prompt": "只查看 engine/connectors 当前这一层。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "engine/connectors"
+      }
+    },
+    "source_user_prompt": "请检查一下 engine/connectors 目录内容。"
+  },
+  {
+    "split": "train",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "engine/connectors",
+        "recursive": true
+      }
+    },
+    "source_user_prompt": "包含所有嵌套目录，列出 engine/connectors。"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "app/agents/planner.py"
+      }
+    },
+    "source_user_prompt": "读取文件 app/agents/planner.py。"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "app/agents/planner.py"
+      }
+    },
+    "source_user_prompt": "打开 app/agents/planner.py 看看内容。"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "app/agents/planner.py",
+        "offset": 0,
+        "limit": 20
+      }
+    },
+    "source_user_prompt": "读取 app/agents/planner.py 前 20 行。"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "app/agents/planner.py",
+        "offset": 0,
+        "limit": 15
+      }
+    },
+    "source_user_prompt": "查看 app/agents/planner.py 最开始的 15 行。"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "app/agents/planner.py",
+        "offset": 4,
+        "limit": 10
+      }
+    },
+    "source_user_prompt": "读取 app/agents/planner.py 第 5 行到第 14 行。"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "app/agents/planner.py",
+        "offset": 4,
+        "limit": 10
+      }
+    },
+    "source_user_prompt": "从 app/agents/planner.py 第 5 行起继续读 10 行。"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "app/agents/planner.py",
+        "offset": 4,
+        "limit": 10
+      }
+    },
+    "source_user_prompt": "请把 app/agents/planner.py 从第 5 行开始的 10 行发给我。"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "app/agents/planner.py"
+      }
+    },
+    "source_user_prompt": "cat app/agents/planner.py"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "engine/runtime/engine.py"
+      }
+    },
+    "source_user_prompt": "读取文件 engine/runtime/engine.py。"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "engine/runtime/engine.py"
+      }
+    },
+    "source_user_prompt": "打开 engine/runtime/engine.py 看看内容。"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "engine/runtime/engine.py",
+        "offset": 0,
+        "limit": 25
+      }
+    },
+    "source_user_prompt": "读取 engine/runtime/engine.py 前 25 行。"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "engine/runtime/engine.py",
+        "offset": 0,
+        "limit": 19
+      }
+    },
+    "source_user_prompt": "查看 engine/runtime/engine.py 最开始的 19 行。"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "engine/runtime/engine.py",
+        "offset": 11,
+        "limit": 13
+      }
+    },
+    "source_user_prompt": "读取 engine/runtime/engine.py 第 12 行到第 24 行。"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "engine/runtime/engine.py",
+        "offset": 11,
+        "limit": 13
+      }
+    },
+    "source_user_prompt": "从 engine/runtime/engine.py 第 12 行起继续读 13 行。"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "engine/runtime/engine.py",
+        "offset": 11,
+        "limit": 13
+      }
+    },
+    "source_user_prompt": "请把 engine/runtime/engine.py 从第 12 行开始的 13 行发给我。"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "engine/runtime/engine.py"
+      }
+    },
+    "source_user_prompt": "cat engine/runtime/engine.py"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "engine/io/fs.py"
+      }
+    },
+    "source_user_prompt": "读取文件 engine/io/fs.py。"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "engine/io/fs.py"
+      }
+    },
+    "source_user_prompt": "打开 engine/io/fs.py 看看内容。"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "engine/io/fs.py",
+        "offset": 0,
+        "limit": 30
+      }
+    },
+    "source_user_prompt": "读取 engine/io/fs.py 前 30 行。"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "engine/io/fs.py",
+        "offset": 0,
+        "limit": 23
+      }
+    },
+    "source_user_prompt": "查看 engine/io/fs.py 最开始的 23 行。"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "engine/io/fs.py",
+        "offset": 18,
+        "limit": 16
+      }
+    },
+    "source_user_prompt": "读取 engine/io/fs.py 第 19 行到第 34 行。"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "engine/io/fs.py",
+        "offset": 18,
+        "limit": 16
+      }
+    },
+    "source_user_prompt": "从 engine/io/fs.py 第 19 行起继续读 16 行。"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "engine/io/fs.py",
+        "offset": 18,
+        "limit": 16
+      }
+    },
+    "source_user_prompt": "请把 engine/io/fs.py 从第 19 行开始的 16 行发给我。"
+  },
+  {
+    "split": "train",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "engine/io/fs.py"
+      }
+    },
+    "source_user_prompt": "cat engine/io/fs.py"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.py",
+        "scope": "app"
+      }
+    },
+    "source_user_prompt": "在 app 目录下查找所有 *.py 文件。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.py",
+        "scope": "app"
+      }
+    },
+    "source_user_prompt": "搜索 app 里面匹配 *.py 的文件。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.py",
+        "scope": "app"
+      }
+    },
+    "source_user_prompt": "请在 app 下找出 *.py。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.py",
+        "scope": "."
+      }
+    },
+    "source_user_prompt": "整个项目里查找 *.py 文件。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.py"
+      }
+    },
+    "source_user_prompt": "帮我找一下 *.py。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.py"
+      }
+    },
+    "source_user_prompt": "查找工作区中符合 *.py 的路径。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.py",
+        "scope": "app"
+      }
+    },
+    "source_user_prompt": "列出 app 下所有符合模式 *.py 的文件路径。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.py",
+        "scope": "app"
+      }
+    },
+    "source_user_prompt": "在目录 app 搜索模式 *.py。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.ts",
+        "scope": "qa"
+      }
+    },
+    "source_user_prompt": "在 qa 目录下查找所有 *.ts 文件。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.ts",
+        "scope": "qa"
+      }
+    },
+    "source_user_prompt": "搜索 qa 里面匹配 *.ts 的文件。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.ts",
+        "scope": "qa"
+      }
+    },
+    "source_user_prompt": "请在 qa 下找出 *.ts。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.ts",
+        "scope": "."
+      }
+    },
+    "source_user_prompt": "整个项目里查找 *.ts 文件。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.ts"
+      }
+    },
+    "source_user_prompt": "帮我找一下 *.ts。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.ts"
+      }
+    },
+    "source_user_prompt": "查找工作区中符合 *.ts 的路径。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.ts",
+        "scope": "qa"
+      }
+    },
+    "source_user_prompt": "列出 qa 下所有符合模式 *.ts 的文件路径。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.ts",
+        "scope": "qa"
+      }
+    },
+    "source_user_prompt": "在目录 qa 搜索模式 *.ts。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.json",
+        "scope": "settings"
+      }
+    },
+    "source_user_prompt": "在 settings 目录下查找所有 *.json 文件。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.json",
+        "scope": "settings"
+      }
+    },
+    "source_user_prompt": "搜索 settings 里面匹配 *.json 的文件。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.json",
+        "scope": "settings"
+      }
+    },
+    "source_user_prompt": "请在 settings 下找出 *.json。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.json",
+        "scope": "."
+      }
+    },
+    "source_user_prompt": "整个项目里查找 *.json 文件。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.json"
+      }
+    },
+    "source_user_prompt": "帮我找一下 *.json。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.json"
+      }
+    },
+    "source_user_prompt": "查找工作区中符合 *.json 的路径。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.json",
+        "scope": "settings"
+      }
+    },
+    "source_user_prompt": "列出 settings 下所有符合模式 *.json 的文件路径。"
+  },
+  {
+    "split": "train",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.json",
+        "scope": "settings"
+      }
+    },
+    "source_user_prompt": "在目录 settings 搜索模式 *.json。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "事件溯源快照压缩与重建"
+      }
+    },
+    "source_user_prompt": "在代码库中检索与“事件溯源快照压缩与重建”相关的实现。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "事件溯源快照压缩与重建"
+      }
+    },
+    "source_user_prompt": "帮我定位 事件溯源快照压缩与重建 对应的代码和文档。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "事件溯源快照压缩与重建"
+      }
+    },
+    "source_user_prompt": "查找项目里关于 事件溯源快照压缩与重建 的实现线索。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "事件溯源快照压缩与重建",
+        "top_k": 3
+      }
+    },
+    "source_user_prompt": "围绕 事件溯源快照压缩与重建 检索相关片段，最多返回 3 条。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "事件溯源快照压缩与重建",
+        "top_k": 3
+      }
+    },
+    "source_user_prompt": "请从工作区检索“事件溯源快照压缩与重建”，给我最相关的 3 个结果。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "事件溯源快照压缩与重建"
+      }
+    },
+    "source_user_prompt": "在代码和说明文档中查一下 事件溯源快照压缩与重建。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "事件溯源快照压缩与重建",
+        "top_k": 3
+      }
+    },
+    "source_user_prompt": "搜索与 事件溯源快照压缩与重建 有关的内容，候选数量限制为 3。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "事件溯源快照压缩与重建"
+      }
+    },
+    "source_user_prompt": "找一下 事件溯源快照压缩与重建 在仓库中的定义或说明。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "Protobuf 消息 Schema 向前兼容"
+      }
+    },
+    "source_user_prompt": "在代码库中检索与“Protobuf 消息 Schema 向前兼容”相关的实现。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "Protobuf 消息 Schema 向前兼容"
+      }
+    },
+    "source_user_prompt": "帮我定位 Protobuf 消息 Schema 向前兼容 对应的代码和文档。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "Protobuf 消息 Schema 向前兼容"
+      }
+    },
+    "source_user_prompt": "查找项目里关于 Protobuf 消息 Schema 向前兼容 的实现线索。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "Protobuf 消息 Schema 向前兼容",
+        "top_k": 5
+      }
+    },
+    "source_user_prompt": "围绕 Protobuf 消息 Schema 向前兼容 检索相关片段，最多返回 5 条。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "Protobuf 消息 Schema 向前兼容",
+        "top_k": 5
+      }
+    },
+    "source_user_prompt": "请从工作区检索“Protobuf 消息 Schema 向前兼容”，给我最相关的 5 个结果。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "Protobuf 消息 Schema 向前兼容"
+      }
+    },
+    "source_user_prompt": "在代码和说明文档中查一下 Protobuf 消息 Schema 向前兼容。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "Protobuf 消息 Schema 向前兼容",
+        "top_k": 5
+      }
+    },
+    "source_user_prompt": "搜索与 Protobuf 消息 Schema 向前兼容 有关的内容，候选数量限制为 5。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "Protobuf 消息 Schema 向前兼容"
+      }
+    },
+    "source_user_prompt": "找一下 Protobuf 消息 Schema 向前兼容 在仓库中的定义或说明。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "GPU 显存分配器碎片整理"
+      }
+    },
+    "source_user_prompt": "在代码库中检索与“GPU 显存分配器碎片整理”相关的实现。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "GPU 显存分配器碎片整理"
+      }
+    },
+    "source_user_prompt": "帮我定位 GPU 显存分配器碎片整理 对应的代码和文档。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "GPU 显存分配器碎片整理"
+      }
+    },
+    "source_user_prompt": "查找项目里关于 GPU 显存分配器碎片整理 的实现线索。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "GPU 显存分配器碎片整理",
+        "top_k": 8
+      }
+    },
+    "source_user_prompt": "围绕 GPU 显存分配器碎片整理 检索相关片段，最多返回 8 条。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "GPU 显存分配器碎片整理",
+        "top_k": 8
+      }
+    },
+    "source_user_prompt": "请从工作区检索“GPU 显存分配器碎片整理”，给我最相关的 8 个结果。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "GPU 显存分配器碎片整理"
+      }
+    },
+    "source_user_prompt": "在代码和说明文档中查一下 GPU 显存分配器碎片整理。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "GPU 显存分配器碎片整理",
+        "top_k": 8
+      }
+    },
+    "source_user_prompt": "搜索与 GPU 显存分配器碎片整理 有关的内容，候选数量限制为 8。"
+  },
+  {
+    "split": "train",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "GPU 显存分配器碎片整理"
+      }
+    },
+    "source_user_prompt": "找一下 GPU 显存分配器碎片整理 在仓库中的定义或说明。"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "请处理这个请求：写一首关于秋天和城市夜景的现代诗。"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "帮我完成：写一首关于秋天和城市夜景的现代诗。"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "我需要你做一件事：写一首关于秋天和城市夜景的现代诗。"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "现在执行以下需求：写一首关于秋天和城市夜景的现代诗。"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "用户需求如下：写一首关于秋天和城市夜景的现代诗。"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "请根据我的要求操作：写一首关于秋天和城市夜景的现代诗。"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "请处理这个请求：今天武汉的天气怎么样？"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "帮我完成：今天武汉的天气怎么样？"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "我需要你做一件事：今天武汉的天气怎么样？"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "现在执行以下需求：今天武汉的天气怎么样？"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "用户需求如下：今天武汉的天气怎么样？"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "请根据我的要求操作：今天武汉的天气怎么样？"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "请处理这个请求：计算 128 乘以 512。"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "帮我完成：计算 128 乘以 512。"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "我需要你做一件事：计算 128 乘以 512。"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "现在执行以下需求：计算 128 乘以 512。"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "用户需求如下：计算 128 乘以 512。"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "请根据我的要求操作：计算 128 乘以 512。"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "请处理这个请求：把下面这段中文翻译成法语。"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "帮我完成：把下面这段中文翻译成法语。"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "我需要你做一件事：把下面这段中文翻译成法语。"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "现在执行以下需求：把下面这段中文翻译成法语。"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "用户需求如下：把下面这段中文翻译成法语。"
+  },
+  {
+    "split": "train",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "请根据我的要求操作：把下面这段中文翻译成法语。"
+  },
+  {
+    "split": "validation",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "workspace/modules"
+      }
+    },
+    "source_user_prompt": "展示 workspace/modules 目录的直接子项。"
+  },
+  {
+    "split": "validation",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "vendor/adapters",
+        "recursive": true
+      }
+    },
+    "source_user_prompt": "递归展开 vendor/adapters 的全部目录层级。"
+  },
+  {
+    "split": "validation",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "config/prod",
+        "recursive": false
+      }
+    },
+    "source_user_prompt": "列出 config/prod 当前层，不进入更深目录。"
+  },
+  {
+    "split": "validation",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "modules/dispatcher.py"
+      }
+    },
+    "source_user_prompt": "打开 modules/dispatcher.py。"
+  },
+  {
+    "split": "validation",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "output/trace.txt",
+        "offset": 13,
+        "limit": 16
+      }
+    },
+    "source_user_prompt": "读取 output/trace.txt 第 14 行到第 29 行。"
+  },
+  {
+    "split": "validation",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "CHANGELOG.md",
+        "offset": 0,
+        "limit": 35
+      }
+    },
+    "source_user_prompt": "查看 CHANGELOG.md 的前 35 行。"
+  },
+  {
+    "split": "validation",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.py",
+        "scope": "modules"
+      }
+    },
+    "source_user_prompt": "在 modules 中查找 *.py。"
+  },
+  {
+    "split": "validation",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.lock",
+        "scope": "."
+      }
+    },
+    "source_user_prompt": "整个仓库找所有 *.lock 文件。"
+  },
+  {
+    "split": "validation",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.feature",
+        "scope": "qa"
+      }
+    },
+    "source_user_prompt": "搜索 qa 目录下的 *.feature 文件。"
+  },
+  {
+    "split": "validation",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "分布式锁续租的实现"
+      }
+    },
+    "source_user_prompt": "检索工作区中关于分布式锁续租的实现。"
+  },
+  {
+    "split": "validation",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "API 请求签名校验相关代码",
+        "top_k": 7
+      }
+    },
+    "source_user_prompt": "找出 API 请求签名校验相关代码，最多给 7 个结果。"
+  },
+  {
+    "split": "validation",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "模型权重加载和设备映射逻辑"
+      }
+    },
+    "source_user_prompt": "定位模型权重加载和设备映射逻辑。"
+  },
+  {
+    "split": "validation",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "帮我写一段生日祝福。"
+  },
+  {
+    "split": "validation",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "查一下现在东京几点。"
+  },
+  {
+    "split": "validation",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "把 2.5 公里换算成米。"
+  },
+  {
+    "split": "test",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "src/agent"
+      }
+    },
+    "source_user_prompt": "列出 `src/agent` 目录下的内容。"
+  },
+  {
+    "split": "test",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "packages/runtime",
+        "recursive": true
+      }
+    },
+    "source_user_prompt": "递归查看 `packages/runtime` 下的全部文件和子目录。"
+  },
+  {
+    "split": "test",
+    "category": "list_files",
+    "target": {
+      "name": "list_files",
+      "arguments": {
+        "path": "configs/production",
+        "recursive": false
+      }
+    },
+    "source_user_prompt": "只看 `configs/production` 当前这一层，不要进入子目录。"
+  },
+  {
+    "split": "test",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "src/agent/router.py"
+      }
+    },
+    "source_user_prompt": "打开 `src/agent/router.py` 看一下。"
+  },
+  {
+    "split": "test",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "logs/worker.log",
+        "offset": 30,
+        "limit": 20
+      }
+    },
+    "source_user_prompt": "读取 `logs/worker.log` 从第 31 行开始的 20 行。"
+  },
+  {
+    "split": "test",
+    "category": "read_file",
+    "target": {
+      "name": "read_file",
+      "arguments": {
+        "path": "README.md",
+        "offset": 0,
+        "limit": 25
+      }
+    },
+    "source_user_prompt": "看 `README.md` 前 25 行。"
+  },
+  {
+    "split": "test",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.py",
+        "scope": "src"
+      }
+    },
+    "source_user_prompt": "在 `src` 下面找所有 `*.py` 文件。"
+  },
+  {
+    "split": "test",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "test_*.py",
+        "scope": "."
+      }
+    },
+    "source_user_prompt": "查找项目里文件名以 `test_` 开头的 Python 测试文件。"
+  },
+  {
+    "split": "test",
+    "category": "search_files",
+    "target": {
+      "name": "search_files",
+      "arguments": {
+        "pattern": "*.yaml",
+        "scope": "configs"
+      }
+    },
+    "source_user_prompt": "在 `configs` 目录内搜索 `*.yaml`。"
+  },
+  {
+    "split": "test",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "Token 过期后如何刷新并重试",
+        "top_k": 5
+      }
+    },
+    "source_user_prompt": "检索 Token 过期后如何刷新并重试，最多给我 5 个相关结果。"
+  },
+  {
+    "split": "test",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "跨域 CORS 配置在哪里定义"
+      }
+    },
+    "source_user_prompt": "查一下跨域 CORS 配置在哪里定义。"
+  },
+  {
+    "split": "test",
+    "category": "text_retrieval",
+    "target": {
+      "name": "text_retrieval",
+      "arguments": {
+        "query": "数据库连接池配置的相关代码段",
+        "top_k": 8
+      }
+    },
+    "source_user_prompt": "找出数据库连接池配置的相关代码段，最多给 8 个候选。"
+  },
+  {
+    "split": "test",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "帮我安排明天下午的会议并邀请项目组成员。"
+  },
+  {
+    "split": "test",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "纽约现在当地时间是多少？"
+  },
+  {
+    "split": "test",
+    "category": "reject_none",
+    "target": {
+      "name": "reject_none",
+      "arguments": {
+        "reason": "unsupported_task"
+      }
+    },
+    "source_user_prompt": "把 37 摄氏度换算成华氏度。"
+  }
+]

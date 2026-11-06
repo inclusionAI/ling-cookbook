@@ -1,3 +1,35 @@
+## About this fork / 本 fork 说明
+
+This fork of [`inclusionAI/ling-cookbook`](https://github.com/inclusionAI/ling-cookbook) hosts the deliverables for **[Issue #11 — Ling-3.0-tiny Fine-tuning Recipe (2026 Ant Open Source Camp · University Tour)](https://github.com/inclusionAI/ling-cookbook/issues/11)**, maintained by [@lostlight530](https://github.com/lostlight530) (Jiang, Xuanyi · [ORCID 0009-0001-3617-0832](https://orcid.org/0009-0001-3617-0832)).
+
+本 fork 在上游基础上承载一项交付资产，其余内容与上游 `main` 保持同步：
+
+| 资产 | 位置 | 说明 |
+|---|---|---|
+| **LoRA Adapter 物理权重** | [`adapter.tar.gz`](adapter.tar.gz)（本分支根目录） | Ling-3.0-tiny 端侧 Agent 工具调用 QLoRA 产物；`adapter_model.safetensors` 8,276,480 B；SHA-256 `0d17c57b149c935abad90fc76238fe8cce672d3b67894d5eccba293898d6a5fe` |
+| **Recipe（PR 源）** | 分支 `edge-agent-tool-calling` → `guide/finetuning/ling-3.0-tiny/edge-agent-tool-calling/` | 已通过 PR 提交至上游；含说明文档、训练脚本、全量语料、评测证据与可重算脚本 |
+
+### 分支约定 / Branch policy
+
+- `main`：跟随上游 `inclusionAI:main` 同步，仅额外挂载 `adapter.tar.gz` 与本说明节——**不承载任何实验分支内容**
+- `edge-agent-tool-calling`：交付分支，PR diff 仅含 recipe 目录纯文本（无二进制）
+
+### 资产引用 / Citing the adapter
+
+```bibtex
+@misc{jiang2026lingedge,
+  author       = {Jiang, Xuanyi},
+  title        = {Ling-3.0-tiny Edge Agent Tool Calling QLoRA Adapter},
+  year         = {2026},
+  howpublished = {\url{https://github.com/lostlight530/ling-cookbook/blob/main/adapter.tar.gz}},
+  note         = {LoRA r=8 $\alpha$=16, 4-bit NF4, seed-42 recipe; ORCID 0009-0001-3617-0832}
+}
+```
+
+> 上游说明（未改动）：以下为 `inclusionAI/ling-cookbook` 原始 README 内容。
+
+---
+
 <p align="right">
   <b>English</b> | <a href="README-zh.md">简体中文</a>
 </p>
