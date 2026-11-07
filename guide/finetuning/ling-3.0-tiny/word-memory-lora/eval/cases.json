@@ -1,0 +1,98 @@
+[
+  {
+    "id": "train_assurance",
+    "split": "train",
+    "word": "assurance",
+    "instruction": "请给出英语单词「assurance」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。"
+  },
+  {
+    "id": "train_viciously",
+    "split": "train",
+    "word": "viciously",
+    "instruction": "请给出英语单词「viciously」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。"
+  },
+  {
+    "id": "photosynthesis",
+    "word": "photosynthesis",
+    "instruction": "请给出英语单词「photosynthesis」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】n. 光合作用\n【记忆方法】photo-（光）+ synthesis（合成）→ 植物利用光把物质合成养分的过程，即光合作用。\n【例句】Photosynthesis allows plants to convert light into chemical energy. 光合作用使植物能够把光转化为化学能。",
+    "split": "held_out"
+  },
+  {
+    "id": "inevitable",
+    "word": "inevitable",
+    "instruction": "请给出英语单词「inevitable」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】adj. 不可避免的，必然发生的\n【记忆方法】in-（不）+ evitable（可避免的）→ 不能避免的，即不可避免的。\n【例句】Change is inevitable in a rapidly developing field. 在快速发展的领域中，变化是不可避免的。",
+    "split": "held_out"
+  },
+  {
+    "id": "meticulous",
+    "word": "meticulous",
+    "instruction": "请给出英语单词「meticulous」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】adj. 一丝不苟的，极注意细节的\n【记忆方法】联想 meticulous 的核心是“连小细节也不放过”：做实验时把每个步骤和数据都仔细核对的人，就是 meticulous。\n【例句】She kept meticulous records of every experiment. 她对每次实验都做了细致详尽的记录。",
+    "split": "held_out"
+  },
+  {
+    "id": "ambiguous",
+    "word": "ambiguous",
+    "instruction": "请给出英语单词「ambiguous」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】adj. 模棱两可的，有歧义的\n【记忆方法】ambi-（两边）+ -ous（形容词后缀）→ 一句话能向两种意思理解，就是有歧义的。\n【例句】The instructions were ambiguous, so we asked for clarification. 这些说明有歧义，因此我们请求进一步解释。",
+    "split": "held_out"
+  },
+  {
+    "id": "resilient",
+    "word": "resilient",
+    "instruction": "请给出英语单词「resilient」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】adj. 有韧性的，能迅速恢复的\n【记忆方法】联想被压弯后弹回原状的弹簧：遭受挫折后又能恢复的人或系统，就是 resilient。\n【例句】A resilient team can recover quickly from setbacks. 有韧性的团队能够迅速从挫折中恢复。",
+    "split": "held_out"
+  },
+  {
+    "id": "scrutinize",
+    "word": "scrutinize",
+    "instruction": "请给出英语单词「scrutinize」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】v. 仔细检查，认真审查\n【记忆方法】联想到近义词 scrutiny（仔细审查）：把 scrutiny 变成动词 scrutinize，就是把材料逐条认真检查。\n【例句】Reviewers scrutinize the data before accepting the paper. 审稿人在接收论文前会仔细审查数据。",
+    "split": "held_out"
+  },
+  {
+    "id": "deteriorate",
+    "word": "deteriorate",
+    "instruction": "请给出英语单词「deteriorate」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】v. 恶化，变坏\n【记忆方法】联想设备从正常逐渐 deteriorate（变差）到故障：性能不断下降，就是 deteriorate。\n【例句】Without maintenance, the machine will deteriorate over time. 缺乏维护时，这台机器会随着时间推移而老化。",
+    "split": "held_out"
+  },
+  {
+    "id": "pragmatic",
+    "word": "pragmatic",
+    "instruction": "请给出英语单词「pragmatic」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】adj. 务实的，讲求实际的\n【记忆方法】联想 pragmatic 的人不先争论理论，而先问“这个办法实际能不能解决问题”，以实际效果为重。\n【例句】We need a pragmatic solution that works with our current hardware. 我们需要一个能在现有硬件上运行的务实方案。",
+    "split": "held_out"
+  },
+  {
+    "id": "coherent",
+    "word": "coherent",
+    "instruction": "请给出英语单词「coherent」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】adj. 连贯的，条理清楚的\n【记忆方法】co-（共同）+ here（连接）→ 各部分紧密连接、前后一致，所以 coherent 表示连贯的。\n【例句】The report presents a coherent explanation of the results. 这份报告对结果作出了连贯的解释。",
+    "split": "held_out"
+  },
+  {
+    "id": "substantiate",
+    "word": "substantiate",
+    "instruction": "请给出英语单词「substantiate」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】v. 用事实或证据证实\n【记忆方法】联想到 substance（实质、依据）：为观点拿出实质性证据，就是 substantiate。\n【例句】The researcher provided data to substantiate the claim. 研究人员提供了数据来证实这一主张。",
+    "split": "held_out"
+  },
+  {
+    "id": "cumbersome",
+    "word": "cumbersome",
+    "instruction": "请给出英语单词「cumbersome」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】adj. 笨重的，繁琐难用的\n【记忆方法】想象抱着 cumbersome 的大箱子爬楼梯：又大又难处理；用于流程时表示繁琐难用。\n【例句】The old registration process was slow and cumbersome. 旧的注册流程缓慢而繁琐。",
+    "split": "held_out"
+  },
+  {
+    "id": "plausible",
+    "word": "plausible",
+    "instruction": "请给出英语单词「plausible」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】adj. 看似合理的，貌似可信的\n【记忆方法】联想一个解释“听起来讲得通”，但还需证据验证：plausible 是看似合理，不等于已经证实。\n【例句】Her explanation sounds plausible, but we still need evidence. 她的解释听起来合理，但我们仍需要证据。",
+    "split": "held_out"
+  }
+]
