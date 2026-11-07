@@ -107,7 +107,7 @@ python eval/score_outputs.py results/base-eager.json \
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 python infer.py \
-  --model "$MODEL" --adapter yucki/ling-word-memory-lora-r8-pilot --word photosynthesis
+  --model "$MODEL" --adapter work/lora-r8-pilot/final --word photosynthesis
 ```
 
 ## 性能与限制
@@ -123,4 +123,23 @@ CUDA_VISIBLE_DEVICES=0 python infer.py \
 
 ## 权重
 
-权重链接将在完成可下载验证后列于此处；PR 仓库不直接存放数百 MiB 的二进制 Adapter。
+已验证的小规模 Adapter 托管于 [GitHub Release](https://github.com/Picodet/ling-cookbook/releases/tag/ling-word-memory-lora-r8-pilot)，符合 Issue #11 的 LoRA 资产托管方式：
+
+```bash
+mkdir -p work/lora-r8-pilot/final
+BASE_URL=https://github.com/Picodet/ling-cookbook/releases/download/ling-word-memory-lora-r8-pilot
+for file in adapter_model.safetensors adapter_config.json tokenizer.json \
+  tokenizer_config.json special_tokens_map.json chat_template.jinja; do
+  curl -fL "$BASE_URL/$file" -o "work/lora-r8-pilot/final/$file"
+done
+echo '1c682d99cd845fcd4d6d58cf250bb44e2e3f5ef502cbabcc1e32adc66b31ba4c  work/lora-r8-pilot/final/adapter_model.safetensors' | sha256sum -c -
+```
+
+Adapter 为 603,042,504 字节，因目标模块覆盖 MLA/KDA 和专家层，不能按“只有几十 MiB”估计。下载后用本地目录推理：
+
+```bash
+CUDA_VISIBLE_DEVICES=0 python infer.py \
+  --model "$MODEL" --adapter work/lora-r8-pilot/final --word photosynthesis
+```
+
+[Hugging Face 模型仓库](https://huggingface.co/yucki/ling-word-memory-lora-r8-pilot)目前仅存放 README、配置和 tokenizer，**尚无 Adapter 大文件**，不能作为该权重的加载地址。
