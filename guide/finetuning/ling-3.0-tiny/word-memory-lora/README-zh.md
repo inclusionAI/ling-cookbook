@@ -126,11 +126,19 @@ CUDA_VISIBLE_DEVICES=0 python infer.py \
 已验证的小规模 Adapter 托管于 [GitHub Release](https://github.com/Picodet/ling-cookbook/releases/tag/ling-word-memory-lora-r8-pilot)，符合 Issue #11 的 LoRA 资产托管方式：
 
 ```bash
-mkdir -p work/lora-r8-pilot/final
+mkdir -p work/lora-r8-pilot/final work/lora-r8-pilot/parts
 BASE_URL=https://github.com/Picodet/ling-cookbook/releases/download/ling-word-memory-lora-r8-pilot
-for file in adapter_model.safetensors adapter_config.json tokenizer.json \
-  tokenizer_config.json special_tokens_map.json chat_template.jinja; do
-  curl -fL "$BASE_URL/$file" -o "work/lora-r8-pilot/final/$file"
+for i in $(seq -w 1 36); do
+  curl --retry 5 --retry-all-errors -fL \
+    "$BASE_URL/adapter_model.safetensors.part-0$i" \
+    -o "work/lora-r8-pilot/parts/adapter_model.safetensors.part-0$i"
+done
+cat work/lora-r8-pilot/parts/adapter_model.safetensors.part-* \
+  > work/lora-r8-pilot/final/adapter_model.safetensors
+for file in adapter_config.json tokenizer.json tokenizer_config.json \
+  special_tokens_map.json chat_template.jinja; do
+  curl --retry 5 --retry-all-errors -fL "$BASE_URL/$file" \
+    -o "work/lora-r8-pilot/final/$file"
 done
 echo '1c682d99cd845fcd4d6d58cf250bb44e2e3f5ef502cbabcc1e32adc66b31ba4c  work/lora-r8-pilot/final/adapter_model.safetensors' | sha256sum -c -
 ```
