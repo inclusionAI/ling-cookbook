@@ -93,6 +93,7 @@ Practical recipes for fine-tuning and evaluating Ling models on local or cloud h
 | :--- | :--- | :--- | :--- | :--- |
 | Ling-3.0-tiny | Apple Silicon Mac (≥ 16GB) | AReno (MLX) | 4-bit QLoRA (SFT) | [Recipe: Split-Payment Decision Fine-Tuning with AReno](guide/finetuning/ling-3.0-tiny/mac-mlx-payment-lora.ipynb) |
 | Ling-3.0-tiny | 8× NVIDIA H20 (96GB) | AReno | LoRA (SFT) | [Recipe: Full-Duplex Voice Dialogue (Turn-Taking)](guide/finetuning/ling-3.0-tiny/full-duplex-turn-taking-lora/full-duplex-turn-taking-lora.ipynb) |
+| Ling-3.0-tiny | Google Colab L4 (22GB) / T4 (15GB) | Transformers + PEFT + bitsandbytes | 4-bit QLoRA (SFT) | [Recipe: Agent Tool-Calling Safety (Cloud QLoRA Fine-Tuning)](guide/finetuning/ling-3.0-tiny/agent-tool-safety-qlora/agent-tool-safety-qlora.ipynb) |
 
 <a id="recommended-skills"></a>
 ### Agent Skills for Specialized Capabilities
@@ -125,3 +126,4 @@ After editing files under `src/`, run `python3 scripts/compile_notebooks.py` to 
 
 - Special thanks to the NVIDIA team [@ly01325](https://github.com/ly01325) for optimizing and contributing the [SGLang Humming Deployment Guide](guide/local-deploy/ling-3.0-flash/dgx-spark-sglang-ling-3-flash-mxfp4-humming.ipynb), delivering Humming MoE operator acceleration, online FP8 LM Head, and MTP speculative decoding synergy on Grace Blackwell (GB10 / SM121) hardware.
 - Thanks to [@sofan110](https://github.com/sofan110) for contributing the [Split-Payment Decision Fine-Tuning Guide on Mac with AReno](guide/finetuning/ling-3.0-tiny/mac-mlx-payment-lora.ipynb).
+- Thanks to [@lostlight530](https://github.com/lostlight530) for contributing the [Agent Tool-Calling Safety Cloud QLoRA Fine-Tuning Guide](guide/finetuning/ling-3.0-tiny/agent-tool-safety-qlora/agent-tool-safety-qlora.ipynb).

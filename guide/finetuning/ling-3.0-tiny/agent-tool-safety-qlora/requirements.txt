@@ -1,0 +1,8 @@
+transformers>=4.46.0,<5.0.0
+peft>=0.7.0
+bitsandbytes>=0.43.0
+accelerate>=0.28.0
+datasets>=2.18.0
+flash-linear-attention
+einops
+ninja
