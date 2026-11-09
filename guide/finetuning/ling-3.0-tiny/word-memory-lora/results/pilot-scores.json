@@ -1,0 +1,306 @@
+{
+  "base": {
+    "cases": 12,
+    "metrics": {
+      "starts_with_meaning_tag": {
+        "passed": 12,
+        "rate": 1.0
+      },
+      "ordered_three_tags": {
+        "passed": 11,
+        "rate": 0.9166666666666666
+      },
+      "all_sections_nonempty": {
+        "passed": 11,
+        "rate": 0.9166666666666666
+      },
+      "english_example_present": {
+        "passed": 11,
+        "rate": 0.9166666666666666
+      },
+      "valid": {
+        "passed": 11,
+        "rate": 0.9166666666666666
+      },
+      "stopped_at_eos": {
+        "passed": 11,
+        "rate": 0.9166666666666666
+      }
+    },
+    "per_case": [
+      {
+        "id": "photosynthesis",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 73,
+        "stopped_at_eos": true
+      },
+      {
+        "id": "inevitable",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 74,
+        "stopped_at_eos": true
+      },
+      {
+        "id": "meticulous",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 99,
+        "stopped_at_eos": true
+      },
+      {
+        "id": "ambiguous",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 114,
+        "stopped_at_eos": true
+      },
+      {
+        "id": "resilient",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 98,
+        "stopped_at_eos": true
+      },
+      {
+        "id": "scrutinize",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 89,
+        "stopped_at_eos": true
+      },
+      {
+        "id": "deteriorate",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": false,
+        "all_sections_nonempty": false,
+        "english_example_present": false,
+        "valid": false,
+        "generated_tokens": 384,
+        "stopped_at_eos": false
+      },
+      {
+        "id": "pragmatic",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 100,
+        "stopped_at_eos": true
+      },
+      {
+        "id": "coherent",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 127,
+        "stopped_at_eos": true
+      },
+      {
+        "id": "substantiate",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 105,
+        "stopped_at_eos": true
+      },
+      {
+        "id": "cumbersome",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 111,
+        "stopped_at_eos": true
+      },
+      {
+        "id": "plausible",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 89,
+        "stopped_at_eos": true
+      }
+    ],
+    "scope": "Structural instruction-following checks; no claim of factual or pedagogical quality."
+  },
+  "lora": {
+    "cases": 12,
+    "metrics": {
+      "starts_with_meaning_tag": {
+        "passed": 12,
+        "rate": 1.0
+      },
+      "ordered_three_tags": {
+        "passed": 12,
+        "rate": 1.0
+      },
+      "all_sections_nonempty": {
+        "passed": 12,
+        "rate": 1.0
+      },
+      "english_example_present": {
+        "passed": 12,
+        "rate": 1.0
+      },
+      "valid": {
+        "passed": 12,
+        "rate": 1.0
+      },
+      "stopped_at_eos": {
+        "passed": 12,
+        "rate": 1.0
+      }
+    },
+    "per_case": [
+      {
+        "id": "photosynthesis",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 67,
+        "stopped_at_eos": true
+      },
+      {
+        "id": "inevitable",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 61,
+        "stopped_at_eos": true
+      },
+      {
+        "id": "meticulous",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 121,
+        "stopped_at_eos": true
+      },
+      {
+        "id": "ambiguous",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 102,
+        "stopped_at_eos": true
+      },
+      {
+        "id": "resilient",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 119,
+        "stopped_at_eos": true
+      },
+      {
+        "id": "scrutinize",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 107,
+        "stopped_at_eos": true
+      },
+      {
+        "id": "deteriorate",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 85,
+        "stopped_at_eos": true
+      },
+      {
+        "id": "pragmatic",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 98,
+        "stopped_at_eos": true
+      },
+      {
+        "id": "coherent",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 95,
+        "stopped_at_eos": true
+      },
+      {
+        "id": "substantiate",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 94,
+        "stopped_at_eos": true
+      },
+      {
+        "id": "cumbersome",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 113,
+        "stopped_at_eos": true
+      },
+      {
+        "id": "plausible",
+        "starts_with_meaning_tag": true,
+        "ordered_three_tags": true,
+        "all_sections_nonempty": true,
+        "english_example_present": true,
+        "valid": true,
+        "generated_tokens": 198,
+        "stopped_at_eos": true
+      }
+    ],
+    "scope": "Structural instruction-following checks; no claim of factual or pedagogical quality."
+  }
+}
