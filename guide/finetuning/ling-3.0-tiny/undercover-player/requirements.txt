@@ -1,0 +1,4 @@
+# MLX 端侧 QLoRA recipe 依赖（Python >= 3.10）
+mlx-lm>=0.32.0          # 含 mlx 核心；bailing_hybrid 架构支持自 0.32 起
+transformers>=4.46.0,<5.0.0   # trust-remote-code 加载 Ling 与本地量化所需
+# 应用侧（Avernet 玩家 Bot）另需 openai / websockets，见 Avernet PR 的 INTEGRATION.md

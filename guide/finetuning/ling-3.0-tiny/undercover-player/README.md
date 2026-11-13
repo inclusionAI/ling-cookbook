@@ -23,6 +23,9 @@
 
 ```
 undercover-player/
+├── undercover-player-zh.ipynb  # 中文 walkthrough notebook（快速上手主入口）
+├── undercover-player.ipynb     # English walkthrough notebook
+├── requirements.txt      # 运行依赖（mlx-lm ≥ 0.32）
 ├── data/
 │   ├── word_pairs.py     # 30 组词对 + 属性池（含 6 组留出词对用于泛化测试）
 │   ├── prompting.py      # 训练/推理统一提示词格式（历史窗口化）
@@ -39,7 +42,8 @@ undercover-player/
 │   ├── lora_config.yaml  # QLoRA 超参（rank 8，后 16/24 层）
 │   └── train.sh          # 训练入口
 ├── eval/
-│   ├── evaluate.py       # 微调前后自动评测 → JSON 对比
+│   ├── evaluate.py       # 微调前后自动评测 → JSON 对比（--seed 换种子出误差棒）
+│   ├── selfplay.py       # 自对弈胜率：6 席全模型 + 脚本裁判（含随机基线）
 │   ├── base-on-v3test.json    # 窗口化 test 三方对比：底座基线
 │   ├── lora-v2-on-v3test.json # 同 test 复测 v2（当前收养件）
 │   ├── lora-v3.json           # 窗口化重训 v3 实测（门槛未过）
@@ -105,10 +109,17 @@ python eval/evaluate.py --model ~/models/Ling-3.0-tiny-4bit \
     --data data/test.jsonl --out eval/base.json
 python eval/evaluate.py --model ~/models/Ling-3.0-tiny-4bit --adapter-path adapters \
     --data data/test.jsonl --out eval/lora.json
+# 自对弈胜率（6 席全模型 + 脚本裁判）+ 随机基线参照
+python eval/selfplay.py --model ~/models/Ling-3.0-tiny-4bit --adapter-path adapters \
+    --games 20 --out eval/selfplay.json
+python eval/selfplay.py --model ~/models/Ling-3.0-tiny-4bit --policy random \
+    --games 200 --out eval/selfplay-random.json
 ```
 
 指标：发言字数合规率、泄词率（输出含自己词语任一字）、自然度（排除
-`1. **分析请求：**` 之类的思考前缀）、格式合规率、投票格式合法率、投票正确率。
+`1. **分析请求：**` 之类的思考前缀）、格式合规率、投票格式合法率、投票正确率、
+**自对弈胜率**（平民/卧底胜率，对照纯随机投票基线）。`evaluate.py --seed` 换
+随机种子重跑即可出误差棒（同一 test 多种子对比，见 metrics-history）。
 
 解码协议：固定种子采样（`temp=0.7, top_p=0.9, seed=42`），并用
 `thinking_option="off"` 渲染提示词 + `clean_output()` 剥模板残渣（原因见
