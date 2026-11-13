@@ -1,0 +1,966 @@
+{
+  "summary": {
+    "model": "/Users/lipeilin/models/Ling-3.0-tiny-4bit",
+    "adapter_path": "adapters-v2-run3",
+    "decoding": "temp=0.7,top_p=0.9,seed=42",
+    "n_speak": 60,
+    "speak_len_ok": 1.0,
+    "speak_leak_rate": 0.0667,
+    "speak_natural": 1.0,
+    "speak_format_ok": 0.9333,
+    "speak_exact_match": 0.0333,
+    "n_vote": 36,
+    "vote_format_ok": 1.0,
+    "vote_accuracy": 0.25
+  },
+  "records": [
+    {
+      "task": "speak",
+      "output": "最大的特点就是一杯端上来",
+      "raw": "</think>最大的特点就是一杯端上来",
+      "target": "一个是可以加糖，还有早上来一杯醒脑",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "一家人共用一份，还有皮，而且常见水果",
+      "raw": "</think>一家人共用一份，还有皮，而且常见水果",
+      "target": "很明显解暑神器",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我投3号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，保安护送驾艇，，用完后，还有上网，没错",
+      "raw": "</think>怎么说呢，保安护送驾艇，，用完后，还有上网，没错",
+      "target": "管门禁，没错",
+      "len_ok": true,
+      "leak": true,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我弃权",
+      "raw": "</think>我弃权",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": true
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投4号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，上网，没错",
+      "raw": "</think>怎么说呢，上网，没错",
+      "target": "很明显甜的居多",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投3号",
+      "raw": "</think>我投3号",
+      "target": "我投3号",
+      "format_ok": true,
+      "correct": true
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多",
+      "raw": "</think>和大家说的差不多",
+      "target": "怎么说呢，很有责任心",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，常见吧",
+      "raw": "</think>怎么说呢，常见吧",
+      "target": "我这个也是这样",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是一杯端上来",
+      "raw": "</think>最大的特点就是一杯端上来",
+      "target": "美式和拿铁，还有下午来一杯",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，多上网，没错",
+      "raw": "</think>怎么说呢，多上网，没错",
+      "target": "很明显每天要遛",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，上网，没错",
+      "raw": "</think>怎么说呢，上网，没错",
+      "target": "我觉得自古有诗词写它",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多",
+      "raw": "</think>和大家说的差不多",
+      "target": "我觉得汪汪叫",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我投5号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多",
+      "raw": "</think>和大家说的差不多",
+      "target": "能加珍珠椰果，还有经常排队买",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多",
+      "raw": "</think>和大家说的差不多",
+      "target": "前面说的挺接近的",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多",
+      "raw": "</think>和大家说的差不多",
+      "target": "很明显夏天穿短袖",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多",
+      "raw": "</think>和大家说的差不多",
+      "target": "我觉得陪伴主人",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投4号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "一家人共用一份，还有吃多了上火很上火",
+      "raw": "</think>一家人共用一份，还有吃多了上火很上火",
+      "target": "表皮有网纹吧",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "一家人共用一份，还有上来，没错",
+      "raw": "</think>一家人共用一份，还有上来，没错",
+      "target": "小区门口值班，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，用在身上",
+      "raw": "</think>怎么说呢，用在身上",
+      "target": "上身穿的，还有有衣领",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，上网，没错",
+      "raw": "</think>怎么说呢，上网，没错",
+      "target": "我觉得清冷柔和",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "吃完西瓜皮，而且，而且就是常见水果",
+      "raw": "</think>吃完西瓜皮，而且，而且就是常见水果",
+      "target": "很甜，没错",
+      "len_ok": true,
+      "leak": true,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，上网，没错",
+      "raw": "</think>怎么说呢，上网，没错",
+      "target": "很多人当家人，而且毛茸茸",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多",
+      "raw": "</think>和大家说的差不多",
+      "target": "黑色的籽吧",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投5号",
+      "raw": "</think>我投5号",
+      "target": "我投3号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投4号",
+      "raw": "</think>我投4号",
+      "target": "我投3号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多",
+      "raw": "</think>和大家说的差不多",
+      "target": "有嫦娥玉兔的传说，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，上网下载，得到",
+      "raw": "</think>怎么说呢，上网下载，得到",
+      "target": "前面说的挺接近的",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投3号",
+      "raw": "</think>我投3号",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多",
+      "raw": "</think>和大家说的差不多",
+      "target": "夏天吃，还有闻起来很香",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我弃权",
+      "raw": "</think>我弃权",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，苦涩烘焙食品，帮助身体。",
+      "raw": "</think>怎么说呢，苦涩烘焙食品，帮助身体。",
+      "target": "闻着香喝着苦",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，甜脆脆的",
+      "raw": "</think>怎么说呢，甜脆脆的",
+      "target": "个头不小，切开吃",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多",
+      "raw": "</think>和大家说的差不多",
+      "target": "我这个也是这样",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，穿上",
+      "raw": "</think>怎么说呢，穿上",
+      "target": "要熨烫平整，另外有衣领",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投3号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，打开冰箱巴巴!!插电用的",
+      "raw": "</think>怎么说呢，打开冰箱巴巴</think>!!插电用的",
+      "target": "表皮有网纹，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多",
+      "raw": "</think>和大家说的差不多",
+      "target": "登记来访客人，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投2号",
+      "format_ok": true,
+      "correct": true
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，保安之腰用在身上",
+      "raw": "</think>怎么说呢，保安之腰用在身上",
+      "target": "登记来访客人，没错",
+      "len_ok": true,
+      "leak": true,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是一杯端上来",
+      "raw": "</think>最大的特点就是一杯端上来",
+      "target": "能外卖送到，另外可以加糖",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投3号",
+      "raw": "</think>我投3号",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我投3号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投2号",
+      "format_ok": true,
+      "correct": true
+    },
+    {
+      "task": "vote",
+      "output": "我弃权",
+      "raw": "</think>我弃权",
+      "target": "我投3号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，有剧情",
+      "raw": "</think>怎么说呢，有剧情",
+      "target": "一个是派出所上班，还有很有责任心",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多",
+      "raw": "</think>和大家说的差不多",
+      "target": "一个是衣柜里有好几件，还有上身穿的",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多",
+      "raw": "</think>和大家说的差不多",
+      "target": "满大街的店，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，穿制服",
+      "raw": "</think>怎么说呢，穿制服",
+      "target": "打110找他，抓坏人",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多",
+      "raw": "</think>和大家说的差不多",
+      "target": "对主人很忠诚",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": true
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多",
+      "raw": "</think>和大家说的差不多",
+      "target": "总之就是常见的那种",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "一家人共用一份，还有有",
+      "raw": "</think>一家人共用一份，还有有",
+      "target": "我这个也是这样",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投4号",
+      "raw": "</think>我投4号",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，上网，没错",
+      "raw": "</think>怎么说呢，上网，没错",
+      "target": "一个是要喂食，还有会抓老鼠",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我投4号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我投5号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "咖啡杯里，果皮，而且常用吧",
+      "raw": "</think>咖啡杯里，果皮，而且常用吧",
+      "target": "怎么说呢，早上来一杯醒脑",
+      "len_ok": true,
+      "leak": true,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，上网，没错",
+      "raw": "</think>怎么说呢，上网，没错",
+      "target": "最大的特点就是毛茸茸",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，洗水用，另外有肉条和皮很薄",
+      "raw": "</think>怎么说呢，洗水用，另外有肉条和皮很薄",
+      "target": "前面说的挺接近的",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多",
+      "raw": "</think>和大家说的差不多",
+      "target": "切块摆盘吧",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，水开直接吃。",
+      "raw": "</think>怎么说呢，水开直接吃。",
+      "target": "能外卖送到，而且美式和拿铁",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投5号",
+      "raw": "</think>我投5号",
+      "target": "我投5号",
+      "format_ok": true,
+      "correct": true
+    },
+    {
+      "task": "vote",
+      "output": "我投4号",
+      "raw": "</think>我投4号",
+      "target": "我投4号",
+      "format_ok": true,
+      "correct": true
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多",
+      "raw": "</think>和大家说的差不多",
+      "target": "和大家说的差不多",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": true
+    },
+    {
+      "task": "speak",
+      "output": "一家人共用一份，还有端上来",
+      "raw": "</think>一家人共用一份，还有端上来",
+      "target": "用粗吸管，还有能外卖送到",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投6号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我弃权",
+      "raw": "</think>我弃权",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": true
+    },
+    {
+      "task": "vote",
+      "output": "我弃权",
+      "raw": "</think>我弃权",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "一家人共用一份一份",
+      "raw": "</think>一家人共用一份一份",
+      "target": "都差不多，不重复了",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我投2号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多",
+      "raw": "</think>和大家说的差不多",
+      "target": "和大家说的差不多",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": true
+    },
+    {
+      "task": "speak",
+      "output": "一家人共用一份，还有上网，没错",
+      "raw": "</think>一家人共用一份，还有上网，没错",
+      "target": "很明显配西裤皮鞋",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多",
+      "raw": "</think>和大家说的差不多",
+      "target": "要熨烫平整，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "一家人共用一份，还有有剧情",
+      "raw": "</think>一家人共用一份，还有有剧情",
+      "target": "大家有事找他们，有执法权",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多",
+      "raw": "</think>和大家说的差不多",
+      "target": "都差不多，不重复了",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多",
+      "raw": "</think>和大家说的差不多",
+      "target": "很明显肉眼能看",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，上网，没错",
+      "raw": "</think>怎么说呢，上网，没错",
+      "target": "前面说的挺接近的",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多",
+      "raw": "</think>和大家说的差不多",
+      "target": "我觉得晒被子杀菌",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，冰镇一下更爽",
+      "raw": "</think>怎么说呢，冰镇一下更爽",
+      "target": "一个是切开吃，还有切块摆盘",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "一滴滴眼泪，另外大型猛兽",
+      "raw": "</think>一滴滴眼泪，另外大型猛兽",
+      "target": "打110找他吧",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，皮很薄",
+      "raw": "</think>怎么说呢，皮很薄",
+      "target": "毛茸茸，还有比较高冷",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "一家人共用一份一份一份",
+      "raw": "</think>一家人共用一份一份一份",
+      "target": "白天出现，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投5号",
+      "raw": "</think>我投5号",
+      "target": "我投5号",
+      "format_ok": true,
+      "correct": true
+    }
+  ]
+}
