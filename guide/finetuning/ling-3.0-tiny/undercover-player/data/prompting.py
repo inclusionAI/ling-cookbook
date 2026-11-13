@@ -3,6 +3,9 @@
 数据合成、评测脚本与推理样例共用此格式；
 Avernet 玩家 Bot（inclusionAI/Avernet#2611）的适配层也应复用同一格式，
 以保证微调模型收到的输入与训练分布一致。
+
+历史渲染是窗口化的（见 render_history）：第 1 轮 + 最近 2 轮，
+中间折叠——prompt 有界（≤~1k 字符），避免随轮次线性膨胀。
 """
 
 RULES_SPEAK = (
@@ -19,18 +22,36 @@ RULES_VOTE = (
 )
 
 
-def render_history(rounds):
-    """rounds: [{"round": 1, "utterances": [(seat, text), ...]}, ...]"""
-    lines = []
-    for r in rounds:
+HISTORY_WINDOW = 2  # 历史窗口：保留第 1 轮 + 最近 2 轮，中间折叠（推理 prompt 有界）
+
+
+def render_history(rounds, window=HISTORY_WINDOW):
+    """rounds: [{"round": 1, "utterances": [(seat, text), ...]}, ...]
+
+    窗口化序列化：保留第 1 轮（初始描述信息量最大）与最近 window 轮，
+    中间轮折叠成一行「（第x-y轮略）」；window=None 时输出全量历史。
+    上限 ~3 轮历史，6 人局打满 prompt 也能压在 1k 字符内——排队的是
+    OpenClaw 框架的 2 万字提示词，我们这侧只求有界与训练/推理分布一致。
+    """
+    if not rounds:
+        return "（暂无）"
+    if window is not None and len(rounds) > window + 1:
+        kept = [rounds[0]] + rounds[-window:]
+    else:
+        kept = list(rounds)
+    lines, prev = [], None
+    for r in kept:
+        if prev is not None and r["round"] > prev + 1:
+            lines.append(f"（第{prev + 1}-{r['round'] - 1}轮略）")
         lines.append(f"第{r['round']}轮：")
         for seat, text in r["utterances"]:
             lines.append(f"{seat}号：{text}")
-    return "\n".join(lines) if lines else "（暂无）"
+        prev = r["round"]
+    return "\n".join(lines)
 
 
-def build_speak_prompt(role, word, rounds):
-    history = render_history(rounds)
+def build_speak_prompt(role, word, rounds, window=HISTORY_WINDOW):
+    history = render_history(rounds, window)
     return (
         "你在玩「谁是卧底」游戏。\n"
         f"你的身份：{role}\n"
@@ -42,8 +63,8 @@ def build_speak_prompt(role, word, rounds):
     )
 
 
-def build_vote_prompt(role, word, rounds):
-    history = render_history(rounds)
+def build_vote_prompt(role, word, rounds, window=HISTORY_WINDOW):
+    history = render_history(rounds, window)
     return (
         "你在玩「谁是卧底」游戏。\n"
         f"你的身份：{role}\n"
@@ -55,12 +76,12 @@ def build_vote_prompt(role, word, rounds):
     )
 
 
-def build_messages(task, role, word, rounds, target):
+def build_messages(task, role, word, rounds, target, window=HISTORY_WINDOW):
     """构造一条 SFT 样本的 messages 字段。"""
     if task == "speak":
-        prompt = build_speak_prompt(role, word, rounds)
+        prompt = build_speak_prompt(role, word, rounds, window)
     else:
-        prompt = build_vote_prompt(role, word, rounds)
+        prompt = build_vote_prompt(role, word, rounds, window)
     return [
         {"role": "user", "content": prompt},
         {"role": "assistant", "content": target},

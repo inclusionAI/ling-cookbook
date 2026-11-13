@@ -25,12 +25,14 @@
 undercover-player/
 ├── data/
 │   ├── word_pairs.py     # 30 组词对 + 属性池（含 6 组留出词对用于泛化测试）
-│   ├── prompting.py      # 训练/推理统一提示词格式
+│   ├── prompting.py      # 训练/推理统一提示词格式（历史窗口化）
 │   ├── synthesize.py     # 程序化数据合成（生成 train/valid/test.jsonl）
+│   ├── rerender.py       # 格式迁移：旧渲染增量样本 → 当前窗口格式（标签不变）
 │   ├── live-v1.jsonl     # 实战对局增量（flywheel.py 产出，带真值投票标签）
 │   ├── api-distill-v1.jsonl  # 教师蒸馏增量（distill.py 产出，离线标注）
-│   ├── train-v2.jsonl    # 飞轮第一轮合并产物（1208 合成 + 156 增量）
-│   └── *.jsonl           # 已生成数据集：1208 / 76 / 96 条
+│   ├── train-v3.jsonl    # 当前合并产物（1212 合成 + 156 增量，窗口化渲染）
+│   ├── train-v2.jsonl    # 上一轮合并产物（1208 + 156，全量历史渲染，存档）
+│   └── *.jsonl           # 已生成数据集：1212 / 76 / 96 条
 ├── flywheel.py           # 数据飞轮：对局状态 → 增量样本 → 按比例合并（见「数据飞轮」）
 ├── distill.py            # 蒸馏轨道：教师大模型离线出动作标签（可选进阶，见「数据飞轮」）
 ├── train/
@@ -39,6 +41,7 @@ undercover-player/
 ├── eval/
 │   ├── evaluate.py       # 微调前后自动评测 → JSON 对比
 │   ├── lora-v2.json      # 飞轮第一轮 v2 实测（门槛全达标）
+│   ├── lora-v3.json      # 窗口化格式 v3 实测（对比基准）
 │   └── metrics-history.jsonl  # 每轮迭代的指标账本
 ├── infer/
 │   └── chat.py           # 单条交互 demo（发言/投票）
@@ -66,6 +69,13 @@ python data/synthesize.py   # 重新生成 train/valid/test.jsonl（seed 固定�
 合成规则：随机配词对 → 分配身份（1 卧底 / N 平民）→ 按属性池模板生成每轮发言
 （卧底刻意模糊，平民用判别属性）→ 规则式打投票标签（平民投嫌疑最大的卧底、
 卧底甩锅/弃权）。留出 6 组词对（`TEST_PAIR_INDICES`）不出现在训练集，用于测泛化。
+对局深度 1~6 轮随机（对齐实战「最多 6 轮」）。
+
+**提示词格式（窗口化）**：历史渲染只保留**第 1 轮（初始描述）+ 最近 2 轮**，
+中间轮折叠成一行「（第x-y轮略）」（`prompting.render_history`）。这样 prompt
+随对局深度有界（实测 ≤420 字符），且 ≥4 轮样本携带折叠标记进入训练集
+（训练集中 626/1212 条触发折叠），保证实战长对局的输入不越出训练分布。
+Avernet 玩家 Bot 内嵌同款渲染（逐字节一致），训练/推理分布严格对齐。
 
 ### 2. 训练（QLoRA）
 
@@ -80,7 +90,7 @@ cd train && bash train.sh
 35 分），每 200 步存 checkpoint，每 100 步跑验证集。
 
 数据侧做了任务平衡：投票是决策任务、比发言难学，`synthesize.py --vote-repeat 3`
-把训练集投票样本过采样 3 倍（train 1208 条 = 434 speak + 774 vote）；
+把训练集投票样本过采样 3 倍（train 1212 条 = 432 speak + 780 vote）；
 valid/test 保持自然分布，评测口径可比。
 
 ### 3. 评测（微调前后对比）
@@ -143,7 +153,9 @@ test.jsonl（96 条，6 组留出词对），固定种子采样（temp=0.7, top_
 微调后的模型通过 `mlx_lm.server` 起 OpenAI 兼容服务，接入 Avernet 的玩家 Bot
 （BCN V3 协议），与其他引擎（云端大模型等）坐同一张桌。集成代码与实测日志见
 Avernet 侧 PR（#2611）。Bot 的发言清洗层（≤25 字、泄词兜底、投票格式强制）保证
-裁判脚本 100% 可解析——小模型即使偶发跑偏也不会违规。
+裁判脚本 100% 可解析——小模型即使偶发跑偏也不会违规。窗口化提示词让单次推理
+输入有界（≤420 字符 ≈ 数百 token），延迟可预算；共享模型服务的排队压力主要来自
+对手引擎自带的 2 万字框架提示词（实测请求体归属），本组件这侧不做无界上下文。
 
 ## 数据飞轮：从实战对局迭代（可选进阶）
 
@@ -154,12 +166,17 @@ Avernet 侧 PR（#2611）。Bot 的发言清洗层（≤25 字、泄词兜底、
 ```bash
 # 每攒够 ≥5 局新对局跑一轮：
 python flywheel.py build --out data/live-vN.jsonl     # 对局状态 -> 实战样本
-python flywheel.py merge --live data/live-vN.jsonl --out data/train-vN.jsonl
+python flywheel.py merge --live data/live-vN.jsonl data/api-distill-vN.jsonl \
+    --out data/train-vN.jsonl                        # 增量可多个，实战+蒸馏一次合并
 mkdir -p data-v2 && cp data/train-vN.jsonl data-v2/train.jsonl \
     && cp data/valid.jsonl data-v2/valid.jsonl        # mlx_lm 认 train/valid 布局
 # 然后照常重训（QLoRA，同超参，--data data-v2 --adapter-path adapters-v2，
 # 16G 上分段续训见「内存与拓扑」）→ 评测门槛 → 达标才换线上 adapter
 ```
+
+提示词格式若改动（如历史窗口化），已采集的增量样本用 `python data/rerender.py
+data/live-vN.jsonl data/api-distill-vN.jsonl` 就地重渲染——旧 prompt 解析回
+rounds 后按当前格式重画 user 部分，动作标签不动（解析先过无损往返校验才落盘）。
 
 三条采样规则（详见 `flywheel.py` 模块注释）：
 
@@ -278,6 +295,12 @@ vote_accuracy 0.11→0.17（观测项）；代价是字数合规 1.00→0.95（�
    没处理。短提示（<2048 token）永远踩不到，冒烟测试测不出；**2k+ 真实提示词
    一打就炸**（当时表现为玩家 Bot "empty response" 全灭）。规避：不开量化 KV
    （16G 单实例显存够用）；根治需上游修（见 Avernet PR 的上游 issue 链接）。
+9. **训练分布的对局深度覆盖不到实战上限，窗口折叠标记就是 OOD**：历史窗口化后
+   ≥4 轮才会出现「（第x-y轮略）」折叠标记，而合成器原本只生成 1~3 轮对局——
+   训练集里折叠标记零覆盖，实战 6 轮对局一上来全是没见过的输入形态。修法：
+   合成对局深度拉齐实战上限（`n_rounds = rng.randint(1, 6)`），让 626/1212 条
+   训练样本携带折叠标记。教训通用：**凡是推理时会变换/折叠/截断输入的规则，
+   训练数据必须覆盖该变换的全部取值**，否则「训练/推理同格式」只是部分成立。
 
 ## AI 使用策略
 

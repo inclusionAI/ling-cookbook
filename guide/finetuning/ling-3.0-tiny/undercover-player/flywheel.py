@@ -193,7 +193,9 @@ def cmd_build(args):
 def cmd_merge(args):
     rng = random.Random(args.seed)
     train = [json.loads(l) for l in open(args.train)]
-    live = [json.loads(l) for l in open(args.live)]
+    live = []
+    for path in args.live:
+        live.extend(json.loads(l) for l in open(path))
     cap = int(len(train) * args.ratio)
     if len(live) > cap:
         live = rng.sample(live, cap)
@@ -219,7 +221,8 @@ def main():
     b.set_defaults(func=cmd_build)
     m = sub.add_parser("merge", help="按比例合并实战集进训练集")
     m.add_argument("--train", default=str(HERE / "data" / "train.jsonl"))
-    m.add_argument("--live", required=True)
+    m.add_argument("--live", required=True, nargs="+",
+                   help="增量样本 JSONL，可多个（实战飞轮 + 教师蒸馏）")
     m.add_argument("--out", required=True)
     m.add_argument("--ratio", type=float, default=0.3,
                    help="实战样本占原训练集的上限比例（防自我模仿淹没）")

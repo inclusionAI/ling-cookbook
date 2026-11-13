@@ -13,7 +13,7 @@
 | 数据合成 | `data/` 全部代码（词对库、提示词格式、合成规则、规则式投票标签） |
 | 训练配置 | `train/lora_config.yaml`、`train.sh`（QLoRA 超参与内存优化取舍） |
 | 评测 | `eval/evaluate.py`（含反刷指标的 `looks_natural` 检查） |
-| 调试 | 全部报错定位与修复（见 README Troubleshooting 8 项） |
+| 调试 | 全部报错定位与修复（见 README Troubleshooting 9 项） |
 | 应用集成 | Avernet #2611 玩家 Bot 代码（BCN V3 协议层 / 游戏逻辑层 / 清洗层）与回环自测 |
 | 数据飞轮 | `flywheel.py`（实战对局 → 真值投票/自我模仿增量）与 `distill.py`（教师蒸馏增量，见下节） |
 | 文档 | README、本报告 |

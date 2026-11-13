@@ -177,11 +177,11 @@ def build_split(rng, pair_indices, pairs, n_speak, n_vote):
             n_players = rng.randint(4, 6)
             my_seat = rng.randint(1, n_players)
             my_role = rng.choice(["平民", "卧底"])
-            n_rounds = rng.randint(1, 3)
+            n_rounds = rng.randint(1, 6)  # 对齐实战「最多6轮」深度：≥4 轮会触发历史窗口折叠
             game = make_game(rng, pair, n_players, my_seat, my_role, n_rounds)
 
             r = n_rounds
-            # 我的历史：前 r-1 轮全量 + 第 r 轮我之前的人
+            # 我的历史：前 r-1 轮 + 第 r 轮我之前的人（渲染由 prompting 窗口化折叠）
             history = [{"round": x["round"], "utterances": x["utterances"]}
                        for x in game["rounds"][: r - 1]]
             current = [(s, t) for s, t in game["rounds"][r - 1]["utterances"] if s < my_seat]
@@ -204,7 +204,7 @@ def build_split(rng, pair_indices, pairs, n_speak, n_vote):
             n_players = rng.randint(4, 6)
             my_seat = rng.randint(1, n_players)
             my_role = rng.choice(["平民", "卧底"])
-            n_rounds = rng.randint(1, 3)
+            n_rounds = rng.randint(1, 6)  # 对齐实战「最多6轮」深度：≥4 轮会触发历史窗口折叠
             game = make_game(rng, pair, n_players, my_seat, my_role, n_rounds)
 
             target, voted_seat = vote_label(rng, game, my_seat, my_role, pair)
