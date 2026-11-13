@@ -27,12 +27,19 @@ undercover-player/
 │   ├── word_pairs.py     # 30 组词对 + 属性池（含 6 组留出词对用于泛化测试）
 │   ├── prompting.py      # 训练/推理统一提示词格式
 │   ├── synthesize.py     # 程序化数据合成（生成 train/valid/test.jsonl）
-│   └── *.jsonl           # 已生成数据集：692 / 76 / 96 条
+│   ├── live-v1.jsonl     # 实战对局增量（flywheel.py 产出，带真值投票标签）
+│   ├── api-distill-v1.jsonl  # 教师蒸馏增量（distill.py 产出，离线标注）
+│   ├── train-v2.jsonl    # 飞轮第一轮合并产物（1208 合成 + 156 增量）
+│   └── *.jsonl           # 已生成数据集：1208 / 76 / 96 条
+├── flywheel.py           # 数据飞轮：对局状态 → 增量样本 → 按比例合并（见「数据飞轮」）
+├── distill.py            # 蒸馏轨道：教师大模型离线出动作标签（可选进阶，见「数据飞轮」）
 ├── train/
 │   ├── lora_config.yaml  # QLoRA 超参（rank 8，后 16/24 层）
 │   └── train.sh          # 训练入口
 ├── eval/
-│   └── evaluate.py       # 微调前后自动评测 → JSON 对比
+│   ├── evaluate.py       # 微调前后自动评测 → JSON 对比
+│   ├── lora-v2.json      # 飞轮第一轮 v2 实测（门槛全达标）
+│   └── metrics-history.jsonl  # 每轮迭代的指标账本
 ├── infer/
 │   └── chat.py           # 单条交互 demo（发言/投票）
 └── adapters/             # 训练输出（git 不跟踪权重，见 Releases）
@@ -138,6 +145,100 @@ test.jsonl（96 条，6 组留出词对），固定种子采样（temp=0.7, top_
 Avernet 侧 PR（#2611）。Bot 的发言清洗层（≤25 字、泄词兜底、投票格式强制）保证
 裁判脚本 100% 可解析——小模型即使偶发跑偏也不会违规。
 
+## 数据飞轮：从实战对局迭代（可选进阶）
+
+合成数据有个天花板（见上：投票标签是规则启发式，噪声不可约）。而**实战对局
+里卧底身份是上帝视角真值**——`flywheel.py` 把牌桌对局状态转成无标签噪声的
+新训练样本，形成「训练 → 实战 → 采样 → 再训练」的自我迭代：
+
+```bash
+# 每攒够 ≥5 局新对局跑一轮：
+python flywheel.py build --out data/live-vN.jsonl     # 对局状态 -> 实战样本
+python flywheel.py merge --live data/live-vN.jsonl --out data/train-vN.jsonl
+mkdir -p data-v2 && cp data/train-vN.jsonl data-v2/train.jsonl \
+    && cp data/valid.jsonl data-v2/valid.jsonl        # mlx_lm 认 train/valid 布局
+# 然后照常重训（QLoRA，同超参，--data data-v2 --adapter-path adapters-v2，
+# 16G 上分段续训见「内存与拓扑」）→ 评测门槛 → 达标才换线上 adapter
+```
+
+三条采样规则（详见 `flywheel.py` 模块注释）：
+
+1. **vote 样本**（核心增量）：每个存活平民座位 × 每个已完成投票轮，标签 =
+   `我投<真实卧底>号`（上帝视角专家，DAgger 式状态取实战分布、动作取真值）；
+2. **speak 样本**：只模仿自己座位的干净发言（无违规/≤25 字/非思考前缀），
+   己方获胜局全收、否则 0.3 概率下采样——自我模仿是弱信号，必须限流；
+3. **留出纪律**：词对命中 `test.jsonl` 留出集的整局跳过；merge 默认实战样本
+   ≤ 原集 30%（防自我模仿淹没原分布）。
+
+实现细节里最容易踩的一个坑：**去重键必须含 user 历史**（task+词+完整历史+答案）。
+只按 (task, 词, 答案) 去重会把「不同历史、同标签」的 DAgger 样本折叠掉——那正是
+真值标签的价值所在，9 局实战会只剩 15 条。历史是多样状态，不是重复。
+
+**蒸馏轨道（可选进阶，`distill.py`）**：把同款学生提示词发给大模型教师
+（Anthropic 兼容 API，如 `mimo-v2.6-pro`）拿发言/投票动作作标签，攻击
+「规则投票标签噪声不可约」的瓶颈（合成对局的状态 + 专家判断）。四条防标签
+冲突纪律：自己座位让给 flywheel、平民真值票不让教师抢、状态按学生提示词哈希
+去重、留出词对跳过。**只做离线数据，绝不进游戏循环**（对局中的大脑始终是
+本机微调小模型），凭据只存 `~/.distill-api.env`，详见 `distill.py` 模块注释
+与 [AI_USAGE.md](AI_USAGE.md) 披露。合并与评测门槛同上。
+
+**评测门槛（每轮迭代的收养标准，防自我训练坍缩）**：
+`vote_format_ok = 1.0`、`speak_format_ok` 不低于上一轮、泄词率不升超 2pt——
+达标才替换线上 adapter；投票正确率只观测不设门槛（天花板见归因实验）。
+每轮的指标记进 `eval/metrics-history.jsonl`，「慢慢提高」必须可测量。
+
+实测第一轮（2026-11-13，39 条实战 + 117 条蒸馏并入 1208 条合成，重训 1500 步）：
+三门槛全达标，泄词率 0.15→**0.05**、speak_format_ok 0.85→**0.90**、
+vote_accuracy 0.11→0.17（观测项）；代价是字数合规 1.00→0.95（约 3/60 句超长）
+与 val loss 上行（自模仿样本少、有过拟合迹象）——收养以门槛为准，全部数字
+见 `eval/lora-v2.json` 与 `eval/metrics-history.jsonl`。
+
+诚实预期：主要增益在①真实对手文本带来的历史鲁棒性 ②真值投票标签的判别力
+信号；发言风格是自我模仿，增益有限且有坍缩风险，所以限流+门槛双保险。
+
+## M4 16GB 统一内存预算（实测）
+
+在 16GB M4 Air 上跑「模型服务 + 6 玩家牌桌 + 裁判」的实测账本，供同配置同学排预算：
+
+### 磁盘
+
+| 项 | 大小 | 说明 |
+|---|---|---|
+| `Ling-3.0-tiny-4bit` | 4.8G | `mlx_lm.convert` 量化产物，推理用这份 |
+| `Ling-3.0-tiny-3bit` | 4.0G | 早期量化实验，可删 |
+| `adapters/` | 3.1G | 其中**推理只用 `adapters.safetensors`（397M）+ `adapter_config.json`**；`checkpoints/` 是训练中间产物，托管/分发时不用带 |
+
+### 内存与拓扑（关键结论：16G 只能单实例）
+
+| 拓扑 | 进程 | RSS | 结论 |
+|---|---|---|---|
+| **单实例双角色**（推荐） | `serve.py` 4bit+QLoRA（GPU） | **5.3G** | 底座/LoRA 靠请求级 `adapters` 字段切换（LoRALinear.scale 置零=底座），模型只加载一次 |
+| | 玩家 bot `main.py` | 14M | |
+| | 裁判 `referee_driver.py` | 5M | |
+| 双实例（已废弃） | 3bit base + 4bit LoRA 两个 serve | 两份权重 ≈9G+ | 挤爆压缩器（swap 5.1G 满载、compressor 4.7G）→ **推理变慢 10 倍** → 节点 420s 超时 |
+
+16G 机器的护栏：`--prompt-cache-size 2`；**别开** `--kv-bits 8 --quantized-kv-start 2048`
+（mlx-lm 对 Ling 的 MoE 实现不兼容，见 Troubleshooting #8）；`MLX_CPU=1` 只为双模型
+共存设计（CPU 权重可被系统换页，Metal 缓冲不行），单实例直接用 GPU。
+
+**训练侧的 16G 约束（2026-11-13 实测）**：QLoRA 1000+ iters 连续跑会在 ~625 步后
+确定性 `Metal Insufficient Memory`（同种子两次死在同一步，`mx.eval` 优化器状态
+处的分配峰值 + 碎片化；v1 当夜一次性跑完属于运气边界）。对策 = **分段续训**：
+每段 ≤600 步，段间用 `--resume-adapter-file <上段 0000XXX_adapters.safetensors>`
+续权重（优化器态会重置，lr 重新预热，可接受）。检查点每 200 步落盘，断在哪
+都能接。若续训中 val loss 明显回升（实测累计 1200 步时 1.61→2.14）是过拟合
+信号，收养前用固定 test 集门槛说话，别只看步数。
+
+### 时延（单节点，提示词 2~4k token）
+
+| 模式 | 单次发言/投票 | 备注 |
+|---|---|---|
+| 单实例 GPU | 秒级 | 短提示实测 <1s；牌桌节点含长上下文，见 Avernet PR 的对局日志 |
+| 双实例 CPU（`MLX_CPU=1`） | 30~90s | 内存挤压期 180s+，直接打穿 420s 节点预算 |
+
+混档请求（底座/微调）不能进同一个 batch（scale 是模型级状态），serve.py 强制
+`is_batchable=False` 串行——牌桌节点本就链式派发，吞吐不受影响。
+
 ## Troubleshooting
 
 踩过的坑，按实际复现顺序记录：
@@ -170,6 +271,13 @@ Avernet 侧 PR（#2611）。Bot 的发言清洗层（≤25 字、泄词兜底、
 7. **贪心解码模式坍缩**：temp=0 时投票 100% 输出「我弃权」（弃权是单一字符串，
    5 个候选把概率质量摊薄）、发言全用「同意前面几位的说法」万能句。评测与推理
    统一改用固定种子采样（temp=0.7, top_p=0.9）；线上再叠加清洗层兜底格式。
+8. **`--kv-bits 8 --quantized-kv-start 2048` 在 >2048 token 提示词上崩溃**：
+   `AttributeError: 'list' object has no attribute 'swapaxes'`，位置
+   `mlx_lm/models/bailing_moe_v3.py` 的 `pe_scores = (q_rope * self.scale) @
+   k_rope.swapaxes(-1, -2)`——量化 KV cache 切换后 `k_rope` 是 list，模型代码
+   没处理。短提示（<2048 token）永远踩不到，冒烟测试测不出；**2k+ 真实提示词
+   一打就炸**（当时表现为玩家 Bot "empty response" 全灭）。规避：不开量化 KV
+   （16G 单实例显存够用）；根治需上游修（见 Avernet PR 的上游 issue 链接）。
 
 ## AI 使用策略
 

@@ -1,0 +1,5 @@
+# 训练权重与派生数据：权重托管 GitHub Releases（仅 adapters.safetensors +
+# adapter_config.json），检查点不入库；data-v2/ 是 merge 后两行 cp 的派生布局。
+adapters*/
+data-v2/
+__pycache__/
