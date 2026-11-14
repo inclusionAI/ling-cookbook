@@ -21,4 +21,3 @@ def check_schema(tool: str, args: dict) -> bool:
         if type(value) is not int or value < 1:
             return False
     return True
-
