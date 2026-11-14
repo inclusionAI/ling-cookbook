@@ -41,21 +41,23 @@ N_PLAYERS = 6
 CANNED_SPEECH = "我觉得大家说的都有道理，再观察一下"  # 随机基线的固定发言
 
 
-def parse_vote(text, own_seat):
+def parse_vote(text, own_seat, alive=None):
     """返回 (target, ok)：target=座位号或 None（弃权）；ok=票面是否规范。"""
-    m = VOTE_RE.search(text)
+    m = VOTE_RE.fullmatch(text.strip())
     if m:
         t = int(m.group(1))
-        if t == own_seat or not (1 <= t <= N_PLAYERS):
+        if t == own_seat or not (1 <= t <= N_PLAYERS) or (alive is not None and t not in alive):
             return None, False      # 自票/越界票 = 废票
         return t, True
-    if "我弃权" in text:
+    if text.strip() == "我弃权":
         return None, True
     return None, False
 
 
-def run_game(model_ctx, policy, game_seed, pair):
+def run_game(model_ctx, policy, game_seed, pair, prompt_protocol="legacy"):
     """打一整局，返回对局记录。policy: 'model' | 'random'。"""
+    if prompt_protocol not in {"legacy", "state-v2"}:
+        raise ValueError("Unknown prompt protocol")
     rng = random.Random(game_seed)
     seats = list(range(1, N_PLAYERS + 1))
     undercover_seat = rng.choice(seats)
@@ -76,11 +78,12 @@ def run_game(model_ctx, policy, game_seed, pair):
             if policy == "random":
                 out = CANNED_SPEECH
             else:
-                prompt = build_speak_prompt(roles[s], words[s], completed_rounds + [cur])
+                state = {"own_seat": s, "alive_seats": sorted(alive)} if prompt_protocol == "state-v2" else {}
+                prompt = build_speak_prompt(roles[s], words[s], completed_rounds + [cur], **state)
                 out = model_ctx.generate(prompt)
-            out = first_line(clean_output(out))
+            out = clean_output(out)
             leak = any(ch in out for ch in words[s])
-            len_ok = 1 <= len(out) <= 25
+            len_ok = 1 <= len(out) <= 25 and len(out.splitlines()) == 1
             natural = looks_natural(out)
             actions.append({"phase": "speak", "seat": s, "output": out,
                             "len_ok": len_ok, "leak": leak, "natural": natural,
@@ -95,9 +98,10 @@ def run_game(model_ctx, policy, game_seed, pair):
                 target, ok = (rng.choice(choices), True) if choices else (None, True)
                 out = f"我投{target}号" if target else "我弃权"
             else:
-                prompt = build_vote_prompt(roles[s], words[s], completed_rounds + [cur])
-                out = first_line(clean_output(model_ctx.generate(prompt)))
-                target, ok = parse_vote(out, s)
+                state = {"own_seat": s, "alive_seats": sorted(alive)} if prompt_protocol == "state-v2" else {}
+                prompt = build_vote_prompt(roles[s], words[s], completed_rounds + [cur], **state)
+                out = clean_output(model_ctx.generate(prompt))
+                target, ok = parse_vote(out, s, alive)
             actions.append({"phase": "vote", "seat": s, "output": out,
                             "format_ok": ok, "self_or_bad": not ok})
             votes[s] = target
@@ -132,7 +136,7 @@ def run_game(model_ctx, policy, game_seed, pair):
 
 
 class ModelCtx:
-    def __init__(self, model_path, adapter_path, seed):
+    def __init__(self, model_path, adapter_path, seed, max_tokens=256):
         import mlx.core as mx
         from mlx_lm import load, generate
         from mlx_lm.sample_utils import make_sampler
@@ -141,6 +145,7 @@ class ModelCtx:
         self.generate_fn = generate
         self.model, self.tokenizer = load(model_path, adapter_path=adapter_path)
         self.sampler = make_sampler(temp=0.7, top_p=0.9)
+        self.max_tokens = max_tokens
         self.seed = seed
         self._step = 0
 
@@ -152,12 +157,12 @@ class ModelCtx:
             self.model, self.tokenizer,
             prompt=self.tokenizer.apply_chat_template(
                 [{"role": "user", "content": prompt}],
-                add_generation_prompt=True, tokenize=False, thinking_option="off",
+                add_generation_prompt=True, tokenize=False, thinking_option="on",
             ),
-            max_tokens=64, sampler=self.sampler, verbose=False,
+            max_tokens=self.max_tokens, sampler=self.sampler, verbose=False,
         )
         self.mx.clear_cache()
-        return text
+        return clean_output(text, require_think_end=True)
 
 
 def main():
@@ -167,10 +172,14 @@ def main():
     ap.add_argument("--policy", choices=["model", "random"], default="model")
     ap.add_argument("--games", type=int, default=20)
     ap.add_argument("--seed", type=int, default=2026)
+    ap.add_argument("--max-tokens", type=int, default=256)
+    ap.add_argument("--prompt-protocol", choices=["legacy", "state-v2"], default="legacy")
     ap.add_argument("--pairs", choices=["heldout", "all"], default="heldout",
                     help="heldout=只用 6 组留出词对（测泛化）；all=30 组全用")
     ap.add_argument("--out", default=None)
     args = ap.parse_args()
+    if args.games < 1:
+        ap.error("--games must be positive")
 
     if args.pairs == "heldout":
         pool = [WORD_PAIRS[i] for i in TEST_PAIR_INDICES]
@@ -179,13 +188,13 @@ def main():
 
     model_ctx = None
     if args.policy == "model":
-        model_ctx = ModelCtx(args.model, args.adapter_path, args.seed)
+        model_ctx = ModelCtx(args.model, args.adapter_path, args.seed, args.max_tokens)
         print(f"loaded: {args.model} (adapter={args.adapter_path})", file=sys.stderr)
 
     games = []
     for g in range(args.games):
         pair = pool[g % len(pool)]
-        rec = run_game(model_ctx, args.policy, args.seed + g, pair)
+        rec = run_game(model_ctx, args.policy, args.seed + g, pair, args.prompt_protocol)
         games.append(rec)
         print(f"  game {g + 1}/{args.games}: {rec['winner']} win, "
               f"{rec['rounds_played']} rounds", file=sys.stderr)
@@ -194,6 +203,10 @@ def main():
     votes = [a for rec in games for a in rec["actions"] if a["phase"] == "vote"]
     n_civ = sum(1 for rec in games if rec["winner"] == "civilian")
     summary = {
+        "protocol": "ling-thinking-on-strict-v1",
+        "prompt_protocol": args.prompt_protocol,
+        "thinking_option": "on" if args.policy == "model" else None,
+        "max_tokens": args.max_tokens if args.policy == "model" else None,
         "model": args.model,
         "adapter_path": args.adapter_path,
         "policy": args.policy,

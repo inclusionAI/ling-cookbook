@@ -4,3 +4,16 @@ adapters*/
 data-v*/
 data-ab-*/
 __pycache__/
+
+# Local audit scheduler lock
+eval/.audit-queue.lock
+
+# Local experiment runs; curated publishable evidence lives in eval/verification/
+eval/audit-thinking-on-*/
+eval/final-vote-audit/
+eval/seat-permutation-probe/
+eval/state-v2-pilot/
+eval/state-v2-training-pilot/
+eval/vote-permutation-training-pilot/
+eval/audit_queue.py
+eval/compare_state.py

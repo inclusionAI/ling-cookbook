@@ -96,7 +96,7 @@ def make_game(rng, pair, n_players, my_seat, my_role, n_rounds):
         uc_seat = my_seat
     else:
         uc_seat = rng.choice([s for s in range(1, n_players + 1) if s != my_seat])
-        roles[uc_seat - 1] = "卧底"
+    roles[uc_seat - 1] = "卧底"
 
     words = {}
     attr_pools = {}

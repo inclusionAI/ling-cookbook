@@ -141,7 +141,7 @@ def game_to_samples(game, me, holdout, rng, iter_tag):
             others = {clean_output(v["raw"]) for k, v in speeches.items()
                       if int(k) != my["seat"] and isinstance(v, dict) and v.get("raw")}
             if text and len(text) <= MAX_SPEAK_CHARS and looks_natural(text) \
-                    and text not in others:
+                    and not any(ch in text for ch in my["word"]) and text not in others:
                 my_win = (win_side == "civilian" and my["word"] == civilian) or \
                          (win_side == "undercover" and my["word"] == undercover)
                 if my_win or rng.random() < LOSE_SPEAK_KEEP_P:

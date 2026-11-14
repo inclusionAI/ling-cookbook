@@ -13,6 +13,7 @@
 """
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -39,13 +40,13 @@ def looks_natural(out):
     return True
 
 
-def eval_sample(sample, output):
+def eval_sample(sample, output, require_think_end=False):
     task = sample["task"]
     target = sample["messages"][1]["content"]
-    out = first_line(clean_output(output))
+    out = clean_output(output, require_think_end=require_think_end)
     if task == "speak":
         word = sample["word"]
-        len_ok = 1 <= len(out) <= 25
+        len_ok = 1 <= len(out) <= 25 and len(out.splitlines()) == 1
         leak = any(ch in out for ch in word)
         natural = looks_natural(out)
         return {
@@ -55,15 +56,24 @@ def eval_sample(sample, output):
             "exact_match": out == target,
         }
     # vote
-    m = VOTE_RE.search(out)
+    m = VOTE_RE.fullmatch(out)
     if m:
-        pred, fmt_ok = f"我投{m.group(1)}号", True
-    elif "我弃权" in out:
+        seat = int(m.group(1))
+        meta = sample.get("meta", {})
+        maximum = meta.get("n_players", 6)
+        fmt_ok = (1 <= seat <= maximum and seat != meta.get("my_seat")
+                  and ("alive_seats" not in meta or seat in meta["alive_seats"]))
+        pred = f"我投{seat}号"
+    elif out == "我弃权":
         pred, fmt_ok = "我弃权", True
     else:
         pred, fmt_ok = out, False
+    uc_target = "我投{}号".format(sample.get("meta", {}).get("uc_seat"))
     return {
         "task": "vote", "output": out, "raw": output, "target": target,
+        "role": sample.get("role"),
+        "undercover_hit": (fmt_ok and pred == uc_target
+                           if sample.get("role") == "平民" else None),
         "format_ok": fmt_ok, "correct": pred == target,
     }
 
@@ -74,8 +84,9 @@ def main():
     ap.add_argument("--adapter-path", default=None, help="LoRA adapter 目录；不传即评基线")
     ap.add_argument("--data", required=True, help="test.jsonl 路径")
     ap.add_argument("--max-samples", type=int, default=-1)
-    ap.add_argument("--max-tokens", type=int, default=64)
+    ap.add_argument("--max-tokens", type=int, default=256)
     ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--sample-seeds", action="store_true", help="Reset RNG per sample for paired comparisons")
     ap.add_argument("--out", default=None, help="结果 JSON 输出路径")
     args = ap.parse_args()
 
@@ -97,9 +108,11 @@ def main():
 
     records = []
     for i, s in enumerate(samples):
+        if args.sample_seeds:
+            mx.random.seed(s.get("meta", {}).get("eval_seed", args.seed + i))
         prompt = tokenizer.apply_chat_template(
-            s["messages"][:1], add_generation_prompt=True, tokenize=False,
-            thinking_option="off",  # 与训练监督区对齐，见 data/prompting.py clean_output
+            s["messages"][:-1], add_generation_prompt=True, tokenize=False,
+            thinking_option="on",  # 与默认训练模板一致
         )
         out = generate(
             model, tokenizer, prompt=prompt,
@@ -107,7 +120,7 @@ def main():
             sampler=sampler,
             verbose=False,
         )
-        records.append(eval_sample(s, out))
+        records.append(eval_sample(s, out, require_think_end=True))
         if (i + 1) % 10 == 0:
             print(f"  {i + 1}/{len(samples)}", file=sys.stderr)
         mx.clear_cache()
@@ -115,9 +128,16 @@ def main():
     speak = [r for r in records if r["task"] == "speak"]
     vote = [r for r in records if r["task"] == "vote"]
     summary = {
+        "protocol": "ling-thinking-on-strict-v1",
+        "thinking_option": "on",
+        "sample_seeds": args.sample_seeds,
+        "prompt_protocols": sorted({s.get("meta", {}).get("prompt_protocol", "legacy") for s in samples}),
+        "max_tokens": args.max_tokens,
+        "data_sha256": hashlib.sha256(open(args.data, "rb").read()).hexdigest(),
         "model": args.model,
         "adapter_path": args.adapter_path,
         "decoding": f"temp=0.7,top_p=0.9,seed={args.seed}",
+        "thinking_completed": sum("</think>" in r["raw"] for r in records),
         "n_speak": len(speak),
         "speak_len_ok": round(sum(r["len_ok"] for r in speak) / max(1, len(speak)), 4),
         "speak_leak_rate": round(sum(r["leak"] for r in speak) / max(1, len(speak)), 4),
@@ -126,6 +146,11 @@ def main():
         "speak_exact_match": round(sum(r["exact_match"] for r in speak) / max(1, len(speak)), 4),
         "n_vote": len(vote),
         "vote_format_ok": round(sum(r["format_ok"] for r in vote) / max(1, len(vote)), 4),
+        "n_civilian_vote": sum(r.get("role") == "平民" for r in vote),
+        "vote_label_match_rate": round(sum(r["correct"] for r in vote) / max(1, len(vote)), 4),
+        "civilian_undercover_hit_rate": round(
+            sum(r["undercover_hit"] is True for r in vote)
+            / max(1, sum(r.get("role") == "平民" for r in vote)), 4),
         "vote_accuracy": round(sum(r["correct"] for r in vote) / max(1, len(vote)), 4),
     }
     print(json.dumps(summary, ensure_ascii=False, indent=2))

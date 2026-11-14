@@ -25,6 +25,22 @@ RULES_VOTE = (
 HISTORY_WINDOW = 2  # 历史窗口：保留第 1 轮 + 最近 2 轮，中间折叠（推理 prompt 有界）
 
 
+def render_player_state(own_seat=None, alive_seats=None):
+    """旧调用不增加字段；新协议要求同时给出本人座位和完整存活名单。"""
+    if own_seat is None and alive_seats is None:
+        return ""
+    if type(own_seat) is not int or own_seat < 1 or alive_seats is None:
+        raise ValueError("own_seat 和 alive_seats 必须同时提供")
+    seats = list(alive_seats)
+    if not seats or any(type(s) is not int or s < 1 for s in seats):
+        raise ValueError("存活座位必须为非空的正整数列表")
+    if len(set(seats)) != len(seats) or own_seat not in seats:
+        raise ValueError("本人必须存活，座位不能重复")
+    return (f"你的座位：{own_seat}号\n"
+            f"存活玩家：{'、'.join(f'{s}号' for s in sorted(seats))}\n"
+            "投票只能选择其他存活玩家，也可以弃权。\n")
+
+
 def render_history(rounds, window=HISTORY_WINDOW):
     """rounds: [{"round": 1, "utterances": [(seat, text), ...]}, ...]
 
@@ -50,12 +66,13 @@ def render_history(rounds, window=HISTORY_WINDOW):
     return "\n".join(lines)
 
 
-def build_speak_prompt(role, word, rounds, window=HISTORY_WINDOW):
+def build_speak_prompt(role, word, rounds, window=HISTORY_WINDOW, *, own_seat=None, alive_seats=None):
     history = render_history(rounds, window)
     return (
         "你在玩「谁是卧底」游戏。\n"
         f"你的身份：{role}\n"
         f"你的词语：{word}\n"
+        f"{render_player_state(own_seat, alive_seats)}"
         f"{RULES_SPEAK}\n"
         f"历史发言：\n{history}\n"
         "现在轮到你发言。\n"
@@ -63,12 +80,13 @@ def build_speak_prompt(role, word, rounds, window=HISTORY_WINDOW):
     )
 
 
-def build_vote_prompt(role, word, rounds, window=HISTORY_WINDOW):
+def build_vote_prompt(role, word, rounds, window=HISTORY_WINDOW, *, own_seat=None, alive_seats=None):
     history = render_history(rounds, window)
     return (
         "你在玩「谁是卧底」游戏。\n"
         f"你的身份：{role}\n"
         f"你的词语：{word}\n"
+        f"{render_player_state(own_seat, alive_seats)}"
         f"{RULES_VOTE}\n"
         f"历史发言：\n{history}\n"
         "现在开始投票。\n"
@@ -76,25 +94,25 @@ def build_vote_prompt(role, word, rounds, window=HISTORY_WINDOW):
     )
 
 
-def build_messages(task, role, word, rounds, target, window=HISTORY_WINDOW):
+def build_messages(task, role, word, rounds, target, window=HISTORY_WINDOW, *, own_seat=None, alive_seats=None):
     """构造一条 SFT 样本的 messages 字段。"""
     if task == "speak":
-        prompt = build_speak_prompt(role, word, rounds, window)
+        prompt = build_speak_prompt(role, word, rounds, window, own_seat=own_seat, alive_seats=alive_seats)
+    elif task == "vote":
+        prompt = build_vote_prompt(role, word, rounds, window, own_seat=own_seat, alive_seats=alive_seats)
     else:
-        prompt = build_vote_prompt(role, word, rounds, window)
+        raise ValueError(f"未知任务：{task}")
     return [
         {"role": "user", "content": prompt},
         {"role": "assistant", "content": target},
     ]
 
 
-def clean_output(text):
-    """剥掉 chat 模板结构残渣，只留模型内容。
-
-    背景（见 README Troubleshooting）：Ling 的 chat 模板带 thinking 块，
-    mlx_lm 的 mask_prompt 偏移会把闭合标签留在监督区，模型可能先输出
-    闭合标签或尾随 <|role_end|>。这些是模板结构，不是模型说的话。
-    """
+def clean_output(text, require_think_end=False):
+    """提取思考结束标记后的正文，并移除回合结束标记。"""
+    if "</think>" in text:
+        text = text.split("</think>", 1)[1]
+    elif require_think_end or "<think>" in text:
+        return ""  # 思考尚未结束，不把推理文本当作答案
     text = text.split("<|role_end|>")[0]
-    text = text.replace("<think>", "").replace("</think>", "")
     return text.strip()

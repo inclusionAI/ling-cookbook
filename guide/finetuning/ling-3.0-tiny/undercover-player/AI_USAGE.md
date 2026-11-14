@@ -1,7 +1,7 @@
 # AI 使用策略报告
 
 本项目（Ling-3.0-tiny「谁是卧底」玩家决策组件 Recipe）在 **Claude Code**
-（Anthropic，模型 claude-opus-5-5 / claude-sonnet-5-5）辅助下完成，遵循
+（客户端；已核实的部分会话通过 MiMo API 使用 mimo-v2.6-pro）及 Codex 辅助下完成，遵循
 「人工决策、AI 执行、可验证交付」的原则。按轻训营要求如实披露如下。
 
 ## AI 承担的部分
@@ -36,8 +36,8 @@
    任何人可重跑核对 README 中的对比表；
 3. **集成可自测**：Avernet Bot 附带 `test_loopback.py`（mock 服务器回环），
    不起真环境即可验证协议链路；
-4. **过程可追溯**：训练日志、checkpoint（每 200 步）、评测 JSON 均随
-   Release/PR 留档。
+4. **过程可追溯**：训练日志、checkpoint（每 200 步）与评测 JSON 用于追溯；
+   是否已上传 Release/PR 需逐项核验，不能仅凭本地存在认定已公开留档。
 
 ## 第三方模型 API 使用披露（数据飞轮·蒸馏轨道）
 
