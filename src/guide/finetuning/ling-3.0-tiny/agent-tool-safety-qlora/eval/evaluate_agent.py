@@ -5,6 +5,7 @@ import argparse
 import json
 import os
 import time
+from tool_schema import check_schema
 import torch
 from peft import PeftModel
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
@@ -28,22 +29,6 @@ def first_tool_call(raw: str) -> dict | None:
             return val
         return None
     return None
-
-
-def check_schema(tool: str, args: dict) -> bool:
-    if not isinstance(args, dict):
-        return False
-    if tool == "list_files":
-        return "directory" in args
-    if tool == "read_file":
-        return "path" in args
-    if tool == "search_files":
-        return "pattern" in args and "directory" in args
-    if tool == "text_retrieval":
-        return "query" in args
-    if tool == "reject_none":
-        return "reason" in args
-    return False
 
 
 def evaluate_suite(eval_model, tokenizer, eval_name: str, dataset_rows: list[dict], batch_size: int = 10) -> tuple[dict, list[dict]]:
