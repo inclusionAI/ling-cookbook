@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT / 'data'), str(ROOT / 'eval'), str(ROOT)]
 from prompting import clean_output, build_vote_prompt, build_messages, render_player_state
 from build_state_dataset import upgrade_record
-from evaluate import eval_sample
+from evaluate import eval_sample, sample_seed
 from selfplay import parse_vote, run_game
 from synthesize import make_game
 from word_pairs import WORD_PAIRS
@@ -19,6 +19,21 @@ class ProtocolTests(unittest.TestCase):
         return {'task': task, 'word': '火锅',
                 'meta': {'my_seat': 1, 'n_players': 6},
                 'messages': [{'content': ''}, {'content': '我投2号'}]}
+
+    def test_seed_changes_even_with_legacy_subset_metadata(self):
+        row = {"meta": {"eval_seed": 59}}  # original row 17
+        self.assertEqual([sample_seed(row, seed, 0) for seed in [7, 42, 123]],
+                         [24, 59, 140])
+
+    def test_paired_seeds_survive_subset_reordering(self):
+        row = {"meta": {"eval_seed": 59}}
+        self.assertEqual(sample_seed(row, 7, 0), sample_seed(row, 7, 12))
+        self.assertEqual(sample_seed({}, 7, 17), sample_seed(row, 7, 0))
+
+    def test_invalid_seed_metadata_is_rejected(self):
+        for value in [True, "59", 59.0, 41]:
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                sample_seed({"meta": {"eval_seed": value}}, 42, 0)
 
     def test_reasoning_is_removed(self):
         self.assertEqual(clean_output('分析</think>我投2号<|role_end|>', True), '我投2号')

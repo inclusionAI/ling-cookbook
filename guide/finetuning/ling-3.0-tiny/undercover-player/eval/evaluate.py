@@ -78,6 +78,21 @@ def eval_sample(sample, output, require_think_end=False):
     }
 
 
+def sample_seed(sample, base_seed, index):
+    """Preserve the original row offset while honoring the requested decoding seed.
+
+    Existing subset builders store eval_seed = 42 + original row index.
+    Treat that legacy field as an offset, not an override of --seed.
+    """
+    stored = sample.get("meta", {}).get("eval_seed")
+    if type(stored) is not int and stored is not None:
+        raise ValueError("eval_seed must be an integer")
+    offset = index if stored is None else stored - 42
+    if type(offset) is not int or offset < 0:
+        raise ValueError("Invalid original sample offset")
+    return base_seed + offset
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", required=True, help="模型目录（4-bit 量化目录或 BF16 目录）")
@@ -109,7 +124,7 @@ def main():
     records = []
     for i, s in enumerate(samples):
         if args.sample_seeds:
-            mx.random.seed(s.get("meta", {}).get("eval_seed", args.seed + i))
+            mx.random.seed(sample_seed(s, args.seed, i))
         prompt = tokenizer.apply_chat_template(
             s["messages"][:-1], add_generation_prompt=True, tokenize=False,
             thinking_option="on",  # 与默认训练模板一致
@@ -120,7 +135,10 @@ def main():
             sampler=sampler,
             verbose=False,
         )
-        records.append(eval_sample(s, out, require_think_end=True))
+        record = eval_sample(s, out, require_think_end=True)
+        if args.sample_seeds:
+            record["decoding_seed"] = sample_seed(s, args.seed, i)
+        records.append(record)
         if (i + 1) % 10 == 0:
             print(f"  {i + 1}/{len(samples)}", file=sys.stderr)
         mx.clear_cache()
@@ -131,6 +149,7 @@ def main():
         "protocol": "ling-thinking-on-strict-v1",
         "thinking_option": "on",
         "sample_seeds": args.sample_seeds,
+        "sample_seed_policy": "base-plus-original-row-offset-v1" if args.sample_seeds else "stream",
         "prompt_protocols": sorted({s.get("meta", {}).get("prompt_protocol", "legacy") for s in samples}),
         "max_tokens": args.max_tokens,
         "data_sha256": hashlib.sha256(open(args.data, "rb").read()).hexdigest(),

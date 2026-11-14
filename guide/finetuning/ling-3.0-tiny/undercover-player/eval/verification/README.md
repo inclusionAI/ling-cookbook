@@ -19,3 +19,5 @@ The scripts refuse to overwrite an existing experiment. Use a fresh checkout/out
 - release-integrity.json: public Release SHA256 compared with the starting adapter.
 
 Historical test tables elsewhere use earlier parsing/rendering protocols; do not combine those denominators with this validation set. Real-table acceptance is recorded separately in the Avernet player PR; local HTTP tests do not establish game win rate.
+
+The historical manifest pins the evaluator used for the recorded experiment; its exact source is preserved in `audited-source/evaluate.py`. The current standalone evaluator fixes `--sample-seeds`: legacy `eval_seed = 42 + original row index` supplies an offset, while `--seed` selects the decoding seed. New results record the policy and per-row seeds. The historical 12-job auditor already used `seed + original row index` directly; its results are unchanged.
