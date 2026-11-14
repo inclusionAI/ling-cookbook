@@ -67,6 +67,53 @@ def bootstrap_difference(jobs, treatment, control):
             'note': 'Resampling cases after averaging decoding seeds; no independent training-seed uncertainty.'}
 
 
+def consistency_record(row, original, reversed_record):
+    expected = original['output']
+    if expected.startswith('我投') and original['format_ok']:
+        seat = int(expected[2:-1])
+        expected = f"我投{row['meta']['n_players'] + 1 - seat}号"
+    return {'id': row['id'], 'original': original['output'],
+            'reversed': reversed_record['output'],
+            'consistent': original['format_ok'] and reversed_record['format_ok']
+                          and expected == reversed_record['output'],
+            'original_abstained': original['output'] == '我弃权'}
+
+
+def validate_result(result, condition, seed, rows, probe):
+    """Reject incomplete/mismatched resumed jobs; recompute scores from raw text."""
+    if result.get('condition') != condition or result.get('seed') != seed:
+        raise ValueError('Cached job condition or seed differs')
+    ids = [row['id'] for row in rows]
+    if len(set(ids)) != len(ids):
+        raise ValueError('Duplicate source case IDs')
+
+    def validate_records(records, source):
+        if not isinstance(records, list) or len(records) != len(source):
+            raise ValueError('Cached job has missing or extra records')
+        for record, row in zip(records, source):
+            if not isinstance(record, dict) or record.get('id') != row['id']:
+                raise ValueError('Cached case IDs/order differ')
+            if not isinstance(record.get('raw'), str):
+                raise ValueError('Cached record has no raw output')
+            expected = eval_sample(row, record['raw'], require_think_end=True)
+            if any(key not in record or record[key] != value for key, value in expected.items()):
+                raise ValueError('Cached scores differ from raw output')
+
+    records = result.get('records')
+    validate_records(records, rows)
+    if result.get('metrics') != metrics(records):
+        raise ValueError('Cached metrics differ from per-case scores')
+    selected = [row for row in rows if row['task'] == 'vote' and row['role'] == '平民'] if probe else []
+    reversed_records = result.get('reversed_records')
+    validate_records(reversed_records, [reverse_seats(row) for row in selected])
+    originals = dict(zip(ids, records))
+    expected_consistency = [consistency_record(row, originals[row['id']], rev)
+                            for row, rev in zip(selected, reversed_records)]
+    if result.get('consistency') != expected_consistency:
+        raise ValueError('Cached consistency differs from per-case outputs')
+    return result
+
+
 def main():
     import mlx.core as mx
     from mlx_lm import load, generate
@@ -104,7 +151,7 @@ def main():
                 name = f'{condition}-{seed}'
                 result_path = output / f'{name}.json'
                 if result_path.exists():
-                    jobs[name] = json.loads(result_path.read_text())
+                    jobs[name] = validate_result(json.loads(result_path.read_text()), condition, seed, rows, probe)
                     status['completed'].append(name)
                     save()
                     continue
@@ -143,20 +190,13 @@ def main():
                         scored['id'] = row['id']
                         reversed_records.append(scored)
                         original = records[index]
-                        expected = original['output']
-                        if expected.startswith('我投') and original['format_ok']:
-                            seat = int(expected[2:-1])
-                            expected = f"我投{row['meta']['n_players'] + 1 - seat}号"
-                        consistency.append({'id': row['id'], 'original': original['output'],
-                                            'reversed': scored['output'],
-                                            'consistent': original['format_ok'] and scored['format_ok']
-                                                          and expected == scored['output'],
-                                            'original_abstained': original['output'] == '我弃权'})
+                        consistency.append(consistency_record(row, original, scored))
                         mx.clear_cache()
                         status['current_sample'] = len(reversed_records)
                         save()
                 result = {'condition': condition, 'seed': seed, 'metrics': metrics(records),
                           'records': records, 'reversed_records': reversed_records, 'consistency': consistency}
+                validate_result(result, condition, seed, rows, probe)
                 temporary = output / f'{name}.tmp'
                 temporary.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n')
                 temporary.replace(result_path)
