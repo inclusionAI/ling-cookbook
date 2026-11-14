@@ -1,0 +1,27 @@
+# 「谁是卧底」玩家决策组件 — MLX QLoRA 训练配置
+# 用法（等价于 train.sh）：
+#   mlx_lm lora -c train/lora_config.yaml
+# 注意：model 路径请按实际修改；--model 指向 4-bit 量化目录即自动启用 QLoRA。
+
+model: ~/models/Ling-3.0-tiny-4bit   # mlx_lm.convert 量化后的目录
+train: true
+data: ../data                        # 包含 train/valid/test.jsonl
+
+fine_tune_type: lora
+optimizer: adamw
+num_layers: 16        # 24 层中的后 16 层挂 LoRA（MoE 权重冻结）
+batch_size: 1
+grad_accumulation_steps: 4          # 等效 batch 4，16G 内存友好
+iters: 1500
+learning_rate: 1.0e-4
+max_seq_length: 1024
+mask_prompt: true                   # loss 只算 assistant 输出
+grad_checkpoint: true               # 省内存
+
+adapter_path: ../adapters           # LoRA 权重输出目录
+save_every: 200
+steps_per_report: 20
+steps_per_eval: 100
+val_batches: 16
+seed: 42
+trust_remote_code: true

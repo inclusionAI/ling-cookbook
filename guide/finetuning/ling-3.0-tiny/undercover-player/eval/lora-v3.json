@@ -1,0 +1,966 @@
+{
+  "summary": {
+    "model": "/Users/lipeilin/models/Ling-3.0-tiny-4bit",
+    "adapter_path": "adapters-v3-run3",
+    "decoding": "temp=0.7,top_p=0.9,seed=42",
+    "n_speak": 60,
+    "speak_len_ok": 0.8833,
+    "speak_leak_rate": 0.1167,
+    "speak_natural": 1.0,
+    "speak_format_ok": 0.7833,
+    "speak_exact_match": 0.0,
+    "n_vote": 36,
+    "vote_format_ok": 1.0,
+    "vote_accuracy": 0.1944
+  },
+  "records": [
+    {
+      "task": "speak",
+      "output": "拿咖啡汁，另外一人一杯，另外卷一卷，还有拿咖啡汁",
+      "raw": "</think>拿咖啡汁，另外一人一杯，另外卷一卷，还有拿咖啡汁",
+      "target": "一个是可以加糖，还有早上来一杯醒脑",
+      "len_ok": true,
+      "leak": true,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投4号",
+      "raw": "</think>我投4号",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "很明显圆圆的的，另外圆圆的吃瓜",
+      "raw": "</think>很明显圆圆的的，另外圆圆的吃瓜",
+      "target": "很明显解暑神器",
+      "len_ok": true,
+      "leak": true,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投3号",
+      "raw": "</think>我投3号",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我弃权",
+      "raw": "</think>我弃权",
+      "target": "我投3号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "有裁判台，另外有裁判台，还有有保安台的",
+      "raw": "</think>有裁判台，另外有裁判台，还有有保安台的",
+      "target": "管门禁，没错",
+      "len_ok": true,
+      "leak": true,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投3号",
+      "raw": "</think>我投3号",
+      "target": "我投4号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "一个是常见的那种还有能外卖送单号，有裁判吹哨，另外能外卖送单号",
+      "raw": "</think>一个是常见的那种还有能外卖送单号，有裁判吹哨，另外能外卖送单号",
+      "target": "很明显甜的居多",
+      "len_ok": false,
+      "leak": false,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投3号",
+      "raw": "</think>我投3号",
+      "target": "我投3号",
+      "format_ok": true,
+      "correct": true
+    },
+    {
+      "task": "vote",
+      "output": "我投3号",
+      "raw": "</think>我投3号",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "当一个有裁判人力的，还有穿制服",
+      "raw": "</think>当一个有裁判人力的，还有穿制服",
+      "target": "怎么说呢，很有责任心",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "一个是站岗执勤，还有穿制服跟穿制服",
+      "raw": "</think>一个是站岗执勤，还有穿制服跟穿制服",
+      "target": "我这个也是这样",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "很明显年续命，另外有咖啡味",
+      "raw": "</think>很明显年续命，另外有咖啡味",
+      "target": "美式和拿铁，还有下午来一杯",
+      "len_ok": true,
+      "leak": true,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我弃权",
+      "raw": "</think>我弃权",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": true
+    },
+    {
+      "task": "speak",
+      "output": "一个是可以追追星，还有圆圆的头的",
+      "raw": "</think>一个是可以追追星，还有圆圆的头的",
+      "target": "很明显每天要遛",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "一个是圆圆的的",
+      "raw": "</think>一个是圆圆的的",
+      "target": "我觉得自古有诗词写它",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "一个是很麻烦的那种",
+      "raw": "</think>一个是很麻烦的那种",
+      "target": "我觉得汪汪叫",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投5号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "很明显，吃糖",
+      "raw": "</think>很明显，吃糖",
+      "target": "能加珍珠椰果，还有经常排队买",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "我觉得跳笼兽号兽之王号兽之王号兽之王",
+      "raw": "</think>我觉得跳笼兽号兽之王号兽之王号兽之王",
+      "target": "前面说的挺接近的",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "很明显棉球穿墨墨",
+      "raw": "</think>很明显棉球穿墨墨",
+      "target": "很明显夏天穿短袖",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "我觉得一个有裁判吹哨，另外爱宠物，另外喜欢钻台球很诡异",
+      "raw": "</think>我觉得一个有裁判吹哨，另外爱宠物，另外喜欢钻台球很诡异",
+      "target": "我觉得陪伴主人",
+      "len_ok": false,
+      "leak": false,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投4号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "圆圆很诡异，另外圆圆的",
+      "raw": "</think>圆圆很诡异，另外圆圆的",
+      "target": "表皮有网纹吧",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "一个是站岗，另外站岗足球",
+      "raw": "</think>一个是站岗，另外站岗足球",
+      "target": "小区门口值班，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "和大家说的差不多3接近的吧",
+      "raw": "</think>和大家说的差不多3接近的吧",
+      "target": "上身穿的，还有有衣领",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投4号",
+      "raw": "</think>我投4号",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是圆圆的",
+      "raw": "</think>最大的特点就是圆圆的",
+      "target": "我觉得清冷柔和",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是圆圆的",
+      "raw": "</think>最大的特点就是圆圆的",
+      "target": "很甜，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我弃权",
+      "raw": "</think>我弃权",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "一个是可以加配菜，另外圆圆的",
+      "raw": "</think>一个是可以加配菜，另外圆圆的",
+      "target": "很多人当家人，而且毛茸茸",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "甜着菜菜，另外圆圆很诡异",
+      "raw": "</think>甜着菜菜，另外圆圆很诡异",
+      "target": "黑色的籽吧",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投3号",
+      "raw": "</think>我投3号",
+      "target": "我投3号",
+      "format_ok": true,
+      "correct": true
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我投3号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "一个是有裁判台，还有圆圆的",
+      "raw": "</think>一个是有裁判台，还有圆圆的",
+      "target": "有嫦娥玉兔的传说，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "一个是常见的那种",
+      "raw": "</think>一个是常见的那种",
+      "target": "前面说的挺接近的",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我弃权",
+      "raw": "</think>我弃权",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": true
+    },
+    {
+      "task": "speak",
+      "output": "滑 pé皮皮很诡异吧",
+      "raw": "</think>滑 pé皮皮很诡异吧",
+      "target": "夏天吃，还有闻起来很香",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投4号",
+      "raw": "</think>我投4号",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "甜上字，还有可以加菜",
+      "raw": "</think>甜上字，还有可以加菜",
+      "target": "闻着香喝着苦",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "容易烂尾，另外有裁判吹哨，还有圆圆的很诡异",
+      "raw": "</think>容易烂尾，另外有裁判吹哨，还有圆圆的很诡异",
+      "target": "个头不小，切开吃",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "很明显街边常见的那种",
+      "raw": "</think>很明显街边常见的那种",
+      "target": "我这个也是这样",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "当提醒大家说的差不多1人一科",
+      "raw": "</think>当提醒大家说的差不多1人一科",
+      "target": "要熨烫平整，另外有衣领",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我投3号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投3号",
+      "raw": "</think>我投3号",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "我这瓜皮红瓣，还有圆的",
+      "raw": "</think>我这瓜皮红瓣，还有圆的",
+      "target": "表皮有网纹，没错",
+      "len_ok": true,
+      "leak": true,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "看监控，另外有裁判吹哨，还有穿制服",
+      "raw": "</think>看监控，另外有裁判吹哨，还有穿制服",
+      "target": "登记来访客人，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我投2号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "都差不多，不重复了",
+      "raw": "</think>都差不多，不重复了",
+      "target": "登记来访客人，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "很明显街边常见的那种",
+      "raw": "</think>很明显街边常见的那种",
+      "target": "能外卖送到，另外可以加糖",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我弃权",
+      "raw": "</think>我弃权",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": true
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我投3号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我弃权",
+      "raw": "</think>我弃权",
+      "target": "我投2号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我投3号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "用字的杆杆，另外可以追",
+      "raw": "</think>用字的杆杆，另外可以追",
+      "target": "一个是派出所上班，还有很有责任心",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "卷一卷，还有天上飞来很诡异",
+      "raw": "</think>卷一卷，还有天上飞来很诡异",
+      "target": "一个是衣柜里有好几件，还有上身穿的",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投3号",
+      "raw": "</think>我投3号",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "很明显穿孔号双打或喝咖啡",
+      "raw": "</think>很明显穿孔号双打或喝咖啡",
+      "target": "满大街的店，没错",
+      "len_ok": true,
+      "leak": true,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "一个是执法权的，还有有裁判吹吹，还有站岗执勤",
+      "raw": "</think>一个是执法权的，还有有裁判吹吹，还有站岗执勤",
+      "target": "打110找他，抓坏人",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "当吃球球，另外圆圆的",
+      "raw": "</think>当吃球球，另外圆圆的",
+      "target": "对主人很忠诚",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": true
+    },
+    {
+      "task": "speak",
+      "output": "当棉球，还有要熨烫临近 deadline，另外穿衣搭配",
+      "raw": "</think>当棉球，还有要熨烫临近 deadline，另外穿衣搭配",
+      "target": "总之就是常见的那种",
+      "len_ok": false,
+      "leak": false,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "很明显街边送单单单上下半场边送单，另外有裁判吹哨，还有换着球衣",
+      "raw": "</think>很明显街边送单单单上下半场边送单，另外有裁判吹哨，还有换着球衣",
+      "target": "我这个也是这样",
+      "len_ok": false,
+      "leak": false,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "都差不多，不重复了",
+      "raw": "</think>都差不多，不重复了",
+      "target": "一个是要喂食，还有会抓老鼠",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我投4号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我投5号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "我觉得四个小蛋糕",
+      "raw": "</think>我觉得四个小蛋糕",
+      "target": "怎么说呢，早上来一杯醒脑",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "一个是常见的那种",
+      "raw": "</think>一个是常见的那种",
+      "target": "最大的特点就是毛茸茸",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "都差不多，不重复了",
+      "raw": "</think>都差不多，不重复了",
+      "target": "前面说的挺接近的",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "球丹，还有圆圆的另外球丹",
+      "raw": "</think>球丹，还有圆圆的另外球丹",
+      "target": "切块摆盘吧",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "挂上墨水的，另外一碗端上来，还有配菜菜菜菜",
+      "raw": "</think>挂上墨水的，另外一碗端上来，还有配菜菜菜菜",
+      "target": "能外卖送到，而且美式和拿铁",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投3号",
+      "raw": "</think>我投3号",
+      "target": "我投5号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投3号",
+      "raw": "</think>我投3号",
+      "target": "我投4号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "滑台，另外圆圆很诡异",
+      "raw": "</think>滑台，另外圆圆很诡异",
+      "target": "和大家说的差不多",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "我觉得有裁判吹哨，另外卷一卷饼",
+      "raw": "</think>我觉得有裁判吹哨，另外卷一卷饼",
+      "target": "用粗吸管，还有能外卖送到",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投3号",
+      "raw": "</think>我投3号",
+      "target": "我投6号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投3号",
+      "raw": "</think>我投3号",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "一个是圆圆很诡异，另外圆圆的",
+      "raw": "</think>一个是圆圆很诡异，另外圆圆的",
+      "target": "都差不多，不重复了",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投2号",
+      "format_ok": true,
+      "correct": true
+    },
+    {
+      "task": "speak",
+      "output": "单穿衫，还有有裁判员罚单点再买新的，还有有裁判员罚单点再买号码，另外换上躯干",
+      "raw": "</think>单穿衫，还有有裁判员罚单点再买新的，还有有裁判员罚单点再买号码，另外换上躯干",
+      "target": "和大家说的差不多",
+      "len_ok": false,
+      "leak": false,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "当棉球，另外能 shirt",
+      "raw": "</think>当棉球，另外能 shirt",
+      "target": "很明显配西裤皮鞋",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "我觉得�尾皮皮墨墨皮皮，另外上人身另外有裁判吹哨，还有配西裤皮鞋",
+      "raw": "</think>我觉得�尾皮皮墨墨皮皮，另外上人身另外有裁判吹哨，还有配西裤皮鞋",
+      "target": "要熨烫平整，没错",
+      "len_ok": false,
+      "leak": false,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "做上队的，另外站岗执勤",
+      "raw": "</think>做上队的，另外站岗执勤",
+      "target": "大家有事找他们，有执法权",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "很明显圆两人一连打表，还有有阴晨",
+      "raw": "</think>很明显圆两人一连打表，还有有阴晨",
+      "target": "都差不多，不重复了",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是圆圆的",
+      "raw": "</think>最大的特点就是圆圆的",
+      "target": "很明显肉眼能看",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "一个是可以加配菜，自己捞人捞人，另外圆圆很诡异",
+      "raw": "</think>一个是可以加配菜，自己捞人捞人，另外圆圆很诡异",
+      "target": "前面说的挺接近的",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "一个是有裁判吹哨，还有打表结账，另外有裁判吹哨，另外太阳的特点刚才有人提过",
+      "raw": "</think>一个是有裁判吹哨，还有打表结账，另外有裁判吹哨，另外太阳的特点刚才有人提过",
+      "target": "我觉得晒被子杀菌",
+      "len_ok": false,
+      "leak": true,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "我觉得玉米籽",
+      "raw": "</think>我觉得玉米籽",
+      "target": "一个是切开吃，还有切块摆盘",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "打表结账，另外有裁判台，另外单兵或单兵双双双兄弟",
+      "raw": "</think>打表结账，另外有裁判台，另外单兵或单兵双双双兄弟",
+      "target": "打110找他吧",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投4号",
+      "raw": "</think>我投4号",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "当圆圆的很诡异吧",
+      "raw": "</think>当圆圆的很诡异吧",
+      "target": "毛茸茸，还有比较高冷",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "一个是圆的的",
+      "raw": "</think>一个是圆的的",
+      "target": "白天出现，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投3号",
+      "raw": "</think>我投3号",
+      "target": "我投5号",
+      "format_ok": true,
+      "correct": false
+    }
+  ]
+}

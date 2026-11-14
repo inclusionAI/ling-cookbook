@@ -94,6 +94,7 @@ Practical recipes for fine-tuning and evaluating Ling models on local or cloud h
 | Ling-3.0-tiny | Apple Silicon Mac (≥ 16GB) | AReno (MLX) | 4-bit QLoRA (SFT) | [Recipe: Split-Payment Decision Fine-Tuning with AReno](guide/finetuning/ling-3.0-tiny/mac-mlx-payment-lora.ipynb) |
 | Ling-3.0-tiny | 8× NVIDIA H20 (96GB) | AReno | LoRA (SFT) | [Recipe: Full-Duplex Voice Dialogue (Turn-Taking)](guide/finetuning/ling-3.0-tiny/full-duplex-turn-taking-lora/full-duplex-turn-taking-lora.ipynb) |
 | Ling-3.0-tiny | Google Colab L4 (22GB) / T4 (15GB) | Transformers + PEFT + bitsandbytes | 4-bit QLoRA (SFT) | [Recipe: Agent Tool-Calling Safety (Cloud QLoRA Fine-Tuning)](guide/finetuning/ling-3.0-tiny/agent-tool-safety-qlora/agent-tool-safety-qlora.ipynb) |
+| Ling-3.0-tiny | Apple Silicon Mac (≥ 16GB) | MLX-LM | 4-bit QLoRA (SFT) | [Recipe: Undercover Game Player QLoRA and Evaluation](guide/finetuning/ling-3.0-tiny/undercover-player/undercover-player.ipynb) |
 
 <a id="recommended-skills"></a>
 ### Agent Skills for Specialized Capabilities

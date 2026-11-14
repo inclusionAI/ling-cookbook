@@ -25,3 +25,8 @@ HANDOFF.md
 agents.md
 handoff.md
 .agents/
+
+# Local investigation and handoff artifacts
+diagnostics/
+claim-comments-draft.md
+share-draft.md

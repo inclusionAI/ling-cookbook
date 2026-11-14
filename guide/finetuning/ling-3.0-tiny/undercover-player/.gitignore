@@ -1,0 +1,19 @@
+# 训练权重与派生数据：权重托管 GitHub Releases（仅 adapters.safetensors +
+# adapter_config.json），检查点不入库；data-v*/、data-ab-*/ 是 merge 后 cp 的 mlx_lm 布局。
+adapters*/
+data-v*/
+data-ab-*/
+__pycache__/
+
+# Local audit scheduler lock
+eval/.audit-queue.lock
+
+# Local experiment runs; curated publishable evidence lives in eval/verification/
+eval/audit-thinking-on-*/
+eval/final-vote-audit/
+eval/seat-permutation-probe/
+eval/state-v2-pilot/
+eval/state-v2-training-pilot/
+eval/vote-permutation-training-pilot/
+eval/audit_queue.py
+eval/compare_state.py

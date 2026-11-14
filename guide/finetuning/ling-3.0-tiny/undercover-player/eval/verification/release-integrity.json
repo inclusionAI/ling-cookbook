@@ -1,0 +1,21 @@
+{
+  "release": "https://github.com/lplalbert/ling-cookbook/releases/tag/undercover-player-adapter-v2",
+  "assets": [
+    {
+      "name": "adapters.safetensors",
+      "bytes": 416282287,
+      "local_bytes": 416282287,
+      "remote_digest": "sha256:168a614dee401d5deb4ee9d94eacb40d216fa4078c7e10589dee524cf4252d95",
+      "local_digest": "sha256:168a614dee401d5deb4ee9d94eacb40d216fa4078c7e10589dee524cf4252d95",
+      "digest_matches": true
+    },
+    {
+      "name": "adapter_config.json",
+      "bytes": 1032,
+      "local_bytes": 1032,
+      "remote_digest": "sha256:f278b077421388e11c17ae818c0f27104c2e9880a0100524c4fc5679144b877a",
+      "local_digest": "sha256:f278b077421388e11c17ae818c0f27104c2e9880a0100524c4fc5679144b877a",
+      "digest_matches": true
+    }
+  ]
+}
