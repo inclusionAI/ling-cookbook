@@ -1,0 +1,9 @@
+{
+  "arm": "allin5",
+  "temperature": 1.5,
+  "threshold": 0.8,
+  "low": 0.40805892854556935,
+  "high": 0.7519949683743459,
+  "dev_mean_mcc": 0.7859687627567038,
+  "dev_records": 481
+}
