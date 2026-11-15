@@ -70,6 +70,7 @@ Please read these limits before reusing the numbers or the model:
 
 - **Task families never cross splits.** Records whose request starts with the same sentence form one family, and train and test never share a family. This is stricter than common practice. AgentAuditor, for example, keeps about 10% of a dataset as memory and scores the rest, so similar records sit on both sides. Numbers from the two protocols are not directly comparable.
 - **The published adapter never trains on Pre-Ex-Bench or R-Judge.** Pre-Ex-Bench is CC BY-NC 4.0 and R-Judge ships without a license, so both are used for evaluation only. The published adapter trains on synthetic pairs written by Ling-3.0-tiny itself and on the ASSEBench training folds (Apache-2.0). Section 7 also reports a research ensemble that trains on the other benchmarks' training folds too. It is not released.
+- **The published dataset leaves out 29 ASSEBench records.** They carry AgentHarm tool names, and AgentHarm's authors ask that its examples not be used for training. The released adapter was trained before this filter and saw them (about 3% of its 885 human records).
 - **ASSE-Security is partly a naming test.** A one-line rule, "the agent called a tool with a CamelCase name", reaches accuracy 0.929 with no false alarms on its training and dev records. Do not read high ASSE-Security scores as safety skill.
 - **Pre-Ex-Bench is partly a keyword test.** A keyword rule (`=True/False`, `skip`, `bypass`, and similar) reaches accuracy 0.808 on its training and dev records.
 - **Borderline records go to the ask tier.** ASSE-Safety marks 260 records as borderline: its Strict and Lenient versions disagree on them. Training gives them a target of 2/3 unsafe.
@@ -83,8 +84,8 @@ Please read these limits before reusing the numbers or the model:
 
 | Artifact | Link |
 | :--- | :--- |
-| Decision adapter (LoRA rank 8 + score head, PEFT format) | [EricChan2028/Ling-3.0-tiny-Agent-Safety-Gate](https://huggingface.co/EricChan2028/Ling-3.0-tiny-Agent-Safety-Gate) |
-| Training data: synthetic pairs, built training sets, warm-start text adapter | [EricChan2028/Ling-3.0-tiny-Agent-Safety-Gate-Data](https://huggingface.co/datasets/EricChan2028/Ling-3.0-tiny-Agent-Safety-Gate-Data) |
+| Decision adapter (LoRA rank 8 + score head, PEFT format) | [ChangyuanChen/Ling-3.0-tiny-Agent-Safety-Gate](https://huggingface.co/ChangyuanChen/Ling-3.0-tiny-Agent-Safety-Gate) |
+| Training data: synthetic pairs, built training sets, warm-start text adapter | [ChangyuanChen/Ling-3.0-tiny-Agent-Safety-Gate-Data](https://huggingface.co/datasets/ChangyuanChen/Ling-3.0-tiny-Agent-Safety-Gate-Data) |
 | Base model | [inclusionAI/Ling-3.0-tiny](https://huggingface.co/inclusionAI/Ling-3.0-tiny) |
 | Training and serving framework | [AReno](https://github.com/inclusionAI/AReno) at commit `e17794c`, JEV decision head |
 | Benchmarks | [ASSEBench](https://github.com/Astarojth/AgentAuditor-ASSEBench), [Pre-Ex-Bench](https://github.com/HowieHwong/Agentic-Guardian), [R-Judge](https://github.com/Lordog/R-Judge), fetched by `gate/fetch_benches.py` |
