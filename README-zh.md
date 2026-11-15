@@ -94,6 +94,7 @@
 | Ling-3.0-tiny | Apple Silicon Mac (≥ 16GB) | AReno (MLX) | 4-bit QLoRA (SFT) | [文档: 基于 AReno 微调模拟组合支付决策](guide/finetuning/ling-3.0-tiny/mac-mlx-payment-lora-zh.ipynb) |
 | Ling-3.0-tiny | 8× NVIDIA H20 (96GB) | AReno | LoRA (SFT) | [文档: 全双工语音对话（话轮管理）](guide/finetuning/ling-3.0-tiny/full-duplex-turn-taking-lora/full-duplex-turn-taking-lora-zh.ipynb) |
 | Ling-3.0-tiny | Google Colab L4 (22GB) / T4 (15GB) | Transformers + PEFT + bitsandbytes | 4-bit QLoRA (SFT) | [文档: Agent 工具调用安全（用云端平台微调）](guide/finetuning/ling-3.0-tiny/agent-tool-safety-qlora/agent-tool-safety-qlora-zh.ipynb) |
+| Ling-3.0-tiny | NVIDIA RTX PRO 5000 (72GB) 训练，CPU 打分 | AReno | LoRA（SFT + JEV 决策头） | [文档: Agent 安全闸门（放行 / 询问 / 拦截决策模型）](guide/finetuning/ling-3.0-tiny/agent-safety-gate/agent-safety-gate-zh.ipynb) |
 
 <a id="recommended-skills"></a>
 ### 部分能力 Agent Skill
