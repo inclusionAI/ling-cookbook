@@ -1,0 +1,966 @@
+{
+  "summary": {
+    "model": "/Users/lipeilin/models/Ling-3.0-tiny-4bit",
+    "adapter_path": "adapters",
+    "decoding": "temp=0.7,top_p=0.9,seed=42",
+    "n_speak": 60,
+    "speak_len_ok": 1.0,
+    "speak_leak_rate": 0.15,
+    "speak_natural": 1.0,
+    "speak_format_ok": 0.85,
+    "speak_exact_match": 0.0,
+    "n_vote": 36,
+    "vote_format_ok": 1.0,
+    "vote_accuracy": 0.1111
+  },
+  "records": [
+    {
+      "task": "speak",
+      "output": "最大的特点就是下午来一杯",
+      "raw": "</think>最大的特点就是下午来一杯",
+      "target": "最大的特点就是满大街的店",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "我的特点刚才有人提过",
+      "raw": "</think>我的特点刚才有人提过",
+      "target": "和大家说的差不多",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是保安值班",
+      "raw": "</think>最大的特点就是保安值班",
+      "target": "大家有事找他们，另外小区门口值班",
+      "len_ok": true,
+      "leak": true,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是能上网，没错",
+      "raw": "</think>最大的特点就是能上网，没错",
+      "target": "挂在天上，还有晚上出现",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我投5号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投4号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投2号",
+      "format_ok": true,
+      "correct": true
+    },
+    {
+      "task": "speak",
+      "output": "拿起来就啃吧",
+      "raw": "</think>拿起来就啃吧",
+      "target": "怎么说呢，夏天吃",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我弃权",
+      "raw": "</think>我弃权",
+      "target": "我投5号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投4号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "生着吃吧",
+      "raw": "</think>生着吃吧",
+      "target": "我这个也是这样",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，常见宠物",
+      "raw": "</think>怎么说呢，常见宠物",
+      "target": "我觉得常见宠物",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我弃权",
+      "raw": "</think>我弃权",
+      "target": "我投3号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，文化场所",
+      "raw": "</think>怎么说呢，文化场所",
+      "target": "很晒很热，白天出现",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投2号",
+      "format_ok": true,
+      "correct": true
+    },
+    {
+      "task": "vote",
+      "output": "我弃权",
+      "raw": "</think>我弃权",
+      "target": "我投4号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投6号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "前面说的挺接近的",
+      "raw": "</think>前面说的挺接近的",
+      "target": "我觉得闻着香喝着苦",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是夜晚能看",
+      "raw": "</think>最大的特点就是夜晚能看",
+      "target": "有嫦娥玉兔的传说，而且中秋赏它",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是洗干净直接穿",
+      "raw": "</think>最大的特点就是洗干净直接穿",
+      "target": "最大的特点就是要熨烫平整",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是猫科动物",
+      "raw": "</think>最大的特点就是猫科动物",
+      "target": "有四条腿，还有汪汪叫",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "很明显很麻烦",
+      "raw": "</think>很明显很麻烦",
+      "target": "一个是一套头穿上，还有纯棉的舒服",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是搽奶油",
+      "raw": "</think>最大的特点就是搽奶油",
+      "target": "怎么说呢，站岗执勤",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "很明显夜晚很难打",
+      "raw": "</think>很明显夜晚很难打",
+      "target": "有阴晴圆缺，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投3号",
+      "raw": "</think>我投3号",
+      "target": "我投3号",
+      "format_ok": true,
+      "correct": true
+    },
+    {
+      "task": "vote",
+      "output": "我弃权",
+      "raw": "</think>我弃权",
+      "target": "我投5号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是穿制服",
+      "raw": "</think>最大的特点就是穿制服",
+      "target": "怎么说呢，有执法权",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投3号",
+      "raw": "</think>我投3号",
+      "target": "我投4号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是站在岗哨前",
+      "raw": "</think>最大的特点就是站在岗哨前",
+      "target": "都差不多，不重复了",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "摇一摇会喷",
+      "raw": "</think>摇一摇会喷",
+      "target": "都差不多，不重复了",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "我家中的，还有泡着牛奶",
+      "raw": "</think>我家中的，还有泡着牛奶",
+      "target": "同意前面几位的说法",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "前面说的挺接近的",
+      "raw": "</think>前面说的挺接近的",
+      "target": "一个是有四条腿，还有会抓老鼠",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "一杯奶茶，而且下午茶",
+      "raw": "</think>一杯奶茶，而且下午茶",
+      "target": "我觉得经常排队买",
+      "len_ok": true,
+      "leak": true,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投4号",
+      "raw": "</think>我投4号",
+      "target": "我投2号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "同意前面几位的说法",
+      "raw": "</think>同意前面几位的说法",
+      "target": "总之就是常见的那种",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是一集要刷",
+      "raw": "</think>最大的特点就是一集要刷",
+      "target": "怎么说呢，和天空有关",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是维C丰富",
+      "raw": "</think>最大的特点就是维C丰富",
+      "target": "冰镇一下更爽，另外解暑神器",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是维C丰富",
+      "raw": "</think>最大的特点就是维C丰富",
+      "target": "很甜，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，古人用来纪时",
+      "raw": "</think>怎么说呢，古人用来纪时",
+      "target": "影响潮汐，另外白天出现",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "很明显冬天很冷",
+      "raw": "</think>很明显冬天很冷",
+      "target": "一个是上身穿的，还有当睡衣也行",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是夏天吃",
+      "raw": "</think>最大的特点就是夏天吃",
+      "target": "一个是黑色的籽，还有个头不小",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是有颜色",
+      "raw": "</think>最大的特点就是有颜色",
+      "target": "都差不多，不重复了",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，警察上班",
+      "raw": "</think>怎么说呢，警察上班",
+      "target": "我这个也是这样",
+      "len_ok": true,
+      "leak": true,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "前面说的挺接近的",
+      "raw": "</think>前面说的挺接近的",
+      "target": "怎么说呢，有执法权",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是晒太阳",
+      "raw": "</think>最大的特点就是晒太阳",
+      "target": "很明显古人用来纪时",
+      "len_ok": true,
+      "leak": true,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是保安巡逻",
+      "raw": "</think>最大的特点就是保安巡逻",
+      "target": "小区门口值班，站岗执勤",
+      "len_ok": true,
+      "leak": true,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "我觉得凌晨时分更爱打",
+      "raw": "</think>我觉得凌晨时分更爱打",
+      "target": "小区门口值班",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "同意前面几位的说法",
+      "raw": "</think>同意前面几位的说法",
+      "target": "满大街的店，另外可以加糖",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "摇一摇会喷",
+      "raw": "</think>摇一摇会喷",
+      "target": "年轻人续命，还有下午来一杯",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我投2号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投3号",
+      "raw": "</think>我投3号",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投6号",
+      "raw": "</think>我投6号",
+      "target": "我投2号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是放包里带着",
+      "raw": "</think>最大的特点就是放包里带着",
+      "target": "同意前面几位的说法",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是提神的",
+      "raw": "</think>最大的特点就是提神的",
+      "target": "可以加糖吧",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是前面说的挺接近的",
+      "raw": "</think>最大的特点就是前面说的挺接近的",
+      "target": "同意前面几位的说法",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "生着吃吧",
+      "raw": "</think>生着吃吧",
+      "target": "夏天吃，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投3号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投3号",
+      "raw": "</think>我投3号",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "放在奶茶店",
+      "raw": "</think>放在奶茶店",
+      "target": "同意前面几位的说法",
+      "len_ok": true,
+      "leak": true,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，猫科动物",
+      "raw": "</think>怎么说呢，猫科动物",
+      "target": "有四条腿，还有毛茸茸",
+      "len_ok": true,
+      "leak": true,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是提神的饮品",
+      "raw": "</think>最大的特点就是提神的饮品",
+      "target": "最大的特点就是拉花很好看",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，植物学",
+      "raw": "</think>怎么说呢，植物学",
+      "target": "很甜，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是肚子很鼓",
+      "raw": "</think>最大的特点就是肚子很鼓",
+      "target": "比较高冷，还有常见宠物",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投4号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "猫科动物吧",
+      "raw": "</think>猫科动物吧",
+      "target": "很明显喵喵叫",
+      "len_ok": true,
+      "leak": true,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投3号",
+      "raw": "</think>我投3号",
+      "target": "我投6号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "我觉得冬天常用",
+      "raw": "</think>我觉得冬天常用",
+      "target": "怎么说呢，陪伴主人",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "都差不多，不重复了",
+      "raw": "</think>都差不多，不重复了",
+      "target": "切开吃，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "我的特点刚才有人提过",
+      "raw": "</think>我的特点刚才有人提过",
+      "target": "同意前面几位的说法",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我弃权",
+      "raw": "</think>我弃权",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": true
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是穿制服",
+      "raw": "</think>最大的特点就是穿制服",
+      "target": "怎么说呢，登记来访客人",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是夏天穿短袖",
+      "raw": "</think>最大的特点就是夏天穿短袖",
+      "target": "一个是纯棉的舒服，还有换季要买新的",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是毛茸茸",
+      "raw": "</think>最大的特点就是毛茸茸",
+      "target": "很多人当家人吧",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，常见宠物",
+      "raw": "</think>怎么说呢，常见宠物",
+      "target": "都差不多，不重复了",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投3号",
+      "raw": "</think>我投3号",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "前面说的挺接近的",
+      "raw": "</think>前面说的挺接近的",
+      "target": "同意前面几位的说法",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "最大的特点就是前面说的",
+      "raw": "</think>最大的特点就是前面说的",
+      "target": "纯棉的舒服，还有印着图案文字",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "很明显冬季很薄",
+      "raw": "</think>很明显冬季很薄",
+      "target": "我觉得有各种颜色",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "很明显夏天吃吧",
+      "raw": "</think>很明显夏天吃吧",
+      "target": "最大的特点就是水分很多",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我弃权",
+      "raw": "</think>我弃权",
+      "target": "我投3号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，切开就吃",
+      "raw": "</think>怎么说呢，切开就吃",
+      "target": "我这个也是这样",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我投3号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我投3号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投2号",
+      "raw": "</think>我投2号",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投3号",
+      "raw": "</think>我投3号",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我投1号",
+      "raw": "</think>我投1号",
+      "target": "我投5号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，月亮",
+      "raw": "</think>怎么说呢，月亮",
+      "target": "中秋赏它，还有影响潮汐",
+      "len_ok": true,
+      "leak": true,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我投6号",
+      "raw": "</think>我投6号",
+      "target": "我投4号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "怎么说呢，衣物",
+      "raw": "</think>怎么说呢，衣物",
+      "target": "最大的特点就是上身穿的",
+      "len_ok": true,
+      "leak": false,
+      "natural": true,
+      "format_ok": true,
+      "exact_match": false
+    }
+  ]
+}

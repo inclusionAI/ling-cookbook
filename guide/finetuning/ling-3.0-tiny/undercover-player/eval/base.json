@@ -1,0 +1,966 @@
+{
+  "summary": {
+    "model": "/Users/lipeilin/models/Ling-3.0-tiny-4bit",
+    "adapter_path": null,
+    "decoding": "temp=0.7,top_p=0.9,seed=42",
+    "n_speak": 60,
+    "speak_len_ok": 0.9667,
+    "speak_leak_rate": 0.0167,
+    "speak_natural": 0.0333,
+    "speak_format_ok": 0.0,
+    "speak_exact_match": 0.0,
+    "n_vote": 36,
+    "vote_format_ok": 0.4444,
+    "vote_accuracy": 0.0556
+  },
+  "records": [
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   游戏：谁是卧底。\n    *   我的身份：卧底。\n    *   我的词语：奶茶。\n    *   规则：\n        1. 发言不超过25个字。\n        2. 不要说出你词语里的任何一个",
+      "target": "最大的特点就是满大街的店",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **角色：** 平民（平民 - 平民）\n    *   **词语：** 咖啡（咖啡）\n    *   **规则：**\n        1.  发言不超过25个字。\n        2.  不要说出你词语",
+      "target": "和大家说的差不多",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：** 谁是卧底\n    *   **我的身份：** 卧底\n    *   **词语：** 保安\n    *   **规则：**\n        1. 发言不超过25个字。\n        2. 不要说出你词语",
+      "target": "大家有事找他们，另外小区门口值班",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：** 谁是卧底\n    *   **我的身份：** 卧底\n    *   **我的词语：** 月亮\n    *   **规则：**\n        1.  发言不超过25个字。\n        2.  不要",
+      "target": "挂在天上，还有晚上出现",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被要求扮演一个「谁是卧底」游戏的平民。词语是\"衬衫\"。我们需要根据历史发言找出可疑的玩家，然后输出\"我投N号\"或\"我弃权\"。历史发言给出了5号玩家的发言，我们需要分析。",
+      "raw": "我们被要求扮演一个「谁是卧底」游戏的平民。词语是\"衬衫\"。我们需要根据历史发言找出可疑的玩家，然后输出\"我投N号\"或\"我弃权\"。历史发言给出了5号玩家的发言，我们需要分析。\n\n首先，理解游戏：每个玩家有一个词语（这里是\"衬衫\"），每个人只能说出一个",
+      "target": "我投5号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "用户说他在玩「谁是卧底」游戏，身份是平民，词语是\"衬衫\"。",
+      "raw": "用户说他在玩「谁是卧底」游戏，身份是平民，词语是\"衬衫\"。\n\n历史发言：\n1号：怎么说呢，纯棉的舒服\n2号：日常穿搭，另外有扣子\n3号：我觉得衣柜里有好几件\n4号：休闲随意吧\n5号：有衣领",
+      "target": "我投4号",
+      "format_ok": false,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被要求玩「谁是卧底」游戏。身份是卧底，词语是“奶茶”。历史发言给出了六个人的发言，我们需要根据发言找出可疑的玩家（可能是卧底或平民）。规则是只输出“我投N号”或“我弃权”。",
+      "raw": "我们被要求玩「谁是卧底」游戏。身份是卧底，词语是“奶茶”。历史发言给出了六个人的发言，我们需要根据发言找出可疑的玩家（可能是卧底或平民）。规则是只输出“我投N号”或“我弃权”。\n\n历史发言：\n1号：怎么说呢，配一块小蛋糕\n",
+      "target": "我投2号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：**「谁是卧底」\n    *   **我的身份：**平民\n    *   **我的词语：西瓜**\n    *   **规则：**\n        1. 发言不超过25个字\n        2. 不要说出你词语",
+      "target": "怎么说呢，夏天吃",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我们需要玩「谁是卧底」游戏。身份是平民，词语是“太阳”。根据大家的发言找出可疑的玩家。",
+      "raw": "我们需要玩「谁是卧底」游戏。身份是平民，词语是“太阳”。根据大家的发言找出可疑的玩家。\n\n历史发言：\n1号：很明显古人用来纪时\n2号：我觉得东升西落\n3号：和天空有关，没错\n4号：影响潮汐吧\n",
+      "target": "我投5号",
+      "format_ok": false,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我们需要分析历史发言，找出可疑的玩家。",
+      "raw": "我们需要分析历史发言，找出可疑的玩家。\n\n根据规则，身份是平民，词语是“猫”。在「谁是卧底」游戏中，平民会使用一个词语（这里是“猫”），而杀手或卧底会使用不同的词语。我们需要找出哪个发言最可能是卧底（因为平民是猫，卧底可能是其他",
+      "target": "我投4号",
+      "format_ok": false,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：** 「谁是卧底」\n    *   **我的身份：** 平民\n    *   **我的词语：** 西瓜\n    *   **规则：**\n        1. 发言不超过25个字。\n        2. 不要说出",
+      "target": "我这个也是这样",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：** 谁是平民\n    *   **我的角色：** 平民\n    *   **我的词语：** 猫\n    *   **规则：**\n        1.  发言不超过25个字\n        2.  不要说出",
+      "target": "我觉得常见宠物",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "让我分析发言：",
+      "raw": "让我分析发言：\n\n1号：很甜，闻起来很香\n2号：绿皮红瓤\n3号：水分很多\n4号：黑色的籽\n5号：半个用勺挖着吃，另外冰镇一下更爽\n\n我的词语是\"哈密瓜\"。\n\n",
+      "target": "我投3号",
+      "format_ok": false,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   游戏：谁是卧底\n    *   身份：平民\n    *   词语：太阳\n    *   约束条件：\n        1. 发言不超过25个字。\n        2. 不要说出你词语里的任何一个字（",
+      "target": "很晒很热，白天出现",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "用户要求我玩「谁是卧底」游戏，身份是平民，词语是“警察”。",
+      "raw": "用户要求我玩「谁是卧底」游戏，身份是平民，词语是“警察”。\n\n历史发言分析：\n1号：最大的特点就是很有责任心 / 打110找他，另外很有责任心 - 提到“责任心”可能与警察有关，但“责任心”不是警察的典型特征。\n",
+      "target": "我投2号",
+      "format_ok": false,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被要求扮演一个平民，在「谁是卧底」游戏中。平民的词语是“衬衫”。我们需要根据历史发言找出一名可疑玩家（即持有与“衬衫”意思相近的词语的玩家）。历史发言有5个发言者，每个发言者说了一句话。我们需要找出谁的发言最接近“衬衫”。",
+      "raw": "我们被要求扮演一个平民，在「谁是卧底」游戏中。平民的词语是“衬衫”。我们需要根据历史发言找出一名可疑玩家（即持有与“衬衫”意思相近的词语的玩家）。历史发言有5个发言者，每个发言者说了一句话。我们需要找出谁的发言最接近“衬衫”。",
+      "target": "我投4号",
+      "format_ok": false,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被要求玩「谁是卧底」游戏。身份是平民，词语是“咖啡”。我们需要根据历史发言找出可疑的玩家。规则是只输出「我投N号」或「我弃权」。",
+      "raw": "我们被要求玩「谁是卧底」游戏。身份是平民，词语是“咖啡”。我们需要根据历史发言找出可疑的玩家。规则是只输出「我投N号」或「我弃权」。\n\n历史发言：\n第1轮：\n1号：女孩子最爱，提神的饮品\n2号",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被要求扮演一个平民，游戏是「谁是卧底」。我们的词语是“太阳”。我们需要根据历史发言找出可疑的玩家（即与“太阳”最相似或不同的玩家），然后输出“我投N号”或“我弃权”。",
+      "raw": "我们被要求扮演一个平民，游戏是「谁是卧底」。我们的词语是“太阳”。我们需要根据历史发言找出可疑的玩家（即与“太阳”最相似或不同的玩家），然后输出“我投N号”或“我弃权”。\n\n历史发言：\n1号：影响潮汐\n2号：古人用来",
+      "target": "我投6号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：** 谁是卧底\n    *   **我的身份：** 平民\n    *   **我的词语：** 咖啡\n    *   **规则：**\n        1.  发言不超过25个字。\n        2.  不要",
+      "target": "我觉得闻着香喝着苦",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1. **分析请求：**",
+      "raw": "1. **分析请求：**\n    *   游戏：谁是卧底\n    *   我的身份：卧底\n    *   我的词语：月亮\n    *   规则：\n        1. 发言不超过25个字。\n        2. 不要说出你词语里的任何一个字（不能有",
+      "target": "有嫦娥玉兔的传说，而且中秋赏它",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：**「谁是卧底」\n    *   **我的身份：**平民\n    *   **我的词语：**衬衫\n    *   **规则：**\n        1. 发言不超过25个字。\n        2. 不要说出你词语",
+      "target": "最大的特点就是要熨烫平整",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **角色：** 卧底（卧底 - 卧底）\n    *   **词语：** 狗（狗）\n    *   **规则：**\n        1.  发言不超过25个字。\n        2.  不要说出你词语",
+      "target": "有四条腿，还有汪汪叫",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：** 谁是卧底\n    *   **我的身份：** 卧底\n    *   **我的词语：** T恤\n    *   **规则：**\n        1. 发言不超过25个字。\n        2. 不要说出你",
+      "target": "一个是一套头穿上，还有纯棉的舒服",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "Let me analyze this \"Who is the卧底\" (Who is the spy) game.",
+      "raw": "Let me analyze this \"Who is the卧底\" (Who is the spy) game.\n\nMy identity: 卧底\nMy word: 保安\nThe words I cannot use: 保, 安, 警, 尊, 严\n\nLet me think of a word that:\n1. Sounds similar",
+      "target": "怎么说呢，站岗执勤",
+      "len_ok": false,
+      "leak": false,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1. **分析请求：**",
+      "raw": "1. **分析请求：**\n    * 游戏：谁是卧底\n    * 我的角色：卧底（卧底）\n    * 我的词语：月亮（月亮）\n    * 规则：\n        1. 发言不超过25个字。\n        2. 不要说出你词语里的任何一个字（即",
+      "target": "有阴晴圆缺，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被要求根据历史发言判断谁是平民（警察）还是平民（罪犯）。规则是：你的身份是平民（警察），你的词语是“警察”。但注意：在“谁是卧底”游戏中，玩家通常有平民和卧底两个阵营。这里说“你是玩「谁是卧底」游戏，你的身份：平民，你的",
+      "raw": "我们被要求根据历史发言判断谁是平民（警察）还是平民（罪犯）。规则是：你的身份是平民（警察），你的词语是“警察”。但注意：在“谁是卧底”游戏中，玩家通常有平民和卧底两个阵营。这里说“你是玩「谁是卧底」游戏，你的身份：平民，你的",
+      "target": "我投3号",
+      "format_ok": false,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被问到：\"你在玩「谁是卧底」游戏。你的身份：平民 你的词语：西瓜 规则：1. 根据大家的发言找出可疑的玩家 2. 只输出「我投N号」或「我弃权」，不要输出其他内容 历史发言：第1轮：1号：冰镇",
+      "raw": "我们被问到：\"你在玩「谁是卧底」游戏。你的身份：平民 你的词语：西瓜 规则：1. 根据大家的发言找出可疑的玩家 2. 只输出「我投N号」或「我弃权」，不要输出其他内容 历史发言：第1轮：1号：冰镇",
+      "target": "我投5号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：** 谁是卧底\n    *   **身份：** 平民\n    *   **词语：** 警察\n    *   **规则：**\n        1. 发言不超过25个字。\n        2. 不要说出你词语里的",
+      "target": "怎么说呢，有执法权",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被问到：\"你在玩「谁是卧底」游戏。你的身份：平民，你的词语：咖啡。规则：1. 根据大家的发言找出可疑的玩家 2. 只输出「我投N号」或「我弃权」，不要输出其他内容\"。历史发言已给出。我们需要分析发言，找出可疑的玩家。因为",
+      "raw": "我们被问到：\"你在玩「谁是卧底」游戏。你的身份：平民，你的词语：咖啡。规则：1. 根据大家的发言找出可疑的玩家 2. 只输出「我投N号」或「我弃权」，不要输出其他内容\"。历史发言已给出。我们需要分析发言，找出可疑的玩家。因为",
+      "target": "我投4号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：**「谁是卧底」\n    *   **我的身份：**平民\n    *   **我的词语：**警察\n    *   **规则：**\n        1. 发言不超过25个字。\n        2. 不要说出我词语",
+      "target": "都差不多，不重复了",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：**「谁是卧底」\n    *   **我的身份：**卧底\n    *   **我的词语：**奶茶\n    *   **规则：**\n        1. 发言不超过25个字\n        2. 不要说出你词语里的",
+      "target": "都差不多，不重复了",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **角色：** 平民（平民）。\n    *   **词语：** 猫（猫）。\n    *   **规则：**\n        1.  发言不超过25个字。\n        2.  不要说出你词语里的任何一个字",
+      "target": "同意前面几位的说法",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   游戏：谁是卧底\n    *   我的身份：平民\n    *   我的词语：猫\n    *   规则：\n        1. 发言不超过25个字\n        2. 不要说出你词语里的任何一个字（不能有",
+      "target": "一个是有四条腿，还有会抓老鼠",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：** 谁是卧底\n    *   **我的身份：** 卧底\n    *   **我的词语：** 奶茶\n    *   **规则：**\n        1.  发言不超过25个字\n        2.  不要说出",
+      "target": "我觉得经常排队买",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被要求作为一个卧底玩家，在「谁是卧底」游戏中。词语是“狗”。其他玩家的发言中，我们需要找出可疑的玩家（即与“狗”最相似或不同的玩家）。然后输出“我投N号”或“我弃权”。",
+      "raw": "我们被要求作为一个卧底玩家，在「谁是卧底」游戏中。词语是“狗”。其他玩家的发言中，我们需要找出可疑的玩家（即与“狗”最相似或不同的玩家）。然后输出“我投N号”或“我弃权”。\n\n分析发言：\n\n第1轮：\n1号：要喂食",
+      "target": "我投2号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：** 谁是平民\n    *   **我的身份：** 平民\n    *   **我的词语：** 衬衫\n    *   **规则：**\n        1.  发言不超过25个字。\n        2.  不要",
+      "target": "总之就是常见的那种",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   游戏：谁是卧底\n    *   身份：卧底\n    *   词语：月亮\n    *   规则：\n        1. 发言不超过25个字\n        2. 不要说出你词语里的任何一个字（不能有",
+      "target": "怎么说呢，和天空有关",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   游戏：谁是卧底\n    *   我的身份：平民\n    *   我的词语：西瓜\n    *   规则：\n        1. 发言不超过25个字\n        2. 不要说出你词语里的任何一个字（西瓜 ->",
+      "target": "冰镇一下更爽，另外解暑神器",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1. **分析请求：**",
+      "raw": "1. **分析请求：**\n    *   **游戏：** 谁是卧底\n    *   **我的身份：** 卧底\n    *   **我的词语：** 哈密瓜\n    *   **规则：**\n        1. 发言不超过25个字。\n        2. 不要说出你",
+      "target": "很甜，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   游戏：谁是卧底\n    *   玩家身份：平民\n    *   词语：太阳\n    *   规则：\n        1. 发言不超过25个字\n        2. 不要说出你词语里的任何一个字（\"",
+      "target": "影响潮汐，另外白天出现",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1. **分析请求：**",
+      "raw": "1. **分析请求：**\n    *   **角色：** 卧底\n    *   **词语：** T恤\n    *   **规则：**\n        1. 发言不超过25个字。\n        2. 不要说出你词语里的任何一个字（\"T恤\" -> 不能有\"T恤",
+      "target": "一个是上身穿的，还有当睡衣也行",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   角色：平民（卧底）。\n    *   词语：西瓜。\n    *   规则：\n        1. 发言不超过25个字。\n        2. 不要说出你词语里的任何一个字（不能有“西”、“",
+      "target": "一个是黑色的籽，还有个头不小",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **角色：** 平民（平民）\n    *   **词语：** 衬衫（衬衫）\n    *   **规则：**\n        1. 发言不超过25个字。\n        2. 不要说出你词语里的任何一个字（没有",
+      "target": "都差不多，不重复了",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被要求扮演一个卧底玩家，词语是\"保安\"。历史发言中，1号说\"最大的特点就是夜班巡逻\"，2号说\"派出所上班，打110找他\"，3号说\"很有责任心\"，4号说\"看监控，管门禁\"，5号说\"一个是穿制服，还有",
+      "raw": "我们被要求扮演一个卧底玩家，词语是\"保安\"。历史发言中，1号说\"最大的特点就是夜班巡逻\"，2号说\"派出所上班，打110找他\"，3号说\"很有责任心\"，4号说\"看监控，管门禁\"，5号说\"一个是穿制服，还有",
+      "target": "我投1号",
+      "format_ok": false,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：** 谁是卧底\n    *   **我的身份：** 平民\n    *   **我的词语：** 警察\n    *   **规则：**\n        1. 发言不超过25个字。\n        2. 不要说出你",
+      "target": "我这个也是这样",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1. **分析请求：**",
+      "raw": "1. **分析请求：**\n    * 角色：平民（不是警察）。\n    * 词语：警察。\n    * 规则：\n        1. 发言不超过25个字。\n        2. 不要说出你词语里的任何一个字（\"警察\"）。\n        3",
+      "target": "怎么说呢，有执法权",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   游戏：谁是卧底\n    *   我的身份：平民\n    *   我的词语：太阳\n    *   规则：\n        1. 发言不超过25个字。\n        2. 不要说出你词语里的任何一个字（不能",
+      "target": "很明显古人用来纪时",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被要求作为卧底玩家，根据历史发言判断谁是可疑的（即卧底），并输出\"我的投N号\"或\"我弃权\"。",
+      "raw": "我们被要求作为卧底玩家，根据历史发言判断谁是可疑的（即卧底），并输出\"我的投N号\"或\"我弃权\"。\n\n已知身份：卧底，词语：狗。\n\n发言历史：\n第1轮：\n1号：会抓老鼠，常见宠物\n2号：毛",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   游戏：谁是卧底\n    *   我的身份：卧底\n    *   我的词语：保安\n    *   规则：\n        1. 发言不超过25个字\n        2. 不要说出你词语里的任何一个字（不能有",
+      "target": "小区门口值班，站岗执勤",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：** 谁是卧底\n    *   **我的身份：** 卧底 (卧底 - 卧底)\n    *   **我的词语：** 保安 (保安 - 保安)\n    *   **规则：**\n        1.  发言",
+      "target": "小区门口值班",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   游戏：谁是卧底\n    *   我的身份：平民\n    *   我的词语：咖啡\n    *   规则：\n        1. 发言不超过25个字\n        2. 不要说出我词语里的任何一个字（所以不能",
+      "target": "满大街的店，另外可以加糖",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   游戏：谁是卧底\n    *   身份：卧底\n    *   词语：奶茶\n    *   规则1：发言不超过25个字\n    *   规则2：不要说出你词语里的任何一个字（不能有\"奶",
+      "target": "年轻人续命，还有下午来一杯",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被要求扮演一个平民，在「谁是卧底」游戏中。词语是「衬衫」。我们需要根据历史发言找出可疑的玩家。历史发言中，每个人说了关于衣服的话。",
+      "raw": "我们被要求扮演一个平民，在「谁是卧底」游戏中。词语是「衬衫」。我们需要根据历史发言找出可疑的玩家。历史发言中，每个人说了关于衣服的话。\n\n第1轮发言：\n1号：一个是换季要买新的，还有日常穿搭\n2号：当睡衣也行，而且有各种",
+      "target": "我投2号",
+      "format_ok": false,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被要求扮演一个卧底玩家。在「谁是卧底」游戏中，每个玩家有一个词语（在这里是\"保安\"），但卧底有不同词语，而其他人有相同词语。卧底需要找出可疑的玩家。",
+      "raw": "我们被要求扮演一个卧底玩家。在「谁是卧底」游戏中，每个玩家有一个词语（在这里是\"保安\"），但卧底有不同词语，而其他人有相同词语。卧底需要找出可疑的玩家。\n\n历史发言：\n第1轮：\n1号：很有责任心，而且站岗执勤\n2号",
+      "target": "我弃权",
+      "format_ok": false,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我们需要分析「谁是卧底」游戏。身份：卧底（卧底是唯一的一个玩家，其词语与其他人不同）。词语是“奶茶”。其他玩家根据发言找出可疑的玩家。",
+      "raw": "我们需要分析「谁是卧底」游戏。身份：卧底（卧底是唯一的一个玩家，其词语与其他人不同）。词语是“奶茶”。其他玩家根据发言找出可疑的玩家。\n\n规则：只输出「我投N号」或「我弃权」，不要输出其他内容。\n\n历史发言：\n",
+      "target": "我投2号",
+      "format_ok": false,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：**「谁是卧底」\n    *   **我的身份：**平民\n    *   **我的词语：**衬衫\n    *   **规则：**\n        1.  发言不超过25个字。\n        2.  不要说出",
+      "target": "同意前面几位的说法",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "用户正在玩\"谁是卧底\"游戏，身份是平民，词语是\"咖啡\"。",
+      "raw": "用户正在玩\"谁是卧底\"游戏，身份是平民，词语是\"咖啡\"。\n\n规则：\n1. 发言不超过25个字\n2. 不要说出你词语里的任何一个字（不能说出\"咖\"和\"啡\"）\n3. 描述要有信息量，但别让人一眼看穿",
+      "target": "可以加糖吧",
+      "len_ok": false,
+      "leak": true,
+      "natural": true,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：** 谁是卧底\n    *   **身份：** 平民\n    *   **词语：** 太阳\n    *   **规则：**\n        1. 发言不超过25个字。\n        2. 不要说出你词语里的",
+      "target": "同意前面几位的说法",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   游戏：「谁是卧底」\n    *   身份：卧底\n    *   词语：哈密瓜\n    *   规则：\n        1. 发言不超过25个字。\n        2. 不要说出你词语里的任何一个",
+      "target": "夏天吃，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "用户正在玩「谁是卧底」游戏，我的身份是平民，词语是\"警察\"。",
+      "raw": "用户正在玩「谁是卧底」游戏，我的身份是平民，词语是\"警察\"。\n\n历史发言：\n1号：看监控，而且大家有事找他们\n2号：我觉得穿制服\n3号：最大的特点就是派出所上班\n4号：我觉得站岗执勤\n\n分析：\n-",
+      "target": "我投1号",
+      "format_ok": false,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "用户说你在玩「谁是卧底」游戏，身份是卧底，词语是“狗”。",
+      "raw": "用户说你在玩「谁是卧底」游戏，身份是卧底，词语是“狗”。\n\n历史发言：\n1号：我觉得喵喵叫\n2号：对主人很忠诚，每天要遛\n3号：爱踩奶，而且很多人当家人\n4号：会抓老鼠，没错\n\n1",
+      "target": "我投3号",
+      "format_ok": false,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被要求扮演一个「谁是卧底」游戏的平民。词语是\"咖啡\"。根据历史发言，找出可疑的玩家，然后只输出\"我投N号\"或\"我弃权\"。",
+      "raw": "我们被要求扮演一个「谁是卧底」游戏的平民。词语是\"咖啡\"。根据历史发言，找出可疑的玩家，然后只输出\"我投N号\"或\"我弃权\"。\n\n历史发言：\n1号：最大的特点就是提神的饮品\n2号：美式和拿铁，而且拉花很好看\n3",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": true
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   游戏：谁是卧底\n    *   我的身份：卧底（卧底）\n    *   我的词语：奶茶\n    *   规则：\n        1. 发言不超过25个字。\n        2. 不要说出你词语里的任何一个",
+      "target": "同意前面几位的说法",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：**「谁是卧底」\n    *   **我的身份：**平民（伪装者）\n    *   **我的词语：**猫\n    *   **规则：**\n        1.  发言不超过25个字。\n        2",
+      "target": "有四条腿，还有毛茸茸",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **角色：**平民（平民）\n    *   **词语：**咖啡（咖啡）\n    *   **规则：**\n        1. 发言不超过25个字。\n        2. 不要说出你词语里的任何一个字（不能包含“",
+      "target": "最大的特点就是拉花很好看",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **角色：** 平民。\n    *   **词语：** 西瓜。\n    *   **规则：**\n        1.  发言不超过25个字。\n        2.  不要说出你词语里的任何一个字（\"西\"、\"",
+      "target": "很甜，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   游戏：谁是卧底\n    *   身份：平民\n    *   词语：猫\n    *   规则：\n        1. 发言不超过25个字。\n        2. 不要说出你词语里的任何一个字（不能",
+      "target": "比较高冷，还有常见宠物",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被要求扮演一个卧底玩家，在「谁是卧底」游戏中。卧底词语是“哈密瓜”。其他玩家发言，我们需要找出可疑的玩家并投票。",
+      "raw": "我们被要求扮演一个卧底玩家，在「谁是卧底」游戏中。卧底词语是“哈密瓜”。其他玩家发言，我们需要找出可疑的玩家并投票。\n\n历史发言：\n第1轮：\n1号：表皮有网纹，夏天吃\n2号：最大的特点就是半个用勺挖着",
+      "target": "我投4号",
+      "format_ok": false,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   游戏：谁是卧底\n    *   我的身份：平民（说真话）\n    *   我的词语：猫\n    *   规则：\n        1.  发言不超过25个字\n        2.  不要说出我词语",
+      "target": "很明显喵喵叫",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被问到：\"你在玩「谁是卧底」游戏。你的身份：平民，词语：太阳。历史发言：... 投票。请只输出「我投N号」或「我弃权」：\"",
+      "raw": "我们被问到：\"你在玩「谁是卧底」游戏。你的身份：平民，词语：太阳。历史发言：... 投票。请只输出「我投N号」或「我弃权」：\"\n\n我们需要分析历史发言，找出与\"太阳\"最接近的词语。平民的目标是找出与\"太阳",
+      "target": "我投6号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：**「谁是卧底」\n    *   **我的身份：**卧底\n    *   **我的词语：**狗 (狗)\n    *   **规则：**\n        1. 发言不超过25个字\n        2. 不要说出",
+      "target": "怎么说呢，陪伴主人",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   游戏：谁是谁（谁是卧底）\n    *   我的身份：平民\n    *   我的词语：西瓜\n    *   规则：\n        1.  发言不超过25个字\n        2.  不要说出我词语",
+      "target": "切开吃，没错",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   游戏：谁是卧底\n    *   我的身份：卧底\n    *   我的词语：月亮\n    *   规则：\n        1. 发言不超过25个字。\n        2. 不要说出你词语里的任何一个字（因此",
+      "target": "同意前面几位的说法",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被要求扮演「谁是卧底」游戏中的平民角色。词语是「西瓜」。我们需要根据历史发言找出可疑的玩家，然后只输出「我投N号」或「我弃权」。",
+      "raw": "我们被要求扮演「谁是卧底」游戏中的平民角色。词语是「西瓜」。我们需要根据历史发言找出可疑的玩家，然后只输出「我投N号」或「我弃权」。\n\n历史发言：\n1号：水分很多吧\n2号：半个用勺挖着吃吧\n3号",
+      "target": "我弃权",
+      "format_ok": true,
+      "correct": true
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：** 「谁是卧底」\n    *   **我的身份：** 卧底\n    *   **我的词语：** 保安\n    *   **规则：**\n        1.  发言不超过25个字。\n        2. ",
+      "target": "怎么说呢，登记来访客人",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "用户要求我玩「谁是卧底」游戏，身份是卧底，词语是\"保安\"。",
+      "raw": "用户要求我玩「谁是卧底」游戏，身份是卧底，词语是\"保安\"。\n\n历史发言：\n1号：打110找他，另外夜班巡逻\n2号：怎么说呢，大家有事找他们\n3号：派出所上班，另外有执法权\n4号：一个是很有责任心，还有",
+      "target": "我弃权",
+      "format_ok": false,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   游戏：谁是卧底\n    *   我的身份：卧底（卧底）\n    *   我的词语：T恤 (T-shirt)\n    *   规则：\n        1. 发言不超过25个字。\n        2. 不要说出",
+      "target": "一个是纯棉的舒服，还有换季要买新的",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   游戏：谁是卧底\n    *   我的身份：卧底\n    *   我的词语：狗\n    *   规则：\n        1. 发言不超过25个字。\n        2. 不要说出你词语里的任何一个字（\"",
+      "target": "很多人当家人吧",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **角色：** 平民\n    *   **词语：** 猫\n    *   **规则：**\n        1. 发言不超过25个字。\n        2. 不要说出你词语里的任何一个字（不能使用“猫”或它的任何",
+      "target": "都差不多，不重复了",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被要求扮演卧底，词语是“狗”。需要分析历史发言，找出可疑的玩家。",
+      "raw": "我们被要求扮演卧底，词语是“狗”。需要分析历史发言，找出可疑的玩家。\n\n历史发言：\n第1轮：\n1号：喜欢钻纸箱，而且陪伴主人\n2号：有四条腿，而且会看家护院\n3号：喵喵叫\n4号：很多人当",
+      "target": "我弃权",
+      "format_ok": false,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被要求作为卧底玩家，在「谁是卧底」游戏中。卧底词语是“T恤”。其他人的词语列表（根据发言）需要分析，找出可疑的玩家。",
+      "raw": "我们被要求作为卧底玩家，在「谁是卧底」游戏中。卧底词语是“T恤”。其他人的词语列表（根据发言）需要分析，找出可疑的玩家。\n\n历史发言：\n第1轮：\n1号：我觉得要熨烫平整\n2号：上身穿的，而且日常穿搭\n3号",
+      "target": "我投1号",
+      "format_ok": false,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：** 谁是卧底\n    *   **我的身份：** 卧底\n    *   **我的词语：** 保安\n    *   **规则：**\n        1. 发言不超过25个字。\n        2. 不要说出我",
+      "target": "同意前面几位的说法",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   游戏：谁是卧底\n    *   我的角色：卧底\n    *   我的词语：T恤 (T-shirt)\n    *   规则：\n        1. 发言不超过25个字。\n        2. 不要说出你词语",
+      "target": "纯棉的舒服，还有印着图案文字",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被要求扮演「谁是卧底」游戏中的卧底角色。卧底词语是哈密瓜。历史发言中，各人发言：",
+      "raw": "我们被要求扮演「谁是卧底」游戏中的卧底角色。卧底词语是哈密瓜。历史发言中，各人发言：\n1号：很明显闻起来很香\n2号：夏天吃，没错\n3号：半个用勺挖着吃，还有切开吃\n4号：水分很多，而且解",
+      "target": "我弃权",
+      "format_ok": false,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：** 谁是卧底\n    *   **我的身份：** 卧底（卧底 - 卧底）\n    *   **我的词语：** T恤（T恤）\n    *   **规则：**\n        1. 发言不超过25个字",
+      "target": "我觉得有各种颜色",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   **游戏：** 谁是卧底\n    *   **身份：** 平民\n    *   **词语：** 西瓜\n    *   **规则：**\n        1.  发言不超过25个字。\n        2.  不要说出你",
+      "target": "最大的特点就是水分很多",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被要求扮演一个卧底玩家，词语是\"奶茶\"。我们需要根据历史发言找出可疑的玩家，并输出\"我投N号\"或\"我弃权\"。",
+      "raw": "我们被要求扮演一个卧底玩家，词语是\"奶茶\"。我们需要根据历史发言找出可疑的玩家，并输出\"我投N号\"或\"我弃权\"。\n\n历史发言：\n1号：早上来一杯醒脑\n2号：满大街的店，另外闻着香喝着苦\n3号：能",
+      "target": "我投3号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   游戏：谁是卧底\n    *   卧底词语：哈密瓜\n    *   规则：\n        1. 发言不超过25个字。\n        2. 不要说出你词语里的任何一个字（哈、密、瓜）。",
+      "target": "我这个也是这样",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "We are playing a game of \"Who is the Murderer?\" (谁是卧底). The user's identity is a civilian (平民). The word is \"衬衫\" (shirt). The user must output either \"我投N号\" (I vote for N号) or \"我弃权\" (I abstain).",
+      "raw": "We are playing a game of \"Who is the Murderer?\" (谁是卧底). The user's identity is a civilian (平民). The word is \"衬衫\" (shirt). The user must output either \"我投N号\" (I vote for N号) or \"我弃权\" (I abstain).",
+      "target": "我投3号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被问到：在「谁是卧底」游戏中，身份是卧底，词语是“月亮”。历史发言是：",
+      "raw": "我们被问到：在「谁是卧底」游戏中，身份是卧底，词语是“月亮”。历史发言是：\n1号：怎么说白天出现\n2号：中秋赏它，而且自古有诗词写它\n3号：一个是影响潮汐，还有和天空有关\n4号：晒被子杀菌，很晒",
+      "target": "我投3号",
+      "format_ok": false,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被要求扮演一个平民，词语是“猫”。我们需要根据历史发言投票。历史发言中，4号提到了“喜欢钻纸箱，还有喵喵叫”、“爱踩奶，还有会抓老鼠”。这些是猫的典型特征。1号、2号、3号的发言比较模糊，4号的发",
+      "raw": "我们被要求扮演一个平民，词语是“猫”。我们需要根据历史发言投票。历史发言中，4号提到了“喜欢钻纸箱，还有喵喵叫”、“爱踩奶，还有会抓老鼠”。这些是猫的典型特征。1号、2号、3号的发言比较模糊，4号的发",
+      "target": "我弃权",
+      "format_ok": false,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被要求玩「谁是卧底」游戏。身份是平民，词语是“西瓜”。我们需要根据历史发言找出可疑的玩家，然后输出“我投N号”或“我弃权”。历史发言给出了四轮，每轮有四个发言者。我们需要找出谁最可能是平民（词语是西瓜），谁可能是卧底（词语",
+      "raw": "我们被要求玩「谁是卧底」游戏。身份是平民，词语是“西瓜”。我们需要根据历史发言找出可疑的玩家，然后输出“我投N号”或“我弃权”。历史发言给出了四轮，每轮有四个发言者。我们需要找出谁最可能是平民（词语是西瓜），谁可能是卧底（词语",
+      "target": "我投1号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被要求玩“谁是卧底”游戏。身份是平民，词语是“太阳”。我们需要根据历史发言找出可疑的玩家，然后输出“我投N号”或“我弃权”。历史发言给出了6个玩家的发言，我们需要分析哪个玩家的发言最可能是“太阳”的同义词或相关词，从而找出可疑者。",
+      "raw": "我们被要求玩“谁是卧底”游戏。身份是平民，词语是“太阳”。我们需要根据历史发言找出可疑的玩家，然后输出“我投N号”或“我弃权”。历史发言给出了6个玩家的发言，我们需要分析哪个玩家的发言最可能是“太阳”的同义词或相关词，从而找出可疑者。\n",
+      "target": "我投5号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "1.  **分析请求：**",
+      "raw": "1.  **分析请求：**\n    *   游戏：谁是卧底\n    *   身份：卧底\n    *   词语：月亮 (moon)\n    *   规则：\n        1. 发言不超过25个字\n        2. 不要说出你词语里的任何一个字",
+      "target": "中秋赏它，还有影响潮汐",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    },
+    {
+      "task": "vote",
+      "output": "我们被要求在「谁是卧底」游戏中作为平民投票。平民的词语是\"太阳\"。我们需要根据历史发言找出可疑的玩家（与词语最接近的），然后输出\"我投N号\"或\"我弃权\"。历史发言中，各人发言：",
+      "raw": "我们被要求在「谁是卧底」游戏中作为平民投票。平民的词语是\"太阳\"。我们需要根据历史发言找出可疑的玩家（与词语最接近的），然后输出\"我投N号\"或\"我弃权\"。历史发言中，各人发言：\n\n第1轮：\n1号：东升西",
+      "target": "我投4号",
+      "format_ok": true,
+      "correct": false
+    },
+    {
+      "task": "speak",
+      "output": "1. **分析请求：**",
+      "raw": "1. **分析请求：**\n    *   **游戏：** 谁是平民（Cuìbǎi - civilian）\n    *   **我的角色：** 平民\n    *   **我的词语：** 衬衫\n    *   **规则：**\n        1. 发言不超过25个字。",
+      "target": "最大的特点就是上身穿的",
+      "len_ok": true,
+      "leak": false,
+      "natural": false,
+      "format_ok": false,
+      "exact_match": false
+    }
+  ]
+}

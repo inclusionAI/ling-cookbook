@@ -1,0 +1,14 @@
+{
+  "adapters-v2-run3/adapters.safetensors": "168a614dee401d5deb4ee9d94eacb40d216fa4078c7e10589dee524cf4252d95",
+  "data/prompting.py": "4912639f95ddb807a44ee20b44500542b44289b7e5b305b2442187747491840d",
+  "eval/final_vote_audit.py": "585fabad000188145aeefcbcd0c8e8f3afe9bc94bfc10b03494f5ea6cfb0ee8e",
+  "adapters-vote-permutation-pilot-control/adapters.safetensors": "e1f6b3bdda6bb5f2caab3877e2754bdb401bceabe2c448eadc2f98fa7252b167",
+  "adapters-vote-permutation-pilot-state/adapter_config.json": "9cbcfce45d2a582c94b99a9b2c0793e2c1fa25962ed0c0989c19b977d50f3863",
+  "eval/evaluate.py": "5cd507e2fed622f78a9f27b1cf3bb63d3467b657f2a400230689f7a0eb459642",
+  "adapters-vote-permutation-pilot-control/adapter_config.json": "49a3fff74486926453b3ee9addd9c170378f00426b9c3f7344cb2b912ab8a078",
+  "adapters-v2-run3/adapter_config.json": "f278b077421388e11c17ae818c0f27104c2e9880a0100524c4fc5679144b877a",
+  "eval/seat_probe.py": "f7484d40f3e774e9d5e6f27d7a85cceafe549c52ab8efe836d4ce14d2596d24b",
+  "adapters-vote-permutation-pilot-state/adapters.safetensors": "26c0f1e0d082b96ce234679ce1a80d4d17f4c4817f4134014f2d14fe5e1b5f17",
+  "data-v5-state/valid.jsonl": "8b2b2fa124bfecc47bf629c2d5d5467bb81080e613e58cad2393e228058bab1b",
+  "data/valid.jsonl": "824cf2c8c1f71c67bca2672323fe3d08232d46a43ba94ecec5566e0ce3ed638f"
+}

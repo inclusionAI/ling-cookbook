@@ -1,0 +1,82 @@
+{
+  "aggregate": {
+    "deployed-v2": {
+      "speech_format": 0.8958333333333334,
+      "speech_leak": 0.034722222222222224,
+      "vote_format": 0.7619047619047619,
+      "civilian_hit": 0.20833333333333334,
+      "label_match": 0.16666666666666666
+    },
+    "v2-state": {
+      "speech_format": 0.9305555555555556,
+      "speech_leak": 0.041666666666666664,
+      "vote_format": 0.7738095238095238,
+      "civilian_hit": 0.20833333333333334,
+      "label_match": 0.17857142857142858,
+      "renumber_consistency": 0.16666666666666666,
+      "nonabstain_consistency": 0.0
+    },
+    "repeat-control": {
+      "speech_format": 1.0,
+      "speech_leak": 0.0,
+      "vote_format": 0.7261904761904762,
+      "civilian_hit": 0.125,
+      "label_match": 0.14285714285714285,
+      "renumber_consistency": 0.020833333333333332,
+      "nonabstain_consistency": 0.020833333333333332
+    },
+    "permuted": {
+      "speech_format": 0.9722222222222222,
+      "speech_leak": 0.020833333333333332,
+      "vote_format": 0.7619047619047619,
+      "civilian_hit": 0.22916666666666666,
+      "label_match": 0.19047619047619047,
+      "renumber_consistency": 0.020833333333333332,
+      "nonabstain_consistency": 0.020833333333333332
+    }
+  },
+  "comparisons": {
+    "repeat-control": {
+      "independent_validation_cases": 16,
+      "mean_difference": 0.10416666666666666,
+      "case_bootstrap_95_percent_interval": [
+        -0.020833333333333332,
+        0.25
+      ],
+      "note": "Resampling cases after averaging decoding seeds; no independent training-seed uncertainty."
+    },
+    "v2-state": {
+      "independent_validation_cases": 16,
+      "mean_difference": 0.020833333333333332,
+      "case_bootstrap_95_percent_interval": [
+        -0.08333333333333333,
+        0.125
+      ],
+      "note": "Resampling cases after averaging decoding seeds; no independent training-seed uncertainty."
+    },
+    "deployed-v2": {
+      "independent_validation_cases": 16,
+      "mean_difference": 0.020833333333333332,
+      "case_bootstrap_95_percent_interval": [
+        -0.08333333333333333,
+        0.125
+      ],
+      "note": "Resampling cases after averaging decoding seeds; no independent training-seed uncertainty."
+    }
+  },
+  "gates": {
+    "speech_format_nonregression": true,
+    "speech_leak_nonregression": true,
+    "vote_format_nonregression": true,
+    "civilian_hit_evidence": false,
+    "renumber_consistency_nonregression": true
+  },
+  "decision": "retain_deployed_v2_do_not_adopt_candidate",
+  "automatic_adoption": false,
+  "limitations": [
+    "Validation only; no new held-out test selection.",
+    "Three decoding seeds, not three training seeds.",
+    "16 independent civilian validation states; repeated seeds do not create new states.",
+    "Thresholds finalized after the initial single-seed pilot; this is exploratory confirmation."
+  ]
+}
