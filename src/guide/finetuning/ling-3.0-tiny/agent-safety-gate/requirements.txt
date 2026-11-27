@@ -2,7 +2,7 @@
 #   git clone https://github.com/inclusionAI/AReno && cd AReno && git checkout e17794c
 #   TORCH_CUDA_ARCH_LIST=<your GPU, e.g. 12.0> pip install --no-deps --no-build-isolation -e .
 torch==2.8.0
-transformers==4.57.1
+transformers==5.10.1
 flash-linear-attention==0.4.2  # install with --no-deps; 0.6 needs a newer triton and transformers 5
 fla-core==0.4.2                # install with --no-deps
 safetensors
