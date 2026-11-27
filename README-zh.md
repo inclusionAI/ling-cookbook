@@ -94,7 +94,7 @@
 | Ling-3.0-tiny | Apple Silicon Mac (≥ 16GB) | AReno (MLX) | 4-bit QLoRA (SFT) | [文档: 基于 AReno 微调模拟组合支付决策](guide/finetuning/ling-3.0-tiny/mac-mlx-payment-lora-zh.ipynb) |
 | Ling-3.0-tiny | 8× NVIDIA H20 (96GB) | AReno | LoRA (SFT) | [文档: 全双工语音对话（话轮管理）](guide/finetuning/ling-3.0-tiny/full-duplex-turn-taking-lora/full-duplex-turn-taking-lora-zh.ipynb) |
 | Ling-3.0-tiny | Google Colab L4 (22GB) / T4 (15GB) | Transformers + PEFT + bitsandbytes | 4-bit QLoRA (SFT) | [文档: Agent 工具调用安全（用云端平台微调）](guide/finetuning/ling-3.0-tiny/agent-tool-safety-qlora/agent-tool-safety-qlora-zh.ipynb) |
-| Ling-3.0-tiny | NVIDIA RTX PRO 5000 (72GB) 训练，CPU 打分 | AReno | LoRA（SFT + JEV 决策头） | [文档: Agent 安全闸门（放行 / 询问 / 拦截决策模型）](guide/finetuning/ling-3.0-tiny/agent-safety-gate/agent-safety-gate-zh.ipynb) |
+| Ling-3.0-tiny | 单卡 GPU (≥ 16GB) 训练 / Mac MLX 推理 | AReno | LoRA（SFT + JEV 决策头） | [文档: Agent 安全闸门（放行 / 询问 / 拦截决策模型）](guide/finetuning/ling-3.0-tiny/agent-safety-gate/agent-safety-gate-zh.ipynb) |
 
 <a id="recommended-skills"></a>
 ### 部分能力 Agent Skill
@@ -127,5 +127,7 @@
 
 - 感谢 Nvidia 团队 [@ly01325](https://github.com/ly01325) 优化和提供 [SGLang Humming 优化部署指南](guide/local-deploy/ling-3.0-flash/dgx-spark-sglang-ling-3-flash-mxfp4-humming-zh.ipynb)，针对 Grace Blackwell (GB10 / SM121) 硬件实现了 Humming MoE 算子加速、在线 FP8 LM Head 与 MTP 投机解码协同优化。
 - 感谢 [@sofan110](https://github.com/sofan110) 提供 [基于 AReno 在 Mac 上微调 Ling-3.0-tiny 模拟组合支付决策指南](guide/finetuning/ling-3.0-tiny/mac-mlx-payment-lora-zh.ipynb)。
+- 感谢 [@Dayuxiaoshui](https://github.com/Dayuxiaoshui) 提供 [基于 AReno LoRA 微调 Ling-3.0-tiny 全双工语音对话话轮管理指南](guide/finetuning/ling-3.0-tiny/full-duplex-turn-taking-lora/full-duplex-turn-taking-lora-zh.ipynb)。
 - 感谢 [@lostlight530](https://github.com/lostlight530) 提供 [基于 Google Colab QLoRA 微调 Ling-3.0-tiny Agent 工具调用安全指南](guide/finetuning/ling-3.0-tiny/agent-tool-safety-qlora/agent-tool-safety-qlora-zh.ipynb)。
+- 感谢 [@EricChan2028](https://github.com/EricChan2028) 提供 [基于 AReno JEV 微调 Ling-3.0-tiny Agent 安全闸门决策模型指南](guide/finetuning/ling-3.0-tiny/agent-safety-gate/agent-safety-gate-zh.ipynb)。
 
