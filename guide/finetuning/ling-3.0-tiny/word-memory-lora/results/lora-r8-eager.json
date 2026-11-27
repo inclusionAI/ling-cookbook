@@ -1,0 +1,134 @@
+[
+  {
+    "id": "photosynthesis",
+    "word": "photosynthesis",
+    "instruction": "请给出英语单词「photosynthesis」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】n. 光合作用\n【记忆方法】photo-（光）+ synthesis（合成）→ 植物利用光把物质合成养分的过程，即光合作用。\n【例句】Photosynthesis allows plants to convert light into chemical energy. 光合作用使植物能够把光转化为化学能。",
+    "mode": "lora",
+    "response": "【释义】n.光合作用，植物利用阳光将二氧化碳和水转化为葡萄糖和氧气的过程\n【记忆方法】photosynthesis 由 photo（光）+ synthesis（制作/生产）组成，表示植物利用光能生产（合成）有机物的过程\n【例句】Plants perform photosynthesis to produce their own food.",
+    "generated_tokens": 67,
+    "elapsed_seconds": 27.602,
+    "stopped_at_eos": true
+  },
+  {
+    "id": "inevitable",
+    "word": "inevitable",
+    "instruction": "请给出英语单词「inevitable」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】adj. 不可避免的，必然发生的\n【记忆方法】in-（不）+ evitable（可避免的）→ 不能避免的，即不可避免的。\n【例句】Change is inevitable in a rapidly developing field. 在快速发展的领域中，变化是不可避免的。",
+    "mode": "lora",
+    "response": "【释义】adj.不可避免的\n【记忆方法】inevitable 由 inevitable 和末尾 -ate 单词核心含义是 already 已经，加上前缀 in 表示否定含义，得到核心含义相反的含义 已经不是必然发生了，即 不可避免的\n【例句】The outcome is inevitable. 结果是不可避免的。",
+    "generated_tokens": 61,
+    "elapsed_seconds": 11.646,
+    "stopped_at_eos": true
+  },
+  {
+    "id": "meticulous",
+    "word": "meticulous",
+    "instruction": "请给出英语单词「meticulous」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】adj. 一丝不苟的，极注意细节的\n【记忆方法】联想 meticulous 的核心是“连小细节也不放过”：做实验时把每个步骤和数据都仔细核对的人，就是 meticulous。\n【例句】She kept meticulous records of every experiment. 她对每次实验都做了细致详尽的记录。",
+    "mode": "lora",
+    "response": "【释义】adj.极其仔细的，细致认真的\n【记忆方法】meticulous 为 m + e + t + u + l + o + u + s 四个部分来记忆 其中 m 和 e 一起组成 a 发音类似 a 后面的 u 发音类似 oo 后面的 o 发音类似 o 后面的 u 发音类似 u 后面的 s 发音类似 s 整体含义是表示一个人做事非常仔细 每一个细节都不放过\n【例句】He is a meticulous worker who pays attention to every detail. 他是一个非常认真的工人，对每一个细节都注意。",
+    "generated_tokens": 121,
+    "elapsed_seconds": 21.435,
+    "stopped_at_eos": true
+  },
+  {
+    "id": "ambiguous",
+    "word": "ambiguous",
+    "instruction": "请给出英语单词「ambiguous」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】adj. 模棱两可的，有歧义的\n【记忆方法】ambi-（两边）+ -ous（形容词后缀）→ 一句话能向两种意思理解，就是有歧义的。\n【例句】The instructions were ambiguous, so we asked for clarification. 这些说明有歧义，因此我们请求进一步解释。",
+    "mode": "lora",
+    "response": "【释义】adj.模糊的，有歧义的\n【记忆方法】ambiguous 由 amble 演变而来，表示 v. 行走；末尾加上 -i-g- 结尾的形容词后缀，并加上 -u- 开头的前缀，表示 -o- 结尾的含义，表示 adj. 倾向于走 a-路 的含义，即模糊的，有歧义的\n【例句】The instructions were ambiguous, so we were unsure what to do. 指示含糊，所以我们不知道该做什么。",
+    "generated_tokens": 102,
+    "elapsed_seconds": 18.301,
+    "stopped_at_eos": true
+  },
+  {
+    "id": "resilient",
+    "word": "resilient",
+    "instruction": "请给出英语单词「resilient」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】adj. 有韧性的，能迅速恢复的\n【记忆方法】联想被压弯后弹回原状的弹簧：遭受挫折后又能恢复的人或系统，就是 resilient。\n【例句】A resilient team can recover quickly from setbacks. 有韧性的团队能够迅速从挫折中恢复。",
+    "mode": "lora",
+    "response": "【释义】adj.有弹性的，适应的，复苏的\n【记忆方法】resilient 由 res + il + ient 组成；res 表示再次，再；il 是前缀 il 表示不；ient 是后缀后缀表示形容词含义；整体含义：面对困难时，不轻易放弃，而是适应环境，迅速恢复能力；因此，resilient 的含义就是：有弹性的，适应的，复苏的\n【例句】She is a resilient worker who always recovers quickly from setbacks. 她是一位有弹性的工作者，总能从挫折中迅速恢复过来。",
+    "generated_tokens": 119,
+    "elapsed_seconds": 22.344,
+    "stopped_at_eos": true
+  },
+  {
+    "id": "scrutinize",
+    "word": "scrutinize",
+    "instruction": "请给出英语单词「scrutinize」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】v. 仔细检查，认真审查\n【记忆方法】联想到近义词 scrutiny（仔细审查）：把 scrutiny 变成动词 scrutinize，就是把材料逐条认真检查。\n【例句】Reviewers scrutinize the data before accepting the paper. 审稿人在接收论文前会仔细审查数据。",
+    "mode": "lora",
+    "response": "【释义】v.仔细审查，审查\n【记忆方法】scrutinize 为 scrutinize 加上后缀 -ize ，核心含义相同； scrutinize 中 scrutinize 可以分解为 scrutin（已经记忆过的单词，表示仔细检查） + -ize ，表示进行动作，即对某事物进行仔细的检查，因此 scrutinize 的含义为仔细审查，v. 形式\n【例句】The committee will scrutinize the new policy before making a decision. 委员会将在做出决定之前仔细审查这项新政策。",
+    "generated_tokens": 107,
+    "elapsed_seconds": 21.321,
+    "stopped_at_eos": true
+  },
+  {
+    "id": "deteriorate",
+    "word": "deteriorate",
+    "instruction": "请给出英语单词「deteriorate」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】v. 恶化，变坏\n【记忆方法】联想设备从正常逐渐 deteriorate（变差）到故障：性能不断下降，就是 deteriorate。\n【例句】Without maintenance, the machine will deteriorate over time. 缺乏维护时，这台机器会随着时间推移而老化。",
+    "mode": "lora",
+    "response": "【释义】v.变得较差，恶化\n【记忆方法】deteriorate 为 deteriorate 加上后缀 -ate 得到核心含义相同的另一个单词 deteriorate，核心含义相同部分为 deteriorate，其中 de- 表示向下， -terior 表示后面， -ate 为动词后缀， 结合起来表示变得较差，恶化\n【例句】The building is deteriorating rapidly. 这栋楼正在迅速恶化。",
+    "generated_tokens": 85,
+    "elapsed_seconds": 17.009,
+    "stopped_at_eos": true
+  },
+  {
+    "id": "pragmatic",
+    "word": "pragmatic",
+    "instruction": "请给出英语单词「pragmatic」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】adj. 务实的，讲求实际的\n【记忆方法】联想 pragmatic 的人不先争论理论，而先问“这个办法实际能不能解决问题”，以实际效果为重。\n【例句】We need a pragmatic solution that works with our current hardware. 我们需要一个能在现有硬件上运行的务实方案。",
+    "mode": "lora",
+    "response": "【释义】adj.实际的；务实的；现实主义\n【记忆方法】pragmat 为核心含义，结尾 -ic 为形容词后缀，-a 前缀表示行为动作，-t 中间元音增加记忆点，-e 结尾元音，整体组合得到核心含义为进行实际行为动作的人/事物，即实际的人/事物，含义为实际的；务实的；现实主义\n【例句】He is a pragmatic leader who focuses on results.",
+    "generated_tokens": 98,
+    "elapsed_seconds": 19.012,
+    "stopped_at_eos": true
+  },
+  {
+    "id": "coherent",
+    "word": "coherent",
+    "instruction": "请给出英语单词「coherent」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】adj. 连贯的，条理清楚的\n【记忆方法】co-（共同）+ here（连接）→ 各部分紧密连接、前后一致，所以 coherent 表示连贯的。\n【例句】The report presents a coherent explanation of the results. 这份报告对结果作出了连贯的解释。",
+    "mode": "lora",
+    "response": "【释义】adj.一致的，清晰的，一致的\n【记忆方法】core为已经记忆过的单词，表示n.核心，主体，a.主要的；核心含义加上coherent的词根hera表示相同，相同的核心含义加上前缀co-表示一起，共同，最终得到核心含义相同的，一致的；含义相同的核心内容表达出来就是清晰的，一致的\n【例句】He gave a coherent answer to the question. 他对这个问题给出了连贯的回答。",
+    "generated_tokens": 95,
+    "elapsed_seconds": 18.668,
+    "stopped_at_eos": true
+  },
+  {
+    "id": "substantiate",
+    "word": "substantiate",
+    "instruction": "请给出英语单词「substantiate」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】v. 用事实或证据证实\n【记忆方法】联想到 substance（实质、依据）：为观点拿出实质性证据，就是 substantiate。\n【例句】The researcher provided data to substantiate the claim. 研究人员提供了数据来证实这一主张。",
+    "mode": "lora",
+    "response": "【释义】v.提供证据支持，使成立\n【记忆方法】sub- 前缀表示向下，sta- 核心含义是 stand 站，tive 后缀表示形容词，-ate 动词后缀，-ed 名词后缀；整体理解为使站立的东西稳定，使论点站得住脚，即提供证据让论点站稳\n【例句】He tried to substantiate his claim with evidence. 他试图用证据来支持自己的论点。",
+    "generated_tokens": 94,
+    "elapsed_seconds": 17.333,
+    "stopped_at_eos": true
+  },
+  {
+    "id": "cumbersome",
+    "word": "cumbersome",
+    "instruction": "请给出英语单词「cumbersome」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】adj. 笨重的，繁琐难用的\n【记忆方法】想象抱着 cumbersome 的大箱子爬楼梯：又大又难处理；用于流程时表示繁琐难用。\n【例句】The old registration process was slow and cumbersome. 旧的注册流程缓慢而繁琐。",
+    "mode": "lora",
+    "response": "【释义】adj.庞大的，笨重的，冗长的\n【记忆方法】cumbersome 为 cum + b + some + e 含义相同的词根 some 表示 some 的意思，表示数量多；加上前缀 cum 表示一起；加上后缀 b 表示 bad 的意思；加上后缀 e 表示动词或者形容词的一种状态；整体含义表示一起携带很多东西导致变得不好（笨重），也就是庞大的，笨重的，冗长的\n【例句】The new software is cumbersome to use. 这款新软件操作起来很繁琐。",
+    "generated_tokens": 113,
+    "elapsed_seconds": 20.49,
+    "stopped_at_eos": true
+  },
+  {
+    "id": "plausible",
+    "word": "plausible",
+    "instruction": "请给出英语单词「plausible」的记忆方法，并附上释义和例句帮助我记住它。只输出【释义】【记忆方法】【例句】三段，不要加标题、编号、emoji 或额外解释。",
+    "reference": "【释义】adj. 看似合理的，貌似可信的\n【记忆方法】联想一个解释“听起来讲得通”，但还需证据验证：plausible 是看似合理，不等于已经证实。\n【例句】Her explanation sounds plausible, but we still need evidence. 她的解释听起来合理，但我们仍需要证据。",
+    "mode": "lora",
+    "response": "【释义】adj.合理的，合乎逻辑的\n【记忆方法】plausible 采用词根词缀分析 + 联想记忆 方法：1. 划分子单词：pl (n. 部分) + a (辅助前缀) + u (u. 某种状态后缀) + d (n. 动作后缀) + a (辅助后缀) = pl(a)udable 2. 理解各部分含义：pl 表示部分，a 表示某种倾向，u d 表示动作，a 表示某种状态后缀 组合起来含义：某部分具有某种倾向，即某事有可能发生，有合理的依据 3. 联想记忆：因为某事有合理的依据，所以觉得某事是 plausible（合理的） 4. 含义引申：1. 合理的，合乎逻辑的 2. 可信的，可能的\n【例句】His explanation was plausible but not convincing. 他的解释合理但不足以让人信服。",
+    "generated_tokens": 198,
+    "elapsed_seconds": 36.695,
+    "stopped_at_eos": true
+  }
+]

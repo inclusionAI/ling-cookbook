@@ -1,0 +1,10 @@
+torch==2.6.0
+transformers==4.57.6
+trl==1.17.1
+peft==0.21.2
+accelerate==1.15.0
+datasets==4.8.5
+fla-core==0.4.2
+tokenizers<0.23
+safetensors>=0.4
+# Install a PyTorch wheel matching the host CUDA driver before these packages.
